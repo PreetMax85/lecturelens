@@ -1,0 +1,171 @@
+const { embedText } = require("./local-embed");
+const { generate } = require("./gemini");
+const { search } = require("./qdrant");
+
+function buildContext(results) {
+  return results
+    .map(
+      (r, i) =>
+        `[Source ${i + 1}] ${r.payload.module} | Lesson: ${r.payload.lesson} | Timestamp: ${r.payload.timestamp}\n${r.payload.text}`
+    )
+    .join("\n\n");
+}
+
+const ANSWER_SYSTEM = `You are a helpful teaching assistant for a video course.
+Answer the student's question using ONLY the provided source excerpts below for
+any factual claim about course content. If the excerpts don't contain the
+answer, say you couldn't find that in the course.
+
+You may see recent conversation turns for context (so you can handle
+follow-ups naturally) - use them to understand what the student means, but
+still ground every factual claim in the source excerpts, not in the prior
+conversation.
+
+Cite where information came from using this exact format: (<module>, Lesson: <lesson>, at <timestamp>)
+e.g. (Module 13, Lesson: Implementing Google OAuth, at 04:12)
+
+Important: cite each fact ONCE. If a sentence already states the module, lesson,
+or timestamp directly (e.g. answering "when was X taught"), do NOT also add a
+parenthetical citation repeating the same module/lesson/timestamp right after it -
+that's redundant. Only add a parenthetical citation for sentences that describe
+content WITHOUT already naming its source inline.
+
+If asked "when was X taught", answer directly with the module, lesson, and
+timestamp stated naturally in the sentence itself - don't follow it with a
+citation that just repeats what you already said.`;
+
+const CONDENSE_SYSTEM = `Given recent conversation history and a student's new
+message, rewrite the new message as a standalone question that makes sense
+without needing the history - resolve pronouns and vague references like
+"that", "it", "what about X" using the history.
+
+If the new message is already a standalone question unrelated to the history,
+return it completely unchanged. Respond with ONLY the rewritten (or unchanged)
+question, nothing else - no preamble, no quotes.`;
+
+function formatHistory(history, limit) {
+  return history
+    .slice(-limit)
+    .map((h) => `${h.role === "user" ? "Student" : "Assistant"}: ${h.content}`)
+    .join("\n");
+}
+
+async function condenseQuery(userMessage, history) {
+  if (!history || history.length === 0) return userMessage;
+  try {
+    const rewritten = await generate(
+      `Conversation so far:\n${formatHistory(history, 6)}\n\nNew message: ${userMessage}`,
+      { systemInstruction: CONDENSE_SYSTEM, temperature: 0 }
+    );
+    return rewritten.trim() || userMessage;
+  } catch (err) {
+    console.error("[condense] failed, using raw message:", err.message);
+    return userMessage;
+  }
+}
+
+const HYDE_SYSTEM = `You are helping retrieve relevant transcript excerpts from a spoken video course.
+Given a student's question, write a short (2-4 sentence) hypothetical answer as if it were
+spoken naturally by a course instructor explaining the topic - use the casual, explanatory
+tone and vocabulary an instructor would actually use in a lecture, not a formal encyclopedia
+answer. This hypothetical passage is only used to improve semantic search - it is never
+shown to the student.`;
+
+async function generateHydePassage(question) {
+  try {
+    return await generate(question, { systemInstruction: HYDE_SYSTEM, temperature: 0.4 });
+  } catch (err) {
+    console.error("[hyde] generation failed, falling back to raw query only:", err.message);
+    return null;
+  }
+}
+
+function mergeResults(resultSets, limit) {
+  const byId = new Map();
+  for (const results of resultSets) {
+    for (const r of results) {
+      const existing = byId.get(r.id);
+      if (!existing || r.score > existing.score) byId.set(r.id, r);
+    }
+  }
+  return [...byId.values()].sort((a, b) => b.score - a.score).slice(0, limit);
+}
+
+const RERANK_SYSTEM = `You are reranking search results for a course Q&A system.
+Given a student's question and a numbered list of candidate transcript excerpts,
+return ONLY a JSON array of the candidate numbers ordered from MOST to LEAST
+relevant to answering the question. Exclude numbers for excerpts that are not
+actually relevant. Respond with ONLY the JSON array, e.g. [3,1,5] - no other
+text, no explanation, no markdown fences.`;
+
+async function rerankResults(question, results) {
+  if (results.length <= 1) return results;
+
+  const listing = results
+    .map(
+      (r, i) =>
+        `${i + 1}. [${r.payload.module} | ${r.payload.lesson} | ${r.payload.timestamp}] ${r.payload.text.slice(0, 300)}`
+    )
+    .join("\n\n");
+
+  try {
+    const raw = await generate(`Question: ${question}\n\nCandidates:\n${listing}`, {
+      systemInstruction: RERANK_SYSTEM,
+      temperature: 0,
+    });
+    const match = raw.match(/\[[\d,\s]*\]/);
+    if (!match) throw new Error("no JSON array found in rerank response");
+    const order = JSON.parse(match[0]);
+    const reranked = order.map((n) => results[n - 1]).filter(Boolean);
+    return reranked.length ? reranked : results; // fallback if parsing produced nothing usable
+  } catch (err) {
+    console.error("[rerank] failed, falling back to vector-score order:", err.message);
+    return results;
+  }
+}
+
+async function answerQuestion(userMessage, history = []) {
+  const standaloneQuery = await condenseQuery(userMessage, history);
+
+  const [queryVector, hydePassage] = await Promise.all([
+    embedText(standaloneQuery),
+    generateHydePassage(standaloneQuery),
+  ]);
+
+  const searchPromises = [search(queryVector, 8)];
+  if (hydePassage) {
+    const hydeVector = await embedText(hydePassage);
+    searchPromises.push(search(hydeVector, 8));
+  }
+
+  const resultSets = await Promise.all(searchPromises);
+  const candidates = mergeResults(resultSets, 10);
+
+  if (!candidates.length) {
+    return {
+      answer: "I couldn't find anything relevant to that in the course content.",
+      sources: [],
+    };
+  }
+
+  const reranked = await rerankResults(standaloneQuery, candidates);
+  const results = reranked.slice(0, 5);
+
+  const context = buildContext(results);
+  const historyBlock = history.length ? `Recent conversation:\n${formatHistory(history, 6)}\n\n` : "";
+  const prompt = `${ANSWER_SYSTEM}\n\n${historyBlock}Source excerpts:\n${context}\n\nStudent question: ${userMessage}`;
+
+  const answer = await generate(prompt, { temperature: 0.2 });
+
+  return {
+    answer,
+    sources: results.map((r) => ({
+      module: r.payload.module,
+      lesson: r.payload.lesson,
+      timestamp: r.payload.timestamp,
+      score: r.score,
+    })),
+  };
+}
+
+module.exports = { answerQuestion };

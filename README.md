@@ -1,0 +1,107 @@
+# LectureLens
+
+Answers student questions about a Udemy course's video content, citing the
+exact module, lesson, and timestamp where the topic was taught.
+
+## Architecture
+
+```
+SRT/VTT files → parse → chunk (with timestamps) → embed (local, all-MiniLM-L6-v2) → Qdrant
+                                                                                        ↓
+user question → input guardrail (history-aware) → query condensation (multi-turn)
+              → embed + HyDE → retrieve (10 candidates) → LLM rerank → top 5
+              → answer generation (cited, history-aware)
+```
+
+Pipeline stages, mapped to the original reference diagram:
+
+| Stage | Diagram equivalent | Status |
+|---|---|---|
+| Chunking + embedding | Data ingestion | Done (local embeddings, no rate limits) |
+| Input guardrail | Guardrails / PII detection | Done — single on-topic/off-topic classifier, history-aware |
+| Query condensation | (multi-turn extension, not in original diagram) | Done — resolves follow-ups like "what about on iOS?" |
+| HyDE | HyDE | Done — bridges spoken-lecture phrasing vs. formal questions |
+| Reranking | RANK | Done — LLM reranks merged candidates before final selection |
+| Query routing (SQL/vector/S3) | Query Routing | **Not applicable** — single course, single vector store, nothing to route between |
+| Step-back / query decomposition | More Abstraction / Decompose | Query decomposition in progress; step-back skipped (HyDE + condensation already cover similar ground) |
+
+## Setup
+
+1. **Gemini API key** (free): https://aistudio.google.com/apikey — used only
+   for guardrail/condense/HyDE/rerank/answer LLM calls, not embeddings.
+2. **Qdrant Cloud free cluster**: https://cloud.qdrant.io
+3. Backend:
+   ```
+   npm install
+   cp .env.example .env
+   # fill in GEMINI_API_KEY, QDRANT_URL, QDRANT_API_KEY
+   ```
+4. Frontend:
+   ```
+   cd frontend
+   npm install
+   ```
+
+## Ingest your course
+
+```
+npm run ingest -- "/path/to/class-subtitle"
+```
+
+Walks `module N/lesson-folder/*.srt|.vtt`, chunks (~45s per chunk), embeds
+locally (no API, no rate limits), upserts to Qdrant. Re-run after any change
+to `cleanLessonTitle`/`cleanModuleName` in `src/ingest.js` — delete the
+Qdrant collection first so old and new casing don't mix.
+
+## Run it
+
+```
+npm start                      # backend on :3001
+cd frontend && npm run dev     # frontend on :5173
+```
+
+## Known limitations (deliberate scope decisions, not oversights)
+
+- **Single course only.** Query routing across multiple courses/data sources
+  is architecturally not needed here — there's one vector store. See Future
+  Scope below for what multi-course support would require.
+- **Guardrail is a single classifier call**, not the full PII/competitor
+  detection pipeline from the reference diagram — appropriate for a
+  single-course student support bot.
+- **Chat history is per-browser** (`localStorage`), not synced across
+  devices or persisted server-side.
+
+## Future scope — turning this from a project into a product
+
+Ranked roughly by effort-to-value if this continues past the assignment:
+
+1. **Multi-course support with real query routing.** Add a course selector,
+   tag every chunk with a `course_id`, and route retrieval to the right
+   course's data — this is where the "Query Routing" diagram node actually
+   becomes applicable, unlike now.
+2. **Analytics / instructor dashboard.** Log every question, its condensed
+   query, retrieval scores, and whether the guardrail blocked it, to a small
+   database (SQLite is enough to start). Surface: most-asked topics, questions
+   with weak retrieval scores (signals a content gap or confusing lesson),
+   and blocked/off-topic queries. Needs real usage data to be convincing —
+   don't ship an empty dashboard.
+3. **Course outline sidebar.** Let students browse modules/lessons directly
+   instead of only asking questions — useful for students who don't know
+   what to ask yet.
+4. **Query decomposition for compound questions** ("explain OAuth and push
+   notifications") — split into sub-questions, retrieve for each, merge.
+5. **Streaming answers.** Stream the LLM response token-by-token to the UI
+   instead of waiting for the full answer — meaningful perceived-speed
+   improvement, no architecture change needed.
+6. **Feedback loop.** Thumbs up/down on answers, stored alongside the
+   analytics log — lets you distinguish "low retrieval score but actually a
+   fine answer" from "high score but wrong answer."
+7. **Server-side chat history + accounts.** Move history off `localStorage`
+   so it syncs across devices; needed if this ever has real multiple users.
+8. **Faithfulness/hallucination check.** A second LLM pass verifying the
+   final answer's claims are actually supported by the cited excerpts, before
+   returning it — real value, but needs careful testing to avoid false
+   rejections of good answers.
+9. **Video timestamp deep-linking.** If lesson videos are hosted somewhere
+   with seek-to-timestamp URLs (e.g. an internal LMS), turn the citation
+   timestamps into clickable links that jump straight to that second.

@@ -1,0 +1,22 @@
+node_modules/
+frontend/node_modules/
+
+.env
+.env.local
+frontend/.env
+frontend/.env.local
+
+dist/
+frontend/dist/
+frontend/build/
+
+.DS_Store
+*.log
+npm-debug.log*
+
+.vercel
+
+# Course transcript data - copyrighted third-party content, don't publish
+class-subtitle/
+class-subtitle.zip
+__MACOSX/   
