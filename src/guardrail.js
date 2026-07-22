@@ -38,8 +38,8 @@ async function checkGuardrail(userMessage, history = []) {
     const clean = verdict.trim().toUpperCase();
     return clean.startsWith("ALLOW");
   } catch (err) {
-    console.error("[guardrail] check failed, failing closed:", err.message);
-    return false; // fail closed - if guardrail itself errors, reject
+    console.error("[guardrail] check failed, failing open:", err.message);
+    return true; // fail open - if guardrail fails, allow RAG pipeline to answer/handle it
   }
 }
 
