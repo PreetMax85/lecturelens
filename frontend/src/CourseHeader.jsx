@@ -15,7 +15,7 @@ export default function CourseHeader() {
       <div className="course-header-top">
         <span className="course-eyebrow">Ask anything from</span>
         <h1 className="course-title">
-          Complete Mobile Developer <span className="course-title-sub">— React Native &amp; Expo</span>
+          Complete Mobile Developer <span className="course-title-sub">— React Native & Expo</span>
         </h1>
         <p className="course-desc">
           22 hours of lessons on components, navigation, APIs, sensors, camera, maps, and auth —
