@@ -6,9 +6,9 @@ function buildContext(results) {
   return results
     .map(
       (r, i) =>
-        `[Source ${i + 1}] ${r.payload.module} | Lesson: ${r.payload.lesson} | Timestamp: ${r.payload.timestamp}\n${r.payload.text}`
+        `[Source ${i + 1}]\nModule: ${r.payload.module}\nLesson: ${r.payload.lesson}\nTimestamp: ${r.payload.timestamp}\nTranscript:\n${r.payload.text}`
     )
-    .join("\n\n");
+    .join("\n\n---\n\n");
 }
 
 const ANSWER_SYSTEM = `You are a helpful teaching assistant for a video course.
@@ -23,6 +23,13 @@ conversation.
 
 Cite where information came from using this exact format: (<module>, Lesson: <lesson>, at <timestamp>)
 e.g. (Module 13, Lesson: Implementing Google OAuth, at 04:12)
+
+CRITICAL TIMESTAMP RULE: Each source excerpt has a "Timestamp:" field in its
+metadata. When you cite a source, you MUST copy the EXACT timestamp shown in
+that source's Timestamp field. Do NOT default to 00:00 or invent a timestamp.
+If Source 1 says "Timestamp: 15:42" and Source 2 says "Timestamp: 02:48",
+cite them as "at 15:42" and "at 02:48" respectively. Always read the
+Timestamp field of the specific source you are referencing.
 
 Important: cite each fact ONCE. If a sentence already states the module, lesson,
 or timestamp directly (e.g. answering "when was X taught"), do NOT also add a
