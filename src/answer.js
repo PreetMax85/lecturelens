@@ -1,12 +1,17 @@
 const { embedText } = require("./local-embed");
 const { generate } = require("./gemini");
 const { search } = require("./qdrant");
+const { formatTimestamp } = require("./chunker");
 
 function buildContext(results) {
   return results
     .map(
-      (r, i) =>
-        `[Source ${i + 1}]\nModule: ${r.payload.module}\nLesson: ${r.payload.lesson}\nTimestamp: ${r.payload.timestamp}\nTranscript:\n${r.payload.text}`
+      (r, i) => {
+        const startTs = r.payload.timestamp;
+        const endTs = r.payload.end != null ? formatTimestamp(r.payload.end) : null;
+        const tsLabel = endTs && endTs !== startTs ? `${startTs} – ${endTs}` : startTs;
+        return `[Source ${i + 1}]\nModule: ${r.payload.module}\nLesson: ${r.payload.lesson}\nTimestamp: ${tsLabel}\nTranscript:\n${r.payload.text}`;
+      }
     )
     .join("\n\n---\n\n");
 }
@@ -22,13 +27,14 @@ still ground every factual claim in the source excerpts, not in the prior
 conversation.
 
 Cite where information came from using this exact format: (<module>, Lesson: <lesson>, at <timestamp>)
-e.g. (Module 13, Lesson: Implementing Google OAuth, at 04:12)
+e.g. (Module 13, Lesson: Implementing Google OAuth, at 04:12 – 05:30)
 
-CRITICAL TIMESTAMP RULE: Each source excerpt has a "Timestamp:" field in its
-metadata. When you cite a source, you MUST copy the EXACT timestamp shown in
-that source's Timestamp field. Do NOT default to 00:00 or invent a timestamp.
-If Source 1 says "Timestamp: 15:42" and Source 2 says "Timestamp: 02:48",
-cite them as "at 15:42" and "at 02:48" respectively. Always read the
+CRITICAL TIMESTAMP RULE: Each source excerpt has a "Timestamp:" field showing
+a time range (e.g. "02:10 – 03:15"). When you cite a source, you MUST use the
+EXACT timestamp range from that source's Timestamp field. Do NOT default to
+00:00 or invent a timestamp. If Source 1 says "Timestamp: 15:42 – 16:20" and
+Source 2 says "Timestamp: 02:48 – 03:30", cite them with those exact ranges.
+Always read the
 Timestamp field of the specific source you are referencing.
 
 Important: cite each fact ONCE. If a sentence already states the module, lesson,
@@ -166,12 +172,16 @@ async function answerQuestion(userMessage, history = []) {
 
   return {
     answer,
-    sources: results.map((r) => ({
-      module: r.payload.module,
-      lesson: r.payload.lesson,
-      timestamp: r.payload.timestamp,
-      score: r.score,
-    })),
+    sources: results.map((r) => {
+      const startTs = r.payload.timestamp;
+      const endTs = r.payload.end != null ? formatTimestamp(r.payload.end) : null;
+      return {
+        module: r.payload.module,
+        lesson: r.payload.lesson,
+        timestamp: endTs && endTs !== startTs ? `${startTs} – ${endTs}` : startTs,
+        score: r.score,
+      };
+    }),
   };
 }
 
