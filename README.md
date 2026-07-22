@@ -60,6 +60,28 @@ npm start                      # backend on :3001
 cd frontend && npm run dev     # frontend on :5173
 ```
 
+## Deployment
+
+### Backend (Render)
+
+Set these environment variables in your [Render](https://render.com) dashboard:
+
+| Variable | Description |
+|---|---|
+| `GEMINI_API_KEY` | Gemini API key |
+| `QDRANT_URL` | Qdrant cluster URL |
+| `QDRANT_API_KEY` | Qdrant API key |
+| `QDRANT_COLLECTION` | Qdrant collection name |
+| `FRONTEND_URL` | Your Vercel frontend URL (no trailing slash) |
+
+### Frontend (Vercel)
+
+Set `VITE_API_URL` to your Render backend URL in the [Vercel](https://vercel.com) project settings (Environment Variables).
+
+## Screenshots
+
+![Demo](screenshots/demo-1.png)
+
 ## Known limitations (deliberate scope decisions, not oversights)
 
 - **Single course only.** Query routing across multiple courses/data sources
