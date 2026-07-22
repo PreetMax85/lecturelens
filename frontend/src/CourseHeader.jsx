@@ -1,13 +1,4 @@
-// Course branding header. The signature element is a timestamp ruler —
-// a literal visual echo of the product's core promise (ask anything,
-// land on the exact second), scaled to the course's real runtime.
-
-const TOTAL_MINUTES = 22 * 60 + 41; // 22h 41m, the course's actual runtime
-const HOUR_TICKS = [0, 4, 8, 12, 16, 20]; // sparse ticks, plus end label separately
-
-function formatHourTick(hour) {
-  return `${hour}h`;
-}
+// Course branding header.
 
 export default function CourseHeader() {
   return (

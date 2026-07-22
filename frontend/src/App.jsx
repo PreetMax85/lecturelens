@@ -54,7 +54,7 @@ export default function App() {
         body: JSON.stringify({
           message: text,
           history: messages
-            .filter((m) => m.role === "user" || m.role === "assistant")
+            .filter((m) => (m.role === "user" || m.role === "assistant") && m.content !== GREETING.content)
             .slice(-8)
             .map((m) => ({ role: m.role, content: m.content })),
         }),
