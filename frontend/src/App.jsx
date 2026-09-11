@@ -103,6 +103,7 @@ export default function App() {
           role: "assistant",
           content: data.answer || data.error || "Something went wrong.",
           sources: data.sources || [],
+          unverified: data.citationCheck?.unverified || [],
         },
       ]);
     } catch (err) {
@@ -165,6 +166,13 @@ export default function App() {
                       </span>
                     ))}
                   </div>
+                )}
+                {m.unverified?.length > 0 && (
+                  <p className="citation-warning">
+                    {m.unverified.length === 1
+                      ? "1 citation above doesn't match the excerpts it was based on, so double-check it."
+                      : `${m.unverified.length} citations above don't match the excerpts they were based on, so double-check them.`}
+                  </p>
                 )}
               </div>
             </div>
