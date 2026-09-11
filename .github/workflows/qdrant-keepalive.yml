@@ -1,0 +1,31 @@
+# Qdrant Cloud suspends free clusters after 1 week without use and deletes
+# them after 4 weeks. Read one point every 3 days so the cluster never goes
+# idle. If the read fails (cluster suspended, deleted, or credentials
+# rotated), the job fails and GitHub emails the repo owner.
+#
+# Needs repo secrets QDRANT_URL and QDRANT_API_KEY (QDRANT_COLLECTION is
+# optional, defaults to course_chunks).
+
+name: Qdrant keep-alive
+
+on:
+  schedule:
+    - cron: "17 6 */3 * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read one point from the collection
+        env:
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+          QDRANT_COLLECTION: ${{ secrets.QDRANT_COLLECTION }}
+        run: |
+          curl --fail-with-body --silent --show-error --max-time 30 \
+            -X POST "${QDRANT_URL%/}/collections/${QDRANT_COLLECTION:-course_chunks}/points/scroll" \
+            -H "api-key: ${QDRANT_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d '{"limit": 1, "with_payload": false, "with_vector": false}' \
+            -o /dev/null -w "Qdrant responded %{http_code}\n"
