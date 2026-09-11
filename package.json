@@ -4,6 +4,7 @@
   "description": "Advanced RAG chatbot over Udemy course SRT/VTT files with timestamp citations",
   "main": "src/server.js",
   "scripts": {
+    "build": "node scripts/prefetch-model.js",
     "ingest": "node src/ingest.js",
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
