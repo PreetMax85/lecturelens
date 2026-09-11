@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const { checkGuardrail } = require("./guardrail");
 const { answerQuestion } = require("./answer");
+const { embedText } = require("./local-embed");
 
 const app = express();
 app.use(
@@ -43,4 +44,9 @@ app.post("/chat", async (req, res) => {
 app.get("/health", (req, res) => res.json({ ok: true }));
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+  // Load the embedding model now rather than on the first question, so a
+  // visitor who wakes the server isn't also waiting on model init.
+  embedText("warmup").catch((err) => console.error("[startup] embedder warmup failed:", err.message));
+});
