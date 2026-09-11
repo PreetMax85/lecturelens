@@ -23,7 +23,7 @@ Pipeline stages, mapped to the original reference diagram:
 | HyDE | HyDE | Done: bridges spoken-lecture phrasing vs. formal questions |
 | Reranking | RANK | Done: LLM reranks merged candidates before final selection |
 | Query routing (SQL/vector/S3) | Query Routing | **Not applicable**: single course, single vector store, nothing to route between |
-| Step-back / query decomposition | More Abstraction / Decompose | Query decomposition in progress; step-back skipped (HyDE + condensation already cover similar ground) |
+| Step-back / query decomposition | More Abstraction / Decompose | Not implemented. Step-back skipped because HyDE and condensation cover similar ground; decomposition is listed under Future scope |
 
 ## Setup
 
