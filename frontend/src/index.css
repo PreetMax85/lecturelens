@@ -131,6 +131,22 @@ body {
   height: 100vh;
 }
 
+.server-banner {
+  flex-shrink: 0;
+  margin: 16px 32px 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+}
+
+.server-banner.down {
+  border-color: #e5484d;
+}
+
 .chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -244,6 +260,10 @@ body {
   .chat-messages, .chat-input-row {
     padding-left: 16px;
     padding-right: 16px;
+  }
+  .server-banner {
+    margin-left: 16px;
+    margin-right: 16px;
   }
   .bubble {
     max-width: 85%;
