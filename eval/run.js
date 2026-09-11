@@ -5,7 +5,9 @@
 // Runs every labeled question in eval/questions.json through retrieve()
 // from src/answer.js (the production code path) against the live Qdrant
 // index, with pipeline stages switched on one at a time, and reports hit@k
-// and MRR per configuration. Writes eval/results.json and eval/results.md.
+// and MRR per configuration. Then generates full production answers and
+// measures how many of their citations verify against the retrieved
+// excerpts. Writes eval/results.json and eval/results.md.
 //
 // --cache-only  fail on any Gemini cache miss instead of calling the API,
 //               so the committed numbers can be reproduced with no quota.
@@ -14,7 +16,8 @@ require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
 
-const { retrieve } = require("../src/answer");
+const { retrieve, answerQuestion } = require("../src/answer");
+const { extractCitations } = require("../src/citations");
 const { scrollPayloads, COLLECTION } = require("../src/qdrant");
 const { MODEL } = require("../src/gemini");
 const { createCachedLlm } = require("./llm-cache");
@@ -112,6 +115,38 @@ async function runConfig(config, questions, llm, queryOf, historyOf) {
   return { perQuestion, fallbacks };
 }
 
+// Full production answers (condense + HyDE + rerank + generation). Also
+// counts timestamps outside any parsed citation, since a citation written
+// in a shape the parser doesn't recognise would otherwise go unchecked.
+async function runCitationCheck(questions, llm) {
+  const perQuestion = {};
+  process.stdout.write(`${"Production answers (citation check)".padEnd(42)} `);
+  for (const q of questions) {
+    const { answer, citationCheck } = await answerQuestion(q.question, q.history || [], { llm });
+    let rest = answer;
+    for (const c of extractCitations(answer)) rest = rest.replace(c.text, "");
+    perQuestion[q.id] = {
+      ...citationCheck,
+      strayTimestamps: (rest.match(/\b\d{1,2}:\d{2}\b/g) || []).length,
+    };
+    process.stdout.write(citationCheck.unverified.length ? "x" : ".");
+  }
+  process.stdout.write("\n");
+  const all = Object.values(perQuestion);
+  const sum = (f) => all.reduce((acc, r) => acc + f(r), 0);
+  const byStatus = (status) => sum((r) => r.unverified.filter((u) => u.status === status).length);
+  return {
+    answers: all.length,
+    citations: sum((r) => r.total),
+    verified: sum((r) => r.verified),
+    wrongTimestamp: byStatus("wrong_timestamp"),
+    unknownSource: byStatus("unknown_source"),
+    answersWithoutCitations: all.filter((r) => r.total === 0).length,
+    strayTimestamps: sum((r) => r.strayTimestamps),
+    perQuestion,
+  };
+}
+
 const pct = (x) => `${Math.round(x * 100)}%`;
 
 function toMarkdown(results) {
@@ -140,6 +175,14 @@ function toMarkdown(results) {
     "",
     header,
     ...multi,
+    "",
+    "**Citation accuracy** (full production answers, all questions)",
+    "",
+    `${results.citations.verified} of ${results.citations.citations} citations verified ` +
+      `(${pct(results.citations.verified / Math.max(results.citations.citations, 1))}) across ${results.citations.answers} answers. ` +
+      `Wrong timestamp: ${results.citations.wrongTimestamp}. Lesson not among the excerpts: ${results.citations.unknownSource}. ` +
+      `Answers with no parseable citation: ${results.citations.answersWithoutCitations}. ` +
+      `Timestamps outside a parseable citation: ${results.citations.strayTimestamps}.`,
     "",
     "**Per-question changes in hit@5**",
     "",
@@ -193,6 +236,8 @@ async function main() {
       losses: ids.filter((id) => a[id].rank == null && b[id].rank != null).length,
     });
   }
+
+  results.citations = await runCitationCheck(questions, llm);
 
   console.log(`\nLLM: ${stats.calls} API calls, ${stats.hits} cache hits, ${stats.failures.length} failures.`);
   if (stats.failures.length) {
