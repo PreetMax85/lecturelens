@@ -74,6 +74,21 @@ Set these environment variables in your [Render](https://render.com) dashboard:
 | `QDRANT_COLLECTION` | Qdrant collection name |
 | `FRONTEND_URL` | Your Vercel frontend URL (no trailing slash) |
 
+Set the build command to `npm install && npm run build`. The build step
+downloads the embedding model, because Render's runtime disk is wiped on
+every spin-down and the model would otherwise be re-fetched on each cold
+start. The free tier still sleeps when idle; the frontend pings `/health` on
+load and shows a "waking up" banner while that happens.
+
+### Keeping the Qdrant free cluster alive
+
+Qdrant Cloud suspends free clusters after a week without use and deletes
+them after four. `.github/workflows/qdrant-keepalive.yml` reads one point
+every 3 days and fails (triggering a GitHub email) if the cluster is gone.
+Add `QDRANT_URL` and `QDRANT_API_KEY` as repository secrets. GitHub pauses
+scheduled workflows after 60 days without repository activity, so check the
+Actions tab if the repo goes quiet for that long.
+
 ### Frontend (Vercel)
 
 Set `VITE_API_URL` to your Render backend URL in the [Vercel](https://vercel.com) project settings (Environment Variables).
