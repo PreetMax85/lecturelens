@@ -2,6 +2,7 @@
 // generation calls - embeddings moved to local-embed.js (see there for why).
 const GEMINI_KEY = process.env.GEMINI_API_KEY;
 const BASE = "https://generativelanguage.googleapis.com/v1beta";
+const MODEL = "gemini-3.1-flash-lite";
 
 if (!GEMINI_KEY) {
   console.warn("[gemini] GEMINI_API_KEY not set - calls will fail");
@@ -18,7 +19,7 @@ async function generate(prompt, { temperature = 0.2, systemInstruction } = {}) {
   }
 
   const res = await fetch(
-    `${BASE}/models/gemini-3.1-flash-lite:generateContent?key=${GEMINI_KEY}`,
+    `${BASE}/models/${MODEL}:generateContent?key=${GEMINI_KEY}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -34,4 +35,4 @@ async function generate(prompt, { temperature = 0.2, systemInstruction } = {}) {
   return candidate.content.parts.map((p) => p.text).join("");
 }
 
-module.exports = { generate };
+module.exports = { generate, MODEL };
