@@ -2,6 +2,7 @@ const { embedText } = require("./local-embed");
 const { generate } = require("./gemini");
 const { search } = require("./qdrant");
 const { formatTimestamp } = require("./chunker");
+const { verifyCitations } = require("./citations");
 
 function buildContext(results) {
   return results
@@ -170,13 +171,14 @@ async function retrieve(
   return { standaloneQuery, candidates, results: ordered.slice(0, FINAL_K) };
 }
 
-async function answerQuestion(userMessage, history = []) {
-  const { results } = await retrieve(userMessage, history);
+async function answerQuestion(userMessage, history = [], { llm = generate } = {}) {
+  const { results } = await retrieve(userMessage, history, { llm });
 
   if (!results.length) {
     return {
       answer: "I couldn't find anything relevant to that in the course content.",
       sources: [],
+      citationCheck: { total: 0, verified: 0, unverified: [] },
     };
   }
 
@@ -184,10 +186,17 @@ async function answerQuestion(userMessage, history = []) {
   const historyBlock = history.length ? `Recent conversation:\n${formatHistory(history, 6)}\n\n` : "";
   const prompt = `${ANSWER_SYSTEM}\n\n${historyBlock}Source excerpts:\n${context}\n\nStudent question: ${userMessage}`;
 
-  const answer = await generate(prompt, { temperature: 0.2 });
+  const answer = await llm(prompt, { temperature: 0.2 });
+
+  const check = verifyCitations(answer, results.map((r) => r.payload));
+  const unverified = check.citations
+    .filter((c) => c.status !== "verified")
+    .map(({ text, status }) => ({ text, status }));
+  if (unverified.length) console.warn("[citations] unverified:", JSON.stringify(unverified));
 
   return {
     answer,
+    citationCheck: { total: check.total, verified: check.verified, unverified },
     sources: results.map((r) => {
       const startTs = r.payload.timestamp;
       const endTs = r.payload.end != null ? formatTimestamp(r.payload.end) : null;
