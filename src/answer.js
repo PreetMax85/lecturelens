@@ -63,10 +63,10 @@ function formatHistory(history, limit) {
     .join("\n");
 }
 
-async function condenseQuery(userMessage, history) {
+async function condenseQuery(userMessage, history, llm = generate) {
   if (!history || history.length === 0) return userMessage;
   try {
-    const rewritten = await generate(
+    const rewritten = await llm(
       `Conversation so far:\n${formatHistory(history, 6)}\n\nNew message: ${userMessage}`,
       { systemInstruction: CONDENSE_SYSTEM, temperature: 0 }
     );
@@ -84,9 +84,9 @@ tone and vocabulary an instructor would actually use in a lecture, not a formal 
 answer. This hypothetical passage is only used to improve semantic search - it is never
 shown to the student.`;
 
-async function generateHydePassage(question) {
+async function generateHydePassage(question, llm = generate) {
   try {
-    return await generate(question, { systemInstruction: HYDE_SYSTEM, temperature: 0.4 });
+    return await llm(question, { systemInstruction: HYDE_SYSTEM, temperature: 0.4 });
   } catch (err) {
     console.error("[hyde] generation failed, falling back to raw query only:", err.message);
     return null;
@@ -111,7 +111,7 @@ relevant to answering the question. Exclude numbers for excerpts that are not
 actually relevant. Respond with ONLY the JSON array, e.g. [3,1,5] - no other
 text, no explanation, no markdown fences.`;
 
-async function rerankResults(question, results) {
+async function rerankResults(question, results, llm = generate) {
   if (results.length <= 1) return results;
 
   const listing = results
@@ -122,7 +122,7 @@ async function rerankResults(question, results) {
     .join("\n\n");
 
   try {
-    const raw = await generate(`Question: ${question}\n\nCandidates:\n${listing}`, {
+    const raw = await llm(`Question: ${question}\n\nCandidates:\n${listing}`, {
       systemInstruction: RERANK_SYSTEM,
       temperature: 0,
     });
@@ -137,12 +137,22 @@ async function rerankResults(question, results) {
   }
 }
 
-async function answerQuestion(userMessage, history = []) {
-  const standaloneQuery = await condenseQuery(userMessage, history);
+const CANDIDATE_POOL = 10;
+const FINAL_K = 5;
+
+// Retrieval half of the pipeline. Each stage can be switched off so
+// eval/run.js can ablate them; production always runs with all stages on.
+// `llm` is injectable so the eval can cache and rate-limit Gemini calls.
+async function retrieve(
+  userMessage,
+  history = [],
+  { condense = true, hyde = true, rerank = true, llm = generate } = {}
+) {
+  const standaloneQuery = condense ? await condenseQuery(userMessage, history, llm) : userMessage;
 
   const [queryVector, hydePassage] = await Promise.all([
     embedText(standaloneQuery),
-    generateHydePassage(standaloneQuery),
+    hyde ? generateHydePassage(standaloneQuery, llm) : null,
   ]);
 
   const searchPromises = [search(queryVector, 8)];
@@ -152,17 +162,21 @@ async function answerQuestion(userMessage, history = []) {
   }
 
   const resultSets = await Promise.all(searchPromises);
-  const candidates = mergeResults(resultSets, 10);
+  const candidates = mergeResults(resultSets, CANDIDATE_POOL);
 
-  if (!candidates.length) {
+  const ordered = rerank ? await rerankResults(standaloneQuery, candidates, llm) : candidates;
+  return { standaloneQuery, candidates, results: ordered.slice(0, FINAL_K) };
+}
+
+async function answerQuestion(userMessage, history = []) {
+  const { results } = await retrieve(userMessage, history);
+
+  if (!results.length) {
     return {
       answer: "I couldn't find anything relevant to that in the course content.",
       sources: [],
     };
   }
-
-  const reranked = await rerankResults(standaloneQuery, candidates);
-  const results = reranked.slice(0, 5);
 
   const context = buildContext(results);
   const historyBlock = history.length ? `Recent conversation:\n${formatHistory(history, 6)}\n\n` : "";
@@ -185,4 +199,4 @@ async function answerQuestion(userMessage, history = []) {
   };
 }
 
-module.exports = { answerQuestion };
+module.exports = { answerQuestion, retrieve };
