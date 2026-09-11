@@ -155,7 +155,9 @@ async function retrieve(
     hyde ? generateHydePassage(standaloneQuery, llm) : null,
   ]);
 
-  const searchPromises = [search(queryVector, 8)];
+  // Two searches of 8 merge to up to 10 unique candidates; without a HyDE
+  // passage, fetch the full pool from the raw query instead.
+  const searchPromises = [search(queryVector, hydePassage ? 8 : CANDIDATE_POOL)];
   if (hydePassage) {
     const hydeVector = await embedText(hydePassage);
     searchPromises.push(search(hydeVector, 8));
