@@ -1,0 +1,217 @@
+[
+  {
+    "id": "c01",
+    "author": "generated",
+    "question": "Do I have to pick between Expo and React Native, or do they work together?",
+    "expected": [
+      { "module": "Module 1", "lesson": "02_react-native-vs-expo_epm", "start": "09:52", "end": "11:03" },
+      { "module": "Module 1", "lesson": "02_react-native-vs-expo_epm", "start": "11:48", "end": "12:28" }
+    ]
+  },
+  {
+    "id": "c02",
+    "author": "generated",
+    "question": "My app gets really laggy when I show a few hundred items in a list. What should I be using instead?",
+    "expected": [
+      { "module": "Module 2", "lesson": "04_list-&-data-display-components_epm", "start": "01:27", "end": "02:46" }
+    ]
+  },
+  {
+    "id": "c03",
+    "author": "generated",
+    "question": "How can I put a small button on the right side of the top bar of a screen?",
+    "expected": [
+      { "module": "Module 3", "lesson": "4. Params, Initial Params & Header Customization_epm", "start": "08:32", "end": "09:57" }
+    ]
+  },
+  {
+    "id": "c04",
+    "author": "generated",
+    "question": "In a route that catches everything after /admin, how do I get each part of the URL?",
+    "expected": [
+      { "module": "Module 4", "lesson": "4-catch-all-route-segments_epm", "start": "05:36", "end": "07:04" },
+      { "module": "Module 4", "lesson": "4-catch-all-route-segments_epm", "start": "08:18", "end": "09:47" }
+    ]
+  },
+  {
+    "id": "c05",
+    "author": "generated",
+    "question": "Do I need a separate Node server for my app's backend, or can Expo handle that?",
+    "expected": [
+      { "module": "Module 5", "lesson": "1. What Are API Routes in Expo Router_epm", "start": "00:01", "end": "02:50" },
+      { "module": "Module 5", "lesson": "1. What Are API Routes in Expo Router_epm", "start": "09:05", "end": "10:17" }
+    ]
+  },
+  {
+    "id": "c06",
+    "author": "generated",
+    "question": "I turned on the fingerprint or face unlock option when saving a password and now saving fails on my phone. Why?",
+    "expected": [
+      { "module": "Module 6", "lesson": "2.expo-secure-store_epm", "start": "15:06", "end": "16:36" },
+      { "module": "Module 6", "lesson": "2.expo-secure-store_epm", "start": "18:45", "end": "20:13" }
+    ]
+  },
+  {
+    "id": "c07",
+    "author": "generated",
+    "question": "Which sensor would I use to steer a car in a racing game by turning the phone?",
+    "expected": [
+      { "module": "Module 7", "lesson": "2. Understanding the Gyroscope The Secret Behind Motion & Orientation_epm", "start": "00:00", "end": "02:13" }
+    ]
+  },
+  {
+    "id": "c08",
+    "author": "generated",
+    "question": "How do shopping apps open straight to a product page when someone shares a link with you?",
+    "expected": [
+      { "module": "Module 9", "lesson": "2. Master Expo Linking - Deep Links, Universal URLs & Navigation Hooks_epm", "start": "00:44", "end": "01:21" },
+      { "module": "Module 9", "lesson": "2. Master Expo Linking - Deep Links, Universal URLs & Navigation Hooks_epm", "start": "02:03", "end": "02:46" }
+    ]
+  },
+  {
+    "id": "c09",
+    "author": "generated",
+    "question": "I added a maps package and it won't work in Expo Go at all. Why?",
+    "expected": [
+      { "module": "Module 10", "lesson": "1. What Is EAS Build Why You Need It & Dev Builds vs Expo Go_epm", "start": "06:27", "end": "07:56" },
+      { "module": "Module 10", "lesson": "1. What Is EAS Build Why You Need It & Dev Builds vs Expo Go_epm", "start": "09:24", "end": "10:46" }
+    ]
+  },
+  {
+    "id": "c10",
+    "author": "generated",
+    "question": "How do I move the map to a different city when a button is tapped?",
+    "expected": [
+      { "module": "Module 11", "lesson": "chapter-2 Map Camera Jump Demo -Programmatically Move & Focus the Map_epm", "start": "00:40", "end": "01:57" },
+      { "module": "Module 11", "lesson": "chapter-2 Map Camera Jump Demo -Programmatically Move & Focus the Map_epm", "start": "04:08", "end": "05:30" },
+      { "module": "Module 11", "lesson": "chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm", "start": "17:26", "end": "18:49" },
+      { "module": "Module 11", "lesson": "chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm", "start": "20:17", "end": "20:56" }
+    ]
+  },
+  {
+    "id": "c11",
+    "author": "generated",
+    "question": "Is the push token Expo gives me the same thing as a Firebase token?",
+    "expected": [
+      { "module": "Module 12", "lesson": "chapter-2-push-notification_epm", "start": "10:31", "end": "12:37" }
+    ]
+  },
+  {
+    "id": "c12",
+    "author": "generated",
+    "question": "I get the push token fine but notifications never actually show up on my Android phone. What am I missing?",
+    "expected": [
+      { "module": "Module 12", "lesson": "chapter-2-push-notification_epm", "start": "34:24", "end": "36:30" }
+    ]
+  },
+  {
+    "id": "c13",
+    "author": "generated",
+    "question": "What's the cleanest way to block logged-out users from certain screens with Expo Router?",
+    "expected": [
+      { "module": "Module 13", "lesson": "chapter-1-auth-in-expo-protected-routes-and-auth-flow_epm", "start": "02:54", "end": "03:37" },
+      { "module": "Module 13", "lesson": "chapter-1-auth-in-expo-protected-routes-and-auth-flow_epm", "start": "07:58", "end": "11:24" }
+    ]
+  },
+  {
+    "id": "c14",
+    "author": "generated",
+    "question": "After I log in, the app lands on a different screen than I expected. How does it decide where to send me?",
+    "expected": [
+      { "module": "Module 13", "lesson": "chapter-1-auth-in-expo-protected-routes-and-auth-flow_epm", "start": "12:08", "end": "13:36" },
+      { "module": "Module 13", "lesson": "chapter-1-auth-in-expo-protected-routes-and-auth-flow_epm", "start": "16:26", "end": "17:09" }
+    ]
+  },
+  {
+    "id": "c15",
+    "author": "generated",
+    "question": "I shipped my app to the Play Store with a spelling mistake. Do users have to download a whole new version just to get the fix?",
+    "expected": [
+      { "module": "Module 14", "lesson": "02_eas-update_epm", "start": "02:47", "end": "04:48" },
+      { "module": "Module 10", "lesson": "1. What Is EAS Build Why You Need It & Dev Builds vs Expo Go_epm", "start": "02:54", "end": "04:21" }
+    ]
+  },
+  {
+    "id": "c16",
+    "author": "generated",
+    "question": "In the AI story generator, why go through OpenRouter instead of calling Gemini directly?",
+    "expected": [
+      { "module": "Module 17", "lesson": "chapter-4_epm", "start": "01:23", "end": "03:31" }
+    ]
+  },
+  {
+    "id": "m01",
+    "author": "generated",
+    "history": [
+      { "role": "user", "content": "Where should I keep a user's login token on the phone?" },
+      { "role": "assistant", "content": "The course recommends Expo SecureStore for sensitive values like tokens, since it encrypts them on the device." }
+    ],
+    "question": "And if it's nothing sensitive?",
+    "expected": [
+      { "module": "Module 6", "lesson": "1.react-native-async-storage_epm", "start": "01:24", "end": "03:30" },
+      { "module": "Module 6", "lesson": "2.expo-secure-store_epm", "start": "20:13", "end": "21:42" }
+    ]
+  },
+  {
+    "id": "m02",
+    "author": "generated",
+    "history": [
+      { "role": "user", "content": "What is EAS?" },
+      { "role": "assistant", "content": "EAS stands for Expo Application Services, a set of cloud services from Expo for building, submitting, and updating apps." }
+    ],
+    "question": "And what's the last one for?",
+    "expected": [
+      { "module": "Module 10", "lesson": "1. What Is EAS Build Why You Need It & Dev Builds vs Expo Go_epm", "start": "02:54", "end": "04:21" },
+      { "module": "Module 14", "lesson": "02_eas-update_epm", "start": "01:21", "end": "04:48" }
+    ]
+  },
+  {
+    "id": "m03",
+    "author": "generated",
+    "history": [
+      { "role": "user", "content": "How do dynamic routes like [id].tsx work in Expo Router?" },
+      { "role": "assistant", "content": "You name a file with square brackets, like [id].tsx, and that part of the URL becomes a param you read with useLocalSearchParams." }
+    ],
+    "question": "What if I don't know how many of those parts there will be?",
+    "expected": [
+      { "module": "Module 4", "lesson": "4-catch-all-route-segments_epm", "start": "02:02", "end": "04:52" }
+    ]
+  },
+  {
+    "id": "m04",
+    "author": "generated",
+    "history": [
+      { "role": "user", "content": "What is FlatList for?" },
+      { "role": "assistant", "content": "FlatList renders long lists efficiently by only rendering the items currently on screen." }
+    ],
+    "question": "What if mine are split into groups, each with its own heading?",
+    "expected": [
+      { "module": "Module 2", "lesson": "04_list-&-data-display-components_epm", "start": "09:51", "end": "13:40" }
+    ]
+  },
+  {
+    "id": "m05",
+    "author": "generated",
+    "history": [
+      { "role": "user", "content": "How do I send an item id to the details screen with React Navigation?" },
+      { "role": "assistant", "content": "Pass an object as the second argument to navigation.navigate, then read it from route.params on the details screen." }
+    ],
+    "question": "Can I change what it says at the top of that screen too?",
+    "expected": [
+      { "module": "Module 3", "lesson": "4. Params, Initial Params & Header Customization_epm", "start": "06:22", "end": "07:46" },
+      { "module": "Module 3", "lesson": "4. Params, Initial Params & Header Customization_epm", "start": "10:39", "end": "11:21" }
+    ]
+  },
+  {
+    "id": "m06",
+    "author": "generated",
+    "history": [
+      { "role": "user", "content": "Who actually delivers push notifications to Android phones?" },
+      { "role": "assistant", "content": "Firebase Cloud Messaging (FCM). Every Android push notification ends up going through FCM." }
+    ],
+    "question": "What about iPhones?",
+    "expected": [
+      { "module": "Module 12", "lesson": "chapter-2-push-notification_epm", "start": "07:00", "end": "07:38" }
+    ]
+  }
+]
