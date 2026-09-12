@@ -3,7 +3,13 @@
 // A retrieved chunk is a strict hit if it comes from the labeled lesson AND
 // its time range overlaps a labeled window by at least MIN_OVERLAP_S seconds
 // (so a chunk that merely touches the window boundary doesn't count). A
-// lesson-level hit only requires the right lesson.
+// lesson-level hit only requires the right lesson, so it counts every strict
+// hit plus the near misses and is always the larger number.
+//
+// `returned` is tracked because the rerank stage drops excerpts it judges
+// irrelevant instead of padding the list, so hit@k and MRR@k are measured over
+// fewer than 5 results on those configs. Shorter lists can only lose hits, so
+// this handicaps the reranked rows rather than flattering them.
 
 const MIN_OVERLAP_S = 1;
 
@@ -32,6 +38,7 @@ function scoreQuestion(q, { candidates, results }) {
     lessonRank: firstRank(results, q.expected, sameLesson),
     poolHit: firstRank(candidates, q.expected, overlapsWindow) != null,
     poolSize: candidates.length,
+    returned: results.length,
   };
 }
 
@@ -46,6 +53,7 @@ function aggregate(scores) {
     lessonHit5: mean((s) => (s.lessonRank != null ? 1 : 0)),
     recall10: mean((s) => (s.poolHit ? 1 : 0)),
     avgPool: mean((s) => s.poolSize),
+    avgReturned: mean((s) => s.returned),
   };
 }
 

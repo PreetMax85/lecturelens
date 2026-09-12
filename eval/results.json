@@ -12,7 +12,8 @@
         "mrr5": 0.5243055555555555,
         "lessonHit5": 0.875,
         "recall10": 0.625,
-        "avgPool": 10
+        "avgPool": 10,
+        "avgReturned": 5
       },
       "perQuestion": {
         "c01": {
@@ -20,6 +21,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Do I have to pick between Expo and React Native, or do they work together?",
           "top5": [
             "Module 1 | 02_react-native-vs-expo_epm | 09:11-09:52",
@@ -34,6 +36,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "My app gets really laggy when I show a few hundred items in a list. What should I be using instead?",
           "top5": [
             "Module 2 | 04_list-&-data-display-components_epm | 01:27-02:07",
@@ -48,6 +51,7 @@
           "lessonRank": 2,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "How can I put a small button on the right side of the top bar of a screen?",
           "top5": [
             "Module 3 | 1. introduction to navigation in react native_epm | 07:58-08:41",
@@ -62,6 +66,7 @@
           "lessonRank": 2,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "In a route that catches everything after /admin, how do I get each part of the URL?",
           "top5": [
             "Module 5 | 2. Creating apis routes and calling from client side of screen_epm | 05:10-05:52",
@@ -76,6 +81,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Do I need a separate Node server for my app's backend, or can Expo handle that?",
           "top5": [
             "Module 5 | 1. What Are API Routes in Expo Router_epm | 01:25-02:08",
@@ -90,6 +96,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "I turned on the fingerprint or face unlock option when saving a password and now saving fails on my phone. Why?",
           "top5": [
             "Module 6 | 2.expo-secure-store_epm | 17:21-18:03",
@@ -104,6 +111,7 @@
           "lessonRank": 2,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Which sensor would I use to steer a car in a racing game by turning the phone?",
           "top5": [
             "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 04:08-04:50",
@@ -118,6 +126,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "How do shopping apps open straight to a product page when someone shares a link with you?",
           "top5": [
             "Module 9 | 2. Master Expo Linking - Deep Links, Universal URLs & Navigation Hooks_epm | 00:44-01:21",
@@ -132,6 +141,7 @@
           "lessonRank": 3,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "I added a maps package and it won't work in Expo Go at all. Why?",
           "top5": [
             "Module 11 | chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm | 08:23-09:03",
@@ -146,6 +156,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "How do I move the map to a different city when a button is tapped?",
           "top5": [
             "Module 11 | chapter-2 Map Camera Jump Demo -Programmatically Move & Focus the Map_epm | 03:23-04:07",
@@ -160,6 +171,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Is the push token Expo gives me the same thing as a Firebase token?",
           "top5": [
             "Module 12 | chapter-2-push-notification_epm | 11:54-12:37",
@@ -174,6 +186,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "I get the push token fine but notifications never actually show up on my Android phone. What am I missing?",
           "top5": [
             "Module 12 | chapter-2-push-notification_epm | 34:24-35:01",
@@ -188,6 +201,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "What's the cleanest way to block logged-out users from certain screens with Expo Router?",
           "top5": [
             "Module 13 | chapter-1-auth-in-expo-protected-routes-and-auth-flow_epm | 02:11-02:54",
@@ -202,6 +216,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "After I log in, the app lands on a different screen than I expected. How does it decide where to send me?",
           "top5": [
             "Module 1 | 03_setting-up-env-creating-first-expo-project_epm | 09:19-09:58",
@@ -216,6 +231,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "I shipped my app to the Play Store with a spelling mistake. Do users have to download a whole new version just to get the fix?",
           "top5": [
             "Module 14 | 02_eas-update_epm | 04:09-04:48",
@@ -230,6 +246,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "In the AI story generator, why go through OpenRouter instead of calling Gemini directly?",
           "top5": [
             "Module 17 | chapter-4_epm | 02:07-02:50",
@@ -244,6 +261,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "In web apps I'd just dump JSON into localStorage, but what local storage option do we use here when we need actual SQL querying on the device?",
           "top5": [
             "Module 6 | 1.react-native-async-storage_epm | 00:45-01:23",
@@ -258,6 +276,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "My step counter subscription keeps firing state updates even after I navigate away to a different screen, how do I turn it off?",
           "top5": [
             "Module 7 | 5. Pedometer & Step Tracking_epm | 07:12-07:56",
@@ -272,6 +291,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Where in the video series do we cover picking a photo from the user's phone library and cropping it before saving?",
           "top5": [
             "Module 8 | 3.Build a Profile Pic Creator - Pick, Crop & Save User Photos_epm | 07:46-08:28",
@@ -286,6 +306,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "I turned on airplane mode on my test device, but my network status check still says I have an active internet connection. Why?",
           "top5": [
             "Module 9 | 1.Expo Network Essentials - Detect Connectivity, IP & Airplane Mode_epm | 22:57-23:38",
@@ -300,6 +321,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "If I want the easiest setup for handling user sign-ins across both web and mobile, should I go with Clerk or set up individual providers like Google and GitHub directly?",
           "top5": [
             "Module 13 | chapter-6-implementing-clerk-authentication_epm | 14:07-14:48",
@@ -314,6 +336,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "Which module walks through the actual step-by-step process of submitting your finished app build to the Google Play Store?",
           "top5": [
             "Module 14 | 02_eas-update_epm | 01:21-02:06",
@@ -328,6 +351,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "I added a settings screen to my app, but the bottom tab navigation bar is showing up on it when it should be full screen. How do I keep it outside the tab layout?",
           "top5": [
             "Module 4 | 9-tab-navigation_epm | 02:10-02:51",
@@ -342,6 +366,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "I want the phone to physically vibrate with a quick haptic pulse when a user taps a button, what API or module do we use for that?",
           "top5": [
             "Module 9 | 3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm | 00:00-00:42",
@@ -363,7 +388,8 @@
         "mrr5": 0.548611111111111,
         "lessonHit5": 0.9166666666666666,
         "recall10": 0.75,
-        "avgPool": 9.833333333333334
+        "avgPool": 9.833333333333334,
+        "avgReturned": 5
       },
       "perQuestion": {
         "c01": {
@@ -371,6 +397,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 9,
+          "returned": 5,
           "query": "Do I have to pick between Expo and React Native, or do they work together?",
           "top5": [
             "Module 1 | 02_react-native-vs-expo_epm | 09:11-09:52",
@@ -385,6 +412,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "My app gets really laggy when I show a few hundred items in a list. What should I be using instead?",
           "top5": [
             "Module 2 | 04_list-&-data-display-components_epm | 01:27-02:07",
@@ -399,6 +427,7 @@
           "lessonRank": 3,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "How can I put a small button on the right side of the top bar of a screen?",
           "top5": [
             "Module 11 | chapter-3 Markers, Routes & Interactions - Map Features_epm | 02:49-03:29",
@@ -413,6 +442,7 @@
           "lessonRank": 2,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "In a route that catches everything after /admin, how do I get each part of the URL?",
           "top5": [
             "Module 5 | 2. Creating apis routes and calling from client side of screen_epm | 05:10-05:52",
@@ -427,6 +457,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Do I need a separate Node server for my app's backend, or can Expo handle that?",
           "top5": [
             "Module 5 | 1. What Are API Routes in Expo Router_epm | 01:25-02:08",
@@ -441,6 +472,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "I turned on the fingerprint or face unlock option when saving a password and now saving fails on my phone. Why?",
           "top5": [
             "Module 6 | 2.expo-secure-store_epm | 18:04-18:43",
@@ -455,6 +487,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Which sensor would I use to steer a car in a racing game by turning the phone?",
           "top5": [
             "Module 7 | 2. Understanding the Gyroscope The Secret Behind Motion & Orientation_epm | 00:42-01:27",
@@ -469,6 +502,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 9,
+          "returned": 5,
           "query": "How do shopping apps open straight to a product page when someone shares a link with you?",
           "top5": [
             "Module 9 | 2. Master Expo Linking - Deep Links, Universal URLs & Navigation Hooks_epm | 18:19-18:58",
@@ -483,6 +517,7 @@
           "lessonRank": 3,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "I added a maps package and it won't work in Expo Go at all. Why?",
           "top5": [
             "Module 11 | chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm | 08:23-09:03",
@@ -497,6 +532,7 @@
           "lessonRank": 3,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "How do I move the map to a different city when a button is tapped?",
           "top5": [
             "Module 11 | chapter-3 Markers, Routes & Interactions - Map Features_epm | 00:43-01:27",
@@ -511,6 +547,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Is the push token Expo gives me the same thing as a Firebase token?",
           "top5": [
             "Module 12 | chapter-2-push-notification_epm | 11:54-12:37",
@@ -525,6 +562,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "I get the push token fine but notifications never actually show up on my Android phone. What am I missing?",
           "top5": [
             "Module 12 | chapter-2-push-notification_epm | 37:16-37:59",
@@ -539,6 +577,7 @@
           "lessonRank": 4,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "What's the cleanest way to block logged-out users from certain screens with Expo Router?",
           "top5": [
             "Module 13 | chapter-2-credentials-login_epm | 08:34-09:16",
@@ -553,6 +592,7 @@
           "lessonRank": 4,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "After I log in, the app lands on a different screen than I expected. How does it decide where to send me?",
           "top5": [
             "Module 4 | 7-route-groups_epm | 06:10-06:53",
@@ -567,6 +607,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "I shipped my app to the Play Store with a spelling mistake. Do users have to download a whole new version just to get the fix?",
           "top5": [
             "Module 14 | 02_eas-update_epm | 04:09-04:48",
@@ -581,6 +622,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 9,
+          "returned": 5,
           "query": "In the AI story generator, why go through OpenRouter instead of calling Gemini directly?",
           "top5": [
             "Module 17 | chapter-4_epm | 02:07-02:50",
@@ -595,6 +637,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "In web apps I'd just dump JSON into localStorage, but what local storage option do we use here when we need actual SQL querying on the device?",
           "top5": [
             "Module 6 | 1.react-native-async-storage_epm | 00:45-01:23",
@@ -609,6 +652,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "My step counter subscription keeps firing state updates even after I navigate away to a different screen, how do I turn it off?",
           "top5": [
             "Module 7 | 5. Pedometer & Step Tracking_epm | 07:12-07:56",
@@ -623,6 +667,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Where in the video series do we cover picking a photo from the user's phone library and cropping it before saving?",
           "top5": [
             "Module 8 | 3.Build a Profile Pic Creator - Pick, Crop & Save User Photos_epm | 07:46-08:28",
@@ -637,6 +682,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 9,
+          "returned": 5,
           "query": "I turned on airplane mode on my test device, but my network status check still says I have an active internet connection. Why?",
           "top5": [
             "Module 9 | 1.Expo Network Essentials - Detect Connectivity, IP & Airplane Mode_epm | 22:57-23:38",
@@ -651,6 +697,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "If I want the easiest setup for handling user sign-ins across both web and mobile, should I go with Clerk or set up individual providers like Google and GitHub directly?",
           "top5": [
             "Module 13 | chapter-6-implementing-clerk-authentication_epm | 14:07-14:48",
@@ -665,6 +712,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Which module walks through the actual step-by-step process of submitting your finished app build to the Google Play Store?",
           "top5": [
             "Module 14 | 03_how-to-publish-your-app-to-google-playstore-and-app-store_epm | 17:15-18:00",
@@ -679,6 +727,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "I added a settings screen to my app, but the bottom tab navigation bar is showing up on it when it should be full screen. How do I keep it outside the tab layout?",
           "top5": [
             "Module 3 | 5. Navigation Patterns , Tab , modal & drawer_epm | 01:22-02:02",
@@ -693,6 +742,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "I want the phone to physically vibrate with a quick haptic pulse when a user taps a button, what API or module do we use for that?",
           "top5": [
             "Module 9 | 3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm | 00:00-00:42",
@@ -714,7 +764,8 @@
         "mrr5": 0.5833333333333334,
         "lessonHit5": 0.875,
         "recall10": 0.625,
-        "avgPool": 10
+        "avgPool": 10,
+        "avgReturned": 3.1666666666666665
       },
       "perQuestion": {
         "c01": {
@@ -722,6 +773,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 4,
           "query": "Do I have to pick between Expo and React Native, or do they work together?",
           "top5": [
             "Module 1 | 02_react-native-vs-expo_epm | 09:52-10:24",
@@ -735,6 +787,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 3,
           "query": "My app gets really laggy when I show a few hundred items in a list. What should I be using instead?",
           "top5": [
             "Module 2 | 04_list-&-data-display-components_epm | 02:08-02:46",
@@ -747,6 +800,7 @@
           "lessonRank": 2,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "How can I put a small button on the right side of the top bar of a screen?",
           "top5": [
             "Module 3 | 1. introduction to navigation in react native_epm | 07:58-08:41",
@@ -761,6 +815,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 3,
           "query": "In a route that catches everything after /admin, how do I get each part of the URL?",
           "top5": [
             "Module 4 | 4-catch-all-route-segments_epm | 03:31-04:10",
@@ -773,6 +828,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 2,
           "query": "Do I need a separate Node server for my app's backend, or can Expo handle that?",
           "top5": [
             "Module 5 | 1. What Are API Routes in Expo Router_epm | 02:09-02:50",
@@ -784,6 +840,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 3,
           "query": "I turned on the fingerprint or face unlock option when saving a password and now saving fails on my phone. Why?",
           "top5": [
             "Module 6 | 2.expo-secure-store_epm | 18:04-18:43",
@@ -796,6 +853,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Which sensor would I use to steer a car in a racing game by turning the phone?",
           "top5": [
             "Module 7 | 2. Understanding the Gyroscope The Secret Behind Motion & Orientation_epm | 08:05-08:49",
@@ -810,6 +868,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 4,
           "query": "How do shopping apps open straight to a product page when someone shares a link with you?",
           "top5": [
             "Module 9 | 2. Master Expo Linking - Deep Links, Universal URLs & Navigation Hooks_epm | 00:44-01:21",
@@ -823,6 +882,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 2,
           "query": "I added a maps package and it won't work in Expo Go at all. Why?",
           "top5": [
             "Module 10 | 1. What Is EAS Build Why You Need It & Dev Builds vs Expo Go_epm | 07:11-07:56",
@@ -834,6 +894,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 3,
           "query": "How do I move the map to a different city when a button is tapped?",
           "top5": [
             "Module 11 | chapter-2 Map Camera Jump Demo -Programmatically Move & Focus the Map_epm | 04:08-04:44",
@@ -846,6 +907,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 2,
           "query": "Is the push token Expo gives me the same thing as a Firebase token?",
           "top5": [
             "Module 12 | chapter-2-push-notification_epm | 11:54-12:37",
@@ -857,6 +919,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 3,
           "query": "I get the push token fine but notifications never actually show up on my Android phone. What am I missing?",
           "top5": [
             "Module 12 | chapter-2-push-notification_epm | 34:24-35:01",
@@ -869,6 +932,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 4,
           "query": "What's the cleanest way to block logged-out users from certain screens with Expo Router?",
           "top5": [
             "Module 13 | chapter-1-auth-in-expo-protected-routes-and-auth-flow_epm | 02:11-02:54",
@@ -882,6 +946,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "After I log in, the app lands on a different screen than I expected. How does it decide where to send me?",
           "top5": [
             "Module 1 | 03_setting-up-env-creating-first-expo-project_epm | 09:19-09:58",
@@ -896,6 +961,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "I shipped my app to the Play Store with a spelling mistake. Do users have to download a whole new version just to get the fix?",
           "top5": [
             "Module 14 | 02_eas-update_epm | 04:09-04:48",
@@ -910,6 +976,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 4,
           "query": "In the AI story generator, why go through OpenRouter instead of calling Gemini directly?",
           "top5": [
             "Module 17 | chapter-4_epm | 14:05-14:48",
@@ -923,6 +990,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 1,
           "query": "In web apps I'd just dump JSON into localStorage, but what local storage option do we use here when we need actual SQL querying on the device?",
           "top5": [
             "Module 6 | 1.react-native-async-storage_epm | 00:45-01:23"
@@ -933,6 +1001,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 2,
           "query": "My step counter subscription keeps firing state updates even after I navigate away to a different screen, how do I turn it off?",
           "top5": [
             "Module 7 | 5. Pedometer & Step Tracking_epm | 07:12-07:56",
@@ -944,6 +1013,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 2,
           "query": "Where in the video series do we cover picking a photo from the user's phone library and cropping it before saving?",
           "top5": [
             "Module 8 | 3.Build a Profile Pic Creator - Pick, Crop & Save User Photos_epm | 07:46-08:28",
@@ -955,6 +1025,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "I turned on airplane mode on my test device, but my network status check still says I have an active internet connection. Why?",
           "top5": [
             "Module 9 | 1.Expo Network Essentials - Detect Connectivity, IP & Airplane Mode_epm | 22:57-23:38",
@@ -969,6 +1040,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 2,
           "query": "If I want the easiest setup for handling user sign-ins across both web and mobile, should I go with Clerk or set up individual providers like Google and GitHub directly?",
           "top5": [
             "Module 13 | chapter-6-implementing-clerk-authentication_epm | 14:07-14:48",
@@ -980,6 +1052,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 2,
           "query": "Which module walks through the actual step-by-step process of submitting your finished app build to the Google Play Store?",
           "top5": [
             "Module 14 | 03_how-to-publish-your-app-to-google-playstore-and-app-store_epm | 03:35-04:18",
@@ -991,6 +1064,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 1,
           "query": "I added a settings screen to my app, but the bottom tab navigation bar is showing up on it when it should be full screen. How do I keep it outside the tab layout?",
           "top5": [
             "Module 3 | mini-project-1-init-project-setup-screens-and-react-navigation_epm | 14:50-15:27"
@@ -1001,6 +1075,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 4,
           "query": "I want the phone to physically vibrate with a quick haptic pulse when a user taps a button, what API or module do we use for that?",
           "top5": [
             "Module 9 | 3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm | 00:00-00:42",
@@ -1021,7 +1096,8 @@
         "mrr5": 0.6875,
         "lessonHit5": 0.875,
         "recall10": 0.75,
-        "avgPool": 9.833333333333334
+        "avgPool": 9.833333333333334,
+        "avgReturned": 3.25
       },
       "perQuestion": {
         "c01": {
@@ -1029,6 +1105,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 9,
+          "returned": 4,
           "query": "Do I have to pick between Expo and React Native, or do they work together?",
           "top5": [
             "Module 1 | 02_react-native-vs-expo_epm | 09:52-10:24",
@@ -1042,6 +1119,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 4,
           "query": "My app gets really laggy when I show a few hundred items in a list. What should I be using instead?",
           "top5": [
             "Module 2 | 04_list-&-data-display-components_epm | 02:08-02:46",
@@ -1055,6 +1133,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 1,
           "query": "How can I put a small button on the right side of the top bar of a screen?",
           "top5": [
             "Module 4 | 8-stack-and-modal-navigation_epm | 06:12-06:56"
@@ -1065,6 +1144,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 4,
           "query": "In a route that catches everything after /admin, how do I get each part of the URL?",
           "top5": [
             "Module 4 | 4-catch-all-route-segments_epm | 06:19-07:04",
@@ -1078,6 +1158,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 1,
           "query": "Do I need a separate Node server for my app's backend, or can Expo handle that?",
           "top5": [
             "Module 5 | 1. What Are API Routes in Expo Router_epm | 01:25-02:08"
@@ -1088,6 +1169,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 4,
           "query": "I turned on the fingerprint or face unlock option when saving a password and now saving fails on my phone. Why?",
           "top5": [
             "Module 6 | 2.expo-secure-store_epm | 15:06-15:50",
@@ -1101,6 +1183,7 @@
           "lessonRank": null,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Which sensor would I use to steer a car in a racing game by turning the phone?",
           "top5": [
             "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 08:15-08:54",
@@ -1115,6 +1198,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 9,
+          "returned": 4,
           "query": "How do shopping apps open straight to a product page when someone shares a link with you?",
           "top5": [
             "Module 9 | 2. Master Expo Linking - Deep Links, Universal URLs & Navigation Hooks_epm | 00:44-01:21",
@@ -1128,6 +1212,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 2,
           "query": "I added a maps package and it won't work in Expo Go at all. Why?",
           "top5": [
             "Module 10 | 1. What Is EAS Build Why You Need It & Dev Builds vs Expo Go_epm | 07:11-07:56",
@@ -1139,6 +1224,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 3,
           "query": "How do I move the map to a different city when a button is tapped?",
           "top5": [
             "Module 11 | chapter-2 Map Camera Jump Demo -Programmatically Move & Focus the Map_epm | 04:08-04:44",
@@ -1151,6 +1237,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 1,
           "query": "Is the push token Expo gives me the same thing as a Firebase token?",
           "top5": [
             "Module 12 | chapter-2-push-notification_epm | 11:54-12:37"
@@ -1161,6 +1248,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 3,
           "query": "I get the push token fine but notifications never actually show up on my Android phone. What am I missing?",
           "top5": [
             "Module 12 | chapter-2-push-notification_epm | 34:24-35:01",
@@ -1173,6 +1261,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 5,
           "query": "What's the cleanest way to block logged-out users from certain screens with Expo Router?",
           "top5": [
             "Module 13 | chapter-1-auth-in-expo-protected-routes-and-auth-flow_epm | 02:11-02:54",
@@ -1187,6 +1276,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 3,
           "query": "After I log in, the app lands on a different screen than I expected. How does it decide where to send me?",
           "top5": [
             "Module 13 | chapter-1-auth-in-expo-protected-routes-and-auth-flow_epm | 07:17-07:58",
@@ -1199,6 +1289,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "I shipped my app to the Play Store with a spelling mistake. Do users have to download a whole new version just to get the fix?",
           "top5": [
             "Module 14 | 02_eas-update_epm | 04:09-04:48",
@@ -1213,6 +1304,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 9,
+          "returned": 2,
           "query": "In the AI story generator, why go through OpenRouter instead of calling Gemini directly?",
           "top5": [
             "Module 17 | chapter-4_epm | 14:05-14:48",
@@ -1224,6 +1316,7 @@
           "lessonRank": 3,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 4,
           "query": "In web apps I'd just dump JSON into localStorage, but what local storage option do we use here when we need actual SQL querying on the device?",
           "top5": [
             "Module 6 | 5.notes-buddy-mini-project_epm | 03:32-04:12",
@@ -1237,6 +1330,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 1,
           "query": "My step counter subscription keeps firing state updates even after I navigate away to a different screen, how do I turn it off?",
           "top5": [
             "Module 7 | 5. Pedometer & Step Tracking_epm | 07:12-07:56"
@@ -1247,6 +1341,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 4,
           "query": "Where in the video series do we cover picking a photo from the user's phone library and cropping it before saving?",
           "top5": [
             "Module 8 | 3.Build a Profile Pic Creator - Pick, Crop & Save User Photos_epm | 07:46-08:28",
@@ -1260,6 +1355,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 9,
+          "returned": 5,
           "query": "I turned on airplane mode on my test device, but my network status check still says I have an active internet connection. Why?",
           "top5": [
             "Module 9 | 1.Expo Network Essentials - Detect Connectivity, IP & Airplane Mode_epm | 22:57-23:38",
@@ -1274,6 +1370,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 2,
           "query": "If I want the easiest setup for handling user sign-ins across both web and mobile, should I go with Clerk or set up individual providers like Google and GitHub directly?",
           "top5": [
             "Module 13 | chapter-6-implementing-clerk-authentication_epm | 14:07-14:48",
@@ -1285,6 +1382,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Which module walks through the actual step-by-step process of submitting your finished app build to the Google Play Store?",
           "top5": [
             "Module 14 | 03_how-to-publish-your-app-to-google-playstore-and-app-store_epm | 00:00-00:42",
@@ -1299,6 +1397,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 2,
           "query": "I added a settings screen to my app, but the bottom tab navigation bar is showing up on it when it should be full screen. How do I keep it outside the tab layout?",
           "top5": [
             "Module 3 | 5. Navigation Patterns , Tab , modal & drawer_epm | 00:00-00:41",
@@ -1310,6 +1409,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 4,
           "query": "I want the phone to physically vibrate with a quick haptic pulse when a user taps a button, what API or module do we use for that?",
           "top5": [
             "Module 9 | 3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm | 00:00-00:42",
@@ -1330,7 +1430,8 @@
         "mrr5": 0.5,
         "lessonHit5": 0.6666666666666666,
         "recall10": 0.5,
-        "avgPool": 10
+        "avgPool": 10,
+        "avgReturned": 2.6666666666666665
       },
       "perQuestion": {
         "m01": {
@@ -1338,6 +1439,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 1,
           "query": "And if it's nothing sensitive?",
           "top5": [
             "Module 6 | 1.react-native-async-storage_epm | 02:08-02:50"
@@ -1348,6 +1450,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 3,
           "query": "And what's the last one for?",
           "top5": [
             "Module 17 | chapter-3_epm | 19:19-19:57",
@@ -1360,6 +1463,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 1,
           "query": "What if I don't know how many of those parts there will be?",
           "top5": [
             "Module 4 | 4-catch-all-route-segments_epm | 02:02-02:46"
@@ -1370,6 +1474,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 3,
           "query": "What if mine are split into groups, each with its own heading?",
           "top5": [
             "Module 2 | 04_list-&-data-display-components_epm | 12:37-13:18",
@@ -1382,6 +1487,7 @@
           "lessonRank": 2,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 4,
           "query": "Can I change what it says at the top of that screen too?",
           "top5": [
             "Module 3 | 5. Navigation Patterns , Tab , modal & drawer_epm | 11:34-12:12",
@@ -1395,6 +1501,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 4,
           "query": "What about iPhones?",
           "top5": [
             "Module 1 | 01_what-is-mobile-development_epm | 00:37-01:16",
@@ -1415,7 +1522,8 @@
         "mrr5": 0.375,
         "lessonHit5": 0.8333333333333334,
         "recall10": 0.6666666666666666,
-        "avgPool": 9.833333333333334
+        "avgPool": 9.833333333333334,
+        "avgReturned": 3.8333333333333335
       },
       "perQuestion": {
         "m01": {
@@ -1423,6 +1531,7 @@
           "lessonRank": 2,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Where should I keep a user's login token on the phone? And if it's nothing sensitive?",
           "top5": [
             "Module 13 | chapter-2-credentials-login_epm | 04:12-04:55",
@@ -1437,6 +1546,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 9,
+          "returned": 4,
           "query": "What is EAS? And what's the last one for?",
           "top5": [
             "Module 10 | 1. What Is EAS Build Why You Need It & Dev Builds vs Expo Go_epm | 00:43-01:24",
@@ -1450,6 +1560,7 @@
           "lessonRank": null,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 1,
           "query": "How do dynamic routes like [id].tsx work in Expo Router? What if I don't know how many of those parts there will be?",
           "top5": [
             "Module 4 | 3-Dynamic Routes_epm | 00:00-00:43"
@@ -1460,6 +1571,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 4,
           "query": "What is FlatList for? What if mine are split into groups, each with its own heading?",
           "top5": [
             "Module 2 | 04_list-&-data-display-components_epm | 02:47-03:32",
@@ -1473,6 +1585,7 @@
           "lessonRank": 1,
           "poolHit": false,
           "poolSize": 10,
+          "returned": 4,
           "query": "How do I send an item id to the details screen with React Navigation? Can I change what it says at the top of that screen too?",
           "top5": [
             "Module 3 | 4. Params, Initial Params & Header Customization_epm | 00:00-00:44",
@@ -1486,6 +1599,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 5,
           "query": "Who actually delivers push notifications to Android phones? What about iPhones?",
           "top5": [
             "Module 12 | chapter-2-push-notification_epm | 07:00-07:38",
@@ -1507,7 +1621,8 @@
         "mrr5": 1,
         "lessonHit5": 1,
         "recall10": 1,
-        "avgPool": 10
+        "avgPool": 10,
+        "avgReturned": 2.3333333333333335
       },
       "perQuestion": {
         "m01": {
@@ -1515,6 +1630,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 1,
           "query": "Where should I keep a user's login token on the phone if it is not sensitive information?",
           "top5": [
             "Module 6 | 1.react-native-async-storage_epm | 02:08-02:50"
@@ -1525,6 +1641,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 4,
           "query": "What is the purpose of EAS Update?",
           "top5": [
             "Module 14 | 02_eas-update_epm | 04:09-04:48",
@@ -1538,6 +1655,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 2,
           "query": "How do I handle dynamic routes in Expo Router when I don't know how many path segments there will be?",
           "top5": [
             "Module 4 | 4-catch-all-route-segments_epm | 02:02-02:46",
@@ -1549,6 +1667,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 3,
           "query": "How can I use FlatList if my data is split into groups, each with its own heading?",
           "top5": [
             "Module 2 | 04_list-&-data-display-components_epm | 12:37-13:18",
@@ -1561,6 +1680,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 3,
           "query": "Can I change the title at the top of the details screen using React Navigation?",
           "top5": [
             "Module 3 | 4. Params, Initial Params & Header Customization_epm | 07:03-07:46",
@@ -1573,6 +1693,7 @@
           "lessonRank": 1,
           "poolHit": true,
           "poolSize": 10,
+          "returned": 1,
           "query": "What service delivers push notifications to iPhones?",
           "top5": [
             "Module 12 | chapter-2-push-notification_epm | 07:00-07:38"

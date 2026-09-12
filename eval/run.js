@@ -153,10 +153,10 @@ function toMarkdown(results) {
   const row = (c) => {
     const m = c.metrics;
     const hits = Math.round(m.hit5 * m.n);
-    return `| ${c.label} | ${m.n} | ${pct(m.hit1)} | ${pct(m.hit5)} (${hits}/${m.n}) | ${m.mrr5.toFixed(3)} | ${pct(m.lessonHit5)} | ${pct(m.recall10)} |`;
+    return `| ${c.label} | ${m.n} | ${m.avgReturned.toFixed(1)} | ${pct(m.hit1)} | ${pct(m.hit5)} (${hits}/${m.n}) | ${m.mrr5.toFixed(3)} | ${pct(m.lessonHit5)} | ${pct(m.recall10)} |`;
   };
   const header =
-    "| Configuration | n | Hit@1 | Hit@5 | MRR@5 | Lesson hit@5 | Pool recall@10 |\n|---|---|---|---|---|---|---|";
+    "| Configuration | n | Avg results | Hit@1 | Hit@k | MRR@k | Lesson hit@k | Pool recall@10 |\n|---|---|---|---|---|---|---|---|";
   const single = SINGLE_TURN_CONFIGS.map((c) => row(results.configs[c.id]));
   const multi = MULTI_TURN_CONFIGS.map((c) => row(results.configs[c.id]));
   const comps = results.comparisons.map(
@@ -165,6 +165,12 @@ function toMarkdown(results) {
   return [
     `Model: \`${results.model}\`. Index: ${results.points} chunks. ` +
       `Rerank responses that failed to parse (fell back to vector order): ${results.rerankParseFallbacks}.`,
+    "",
+    "`k` is the number of results the configuration actually returned, shown in " +
+      "the Avg results column. It is 5 on the rows without rerank. The reranker " +
+      "drops excerpts it judges irrelevant instead of padding the list, so on the " +
+      "reranked rows it is at most 5 and usually fewer. A shorter list can only " +
+      "lose hits, never gain them.",
     "",
     "**Single-turn questions**",
     "",
@@ -182,9 +188,10 @@ function toMarkdown(results) {
       `(${pct(results.citations.verified / Math.max(results.citations.citations, 1))}) across ${results.citations.answers} answers. ` +
       `Wrong timestamp: ${results.citations.wrongTimestamp}. Lesson not among the excerpts: ${results.citations.unknownSource}. ` +
       `Answers with no parseable citation: ${results.citations.answersWithoutCitations}. ` +
-      `Timestamps outside a parseable citation: ${results.citations.strayTimestamps}.`,
+      `Timestamps outside a parseable citation: ${results.citations.strayTimestamps} ` +
+      `(compound citations naming two ranges at once; the parser reads the first).`,
     "",
-    "**Per-question changes in hit@5**",
+    "**Per-question changes in hit@k**",
     "",
     "| Comparison | Newly hit | Newly missed |\n|---|---|---|",
     ...comps,
