@@ -140,6 +140,69 @@
     ]
   },
   {
+    "id": "p01",
+    "author": "preet",
+    "question": "In web apps I'd just dump JSON into localStorage, but what local storage option do we use here when we need actual SQL querying on the device?",
+    "expected": [
+      { "module": "Module 6", "lesson": "3.expo-sqllite-creating-basic-crud-app_epm", "start": "00:00", "end": "00:42" },
+      { "module": "Module 6", "lesson": "3.expo-sqllite-creating-basic-crud-app_epm", "start": "13:47", "end": "14:30" }
+    ]
+  },
+  {
+    "id": "p02",
+    "author": "preet",
+    "question": "My step counter subscription keeps firing state updates even after I navigate away to a different screen, how do I turn it off?",
+    "expected": [
+      { "module": "Module 7", "lesson": "5. Pedometer & Step Tracking_epm", "start": "04:16", "end": "04:58" },
+      { "module": "Module 7", "lesson": "5. Pedometer & Step Tracking_epm", "start": "07:12", "end": "07:56" }
+    ]
+  },
+  {
+    "id": "p03",
+    "author": "preet",
+    "question": "Where in the video series do we cover picking a photo from the user's phone library and cropping it before saving?",
+    "expected": [
+      { "module": "Module 8", "lesson": "3.Build a Profile Pic Creator - Pick, Crop & Save User Photos_epm", "start": "00:00", "end": "00:42" },
+      { "module": "Module 8", "lesson": "3.Build a Profile Pic Creator - Pick, Crop & Save User Photos_epm", "start": "07:46", "end": "08:28" }
+    ]
+  },
+  {
+    "id": "p04",
+    "author": "preet",
+    "question": "I turned on airplane mode on my test device, but my network status check still says I have an active internet connection. Why?",
+    "expected": [
+      { "module": "Module 9", "lesson": "1.Expo Network Essentials - Detect Connectivity, IP & Airplane Mode_epm", "start": "15:01", "end": "15:45" },
+      { "module": "Module 9", "lesson": "1.Expo Network Essentials - Detect Connectivity, IP & Airplane Mode_epm", "start": "23:39", "end": "24:20" }
+    ]
+  },
+  {
+    "id": "p05",
+    "author": "preet",
+    "question": "If I want the easiest setup for handling user sign-ins across both web and mobile, should I go with Clerk or set up individual providers like Google and GitHub directly?",
+    "expected": [
+      { "module": "Module 13", "lesson": "chapter-6-implementing-clerk-authentication_epm", "start": "14:07", "end": "14:48" },
+      { "module": "Module 13", "lesson": "chapter-2-credentials-login_epm", "start": "15:01", "end": "15:39" }
+    ]
+  },
+  {
+    "id": "p06",
+    "author": "preet",
+    "question": "Which module walks through the actual step-by-step process of submitting your finished app build to the Google Play Store?",
+    "expected": [
+      { "module": "Module 14", "lesson": "03_how-to-publish-your-app-to-google-playstore-and-app-store_epm", "start": "00:00", "end": "00:42" },
+      { "module": "Module 14", "lesson": "03_how-to-publish-your-app-to-google-playstore-and-app-store_epm", "start": "17:15", "end": "18:00" }
+    ]
+  },
+  {
+    "id": "p07",
+    "author": "preet",
+    "question": "I added a settings screen to my app, but the bottom tab navigation bar is showing up on it when it should be full screen. How do I keep it outside the tab layout?",
+    "expected": [
+      { "module": "Module 4", "lesson": "9-tab-navigation_epm", "start": "00:00", "end": "00:40" },
+      { "module": "Module 4", "lesson": "9-tab-navigation_epm", "start": "00:40", "end": "01:23" }
+    ]
+  },
+  {
     "id": "m01",
     "author": "generated",
     "history": [
