@@ -203,6 +203,15 @@
     ]
   },
   {
+    "id": "p08",
+    "author": "preet",
+    "question": "I want the phone to physically vibrate with a quick haptic pulse when a user taps a button, what API or module do we use for that?",
+    "expected": [
+      { "module": "Module 9", "lesson": "3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm", "start": "00:00", "end": "00:42" },
+      { "module": "Module 9", "lesson": "3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm", "start": "01:25", "end": "02:08" }
+    ]
+  },
+  {
     "id": "m01",
     "author": "generated",
     "history": [
