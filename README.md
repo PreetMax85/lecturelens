@@ -9,7 +9,7 @@ exact module, lesson, and timestamp where the topic was taught.
 SRT/VTT files → parse → chunk (with timestamps) → embed (local, all-MiniLM-L6-v2) → Qdrant
                                                                                         ↓
 user question → input guardrail (history-aware) → query condensation (multi-turn)
-              → embed + HyDE → retrieve (10 candidates) → LLM rerank → top 5
+              → embed + HyDE → retrieve (up to 10 candidates) → LLM rerank → up to 5
               → answer generation (cited, history-aware)
 ```
 
@@ -80,36 +80,49 @@ that hits any API error refuses to write results at all, so a partially failed
 run cannot quietly turn into a published number.
 
 A retrieved chunk counts as a hit only if it comes from the labeled lesson and
-overlaps the labeled time window by at least one second. Landing in the right
-lesson at the wrong timestamp is tracked separately as a lesson hit.
+overlaps the labeled time window by at least one second. Lesson hit is the
+looser version of the same measure, right lesson at any timestamp, so it counts
+every strict hit plus the near misses and is always the larger number.
+
+The `k` in the table headers is not always 5. The reranker is told to drop
+excerpts it judges irrelevant rather than pad the list out, so the reranked
+rows return at most 5 results and usually fewer: a mean of 3.3 in the
+production configuration, with 4 of the 24 single-turn questions answered from
+a single excerpt. A shorter list can only lose hits, never gain them, so this
+handicaps those rows rather than flattering them. The candidate pool is 10
+except on the HyDE rows, where the raw and hypothetical-answer searches
+sometimes return the same chunk and dedup to 9 (mean 9.8).
 
 **Single-turn questions**
 
-| Configuration | n | Hit@1 | Hit@5 | MRR@5 | Lesson hit@5 | Pool recall@10 |
-|---|---|---|---|---|---|---|
-| Vector search only | 24 | 46% | 63% (15/24) | 0.524 | 88% | 63% |
-| + HyDE | 24 | 46% | 67% (16/24) | 0.549 | 92% | 75% |
-| + Rerank (no HyDE) | 24 | 54% | 63% (15/24) | 0.583 | 88% | 63% |
-| + HyDE + Rerank (production) | 24 | 67% | 71% (17/24) | 0.688 | 88% | 75% |
+| Configuration | n | Avg results | Hit@1 | Hit@k | MRR@k | Lesson hit@k | Pool recall@10 |
+|---|---|---|---|---|---|---|---|
+| Vector search only | 24 | 5.0 | 46% | 63% (15/24) | 0.524 | 88% | 63% |
+| + HyDE | 24 | 5.0 | 46% | 67% (16/24) | 0.549 | 92% | 75% |
+| + Rerank (no HyDE) | 24 | 3.2 | 54% | 63% (15/24) | 0.583 | 88% | 63% |
+| + HyDE + Rerank (production) | 24 | 3.3 | 67% | 71% (17/24) | 0.688 | 88% | 75% |
 
 **Multi-turn follow-ups** (every row runs HyDE and rerank; only the handling
 of conversation history changes)
 
-| Configuration | n | Hit@1 | Hit@5 | MRR@5 | Lesson hit@5 | Pool recall@10 |
-|---|---|---|---|---|---|---|
-| Follow-up alone (no condensation) | 6 | 50% | 50% (3/6) | 0.500 | 67% | 50% |
-| Previous turn + follow-up, concatenated | 6 | 17% | 67% (4/6) | 0.375 | 83% | 67% |
-| LLM condensation (production) | 6 | 100% | 100% (6/6) | 1.000 | 100% | 100% |
+| Configuration | n | Avg results | Hit@1 | Hit@k | MRR@k | Lesson hit@k | Pool recall@10 |
+|---|---|---|---|---|---|---|---|
+| Follow-up alone (no condensation) | 6 | 2.7 | 50% | 50% (3/6) | 0.500 | 67% | 50% |
+| Previous turn + follow-up, concatenated | 6 | 3.8 | 17% | 67% (4/6) | 0.375 | 83% | 67% |
+| LLM condensation (production) | 6 | 2.3 | 100% | 100% (6/6) | 1.000 | 100% | 100% |
 
 **Citation accuracy**, measured on full production answers to all 30
-questions: 56 of 57 citations verified (98%). One answer cited a timestamp
-that matched no retrieved excerpt, no answer cited a lesson that was not among
-its excerpts, and every answer carried at least one parseable citation.
+questions: 56 of 57 parsed citations verified (98%). One answer cited a
+timestamp that matched no retrieved excerpt, no answer cited a lesson that was
+not among its excerpts, and every answer carried at least one parseable
+citation. Two answers also wrote compound citations naming two time ranges at
+once, of which the parser reads only the first, leaving 4 timestamps outside
+any checked citation. So 57 is the parser's denominator, not the model's.
 
 ### What the numbers actually say
 
 - **Reranking cannot fix retrieval, only ordering.** Rerank alone changed
-  hit@5 on exactly zero questions (+0 newly hit, -0 newly missed), because it
+  hit@k on exactly zero questions (+0 newly hit, -0 newly missed), because it
   reorders a pool that vector search has already fixed. What it moved was
   hit@1, 46% to 54%, and MRR, 0.524 to 0.583.
 - **HyDE is the stage that changes what gets found at all.** It lifts pool
@@ -118,7 +131,7 @@ its excerpts, and every answer carried at least one parseable citation.
 - **The two compose.** HyDE widens the pool, rerank then picks better inside
   it: hit@1 46% to 67%, MRR 0.524 to 0.688.
 - **Condensation is the whole story on follow-ups.** Concatenating the
-  previous turn beats using the follow-up alone on hit@5, but it drags the
+  previous turn beats using the follow-up alone on hit@k, but it drags the
   earlier topic's vocabulary into the query and wrecks hit@1 (17%). Rewriting
   the follow-up into a standalone question first is what makes it work.
 
@@ -136,13 +149,20 @@ Read these before quoting any number above.
 - **Question provenance matters, and it shows.** 22 questions were generated
   and are marked `"author": "generated"`; 8 were written by hand, before
   reading any transcript, and are marked `"author": "preet"`. The hand-written
-  ones score lower: 5 of 8 hit@5 against 12 of 16 for the generated ones, in
+  ones score lower: 5 of 8 hit@k against 12 of 16 for the generated ones, in
   the production configuration. Questions written by a model over the same
   corpus share vocabulary with it, which flatters retrieval. The hand-written
   subset is the more honest signal, and it is also the smaller one.
 - **Four of the seven production misses land in the right lesson** but outside
   the labeled window, so a student would still have been sent to the right
   video, just not the right minute. The other three miss the lesson entirely.
+- **Three of those four are boundary misses.** A hit needs at least one second
+  of overlap with the labeled window, and in those three cases the retrieved
+  chunk ends exactly where the labeled window starts, or starts exactly where
+  it ends: retrieval landed on the immediately adjacent chunk. The strict rule
+  is worth keeping, since a student sent 40 seconds early is still sent to the
+  wrong place, but it does mean the headline numbers are a floor rather than a
+  generous reading.
 - **One label is weaker than the rest.** The question about keeping a settings
   screen outside a tab layout is answered only implicitly by the course, which
   states that files inside the tabs directory become tabs but never addresses
