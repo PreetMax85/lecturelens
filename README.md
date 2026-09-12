@@ -60,6 +60,95 @@ npm start                      # backend on :3001
 cd frontend && npm run dev     # frontend on :5173
 ```
 
+## Evaluation
+
+Retrieval here is measured, not asserted. `eval/questions.json` holds 30
+questions labeled with the module, lesson, and timestamp window that actually
+answers each one. `npm run eval` runs every question through the same
+`retrieve()` function the server uses, with pipeline stages switched on one at
+a time, against the live Qdrant index.
+
+Reproduce the published numbers without spending any API quota:
+
+```
+npm run eval -- --cache-only
+```
+
+Every Gemini response is cached in `eval/cache/llm.json`, which is committed,
+so a cache-only run replays the exact calls behind the tables below. A run
+that hits any API error refuses to write results at all, so a partially failed
+run cannot quietly turn into a published number.
+
+A retrieved chunk counts as a hit only if it comes from the labeled lesson and
+overlaps the labeled time window by at least one second. Landing in the right
+lesson at the wrong timestamp is tracked separately as a lesson hit.
+
+**Single-turn questions**
+
+| Configuration | n | Hit@1 | Hit@5 | MRR@5 | Lesson hit@5 | Pool recall@10 |
+|---|---|---|---|---|---|---|
+| Vector search only | 24 | 46% | 63% (15/24) | 0.524 | 88% | 63% |
+| + HyDE | 24 | 46% | 67% (16/24) | 0.549 | 92% | 75% |
+| + Rerank (no HyDE) | 24 | 54% | 63% (15/24) | 0.583 | 88% | 63% |
+| + HyDE + Rerank (production) | 24 | 67% | 71% (17/24) | 0.688 | 88% | 75% |
+
+**Multi-turn follow-ups** (every row runs HyDE and rerank; only the handling
+of conversation history changes)
+
+| Configuration | n | Hit@1 | Hit@5 | MRR@5 | Lesson hit@5 | Pool recall@10 |
+|---|---|---|---|---|---|---|
+| Follow-up alone (no condensation) | 6 | 50% | 50% (3/6) | 0.500 | 67% | 50% |
+| Previous turn + follow-up, concatenated | 6 | 17% | 67% (4/6) | 0.375 | 83% | 67% |
+| LLM condensation (production) | 6 | 100% | 100% (6/6) | 1.000 | 100% | 100% |
+
+**Citation accuracy**, measured on full production answers to all 30
+questions: 56 of 57 citations verified (98%). One answer cited a timestamp
+that matched no retrieved excerpt, no answer cited a lesson that was not among
+its excerpts, and every answer carried at least one parseable citation.
+
+### What the numbers actually say
+
+- **Reranking cannot fix retrieval, only ordering.** Rerank alone changed
+  hit@5 on exactly zero questions (+0 newly hit, -0 newly missed), because it
+  reorders a pool that vector search has already fixed. What it moved was
+  hit@1, 46% to 54%, and MRR, 0.524 to 0.583.
+- **HyDE is the stage that changes what gets found at all.** It lifts pool
+  recall@10 from 63% to 75%, because a hypothetical instructor-voice answer
+  matches spoken transcript phrasing better than a student's question does.
+- **The two compose.** HyDE widens the pool, rerank then picks better inside
+  it: hit@1 46% to 67%, MRR 0.524 to 0.688.
+- **Condensation is the whole story on follow-ups.** Concatenating the
+  previous turn beats using the follow-up alone on hit@5, but it drags the
+  earlier topic's vocabulary into the query and wrecks hit@1 (17%). Rewriting
+  the follow-up into a standalone question first is what makes it work.
+
+### Caveats
+
+Read these before quoting any number above.
+
+- **n is small.** 24 single-turn and 6 multi-turn questions. One question is
+  worth about 4 percentage points, so a gap of one or two questions is noise.
+  The per-question win and loss table in `eval/results.md` is more
+  informative than the headline percentages.
+- **HyDE is sampled once at temperature 0.4**, so its rows would shift a
+  little on a fresh run. The cache pins one sample, it does not make the
+  number stable in principle.
+- **Question provenance matters, and it shows.** 22 questions were generated
+  and are marked `"author": "generated"`; 8 were written by hand, before
+  reading any transcript, and are marked `"author": "preet"`. The hand-written
+  ones score lower: 5 of 8 hit@5 against 12 of 16 for the generated ones, in
+  the production configuration. Questions written by a model over the same
+  corpus share vocabulary with it, which flatters retrieval. The hand-written
+  subset is the more honest signal, and it is also the smaller one.
+- **Four of the seven production misses land in the right lesson** but outside
+  the labeled window, so a student would still have been sent to the right
+  video, just not the right minute. The other three miss the lesson entirely.
+- **One label is weaker than the rest.** The question about keeping a settings
+  screen outside a tab layout is answered only implicitly by the course, which
+  states that files inside the tabs directory become tabs but never addresses
+  the symptom. It is labeled against that statement, and the production
+  pipeline misses it.
+
 ## Deployment
 
 ### Backend (Render)
