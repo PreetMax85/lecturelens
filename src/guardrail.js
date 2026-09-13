@@ -25,13 +25,14 @@ function formatHistory(history, limit) {
     .join("\n");
 }
 
-async function checkGuardrail(userMessage, history = []) {
+// `llm` is injectable so eval/guardrail.js can cache Gemini calls.
+async function checkGuardrail(userMessage, history = [], { llm = generate } = {}) {
   const input = history.length
     ? `Recent conversation:\n${formatHistory(history, 4)}\n\nFinal message: ${userMessage}`
     : userMessage;
 
   try {
-    const verdict = await generate(input, {
+    const verdict = await llm(input, {
       systemInstruction: GUARDRAIL_SYSTEM,
       temperature: 0,
     });
