@@ -1,8 +1,8 @@
 // Local embeddings via transformers.js - runs entirely on CPU, no API
-// calls, no rate limits. First run downloads the model (~90MB) from
-// Hugging Face and caches it locally under node_modules/.cache (or
-// wherever TRANSFORMERS_CACHE points); needs internet once, then works
-// fully offline.
+// calls, no rate limits. First run downloads the quantized model (~23MB)
+// from Hugging Face and caches it under
+// node_modules/@xenova/transformers/.cache; needs internet once, then works
+// fully offline. `npm run build` does that download ahead of time.
 
 const { pipeline } = require("@xenova/transformers");
 

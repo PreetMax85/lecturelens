@@ -58,4 +58,25 @@ async function search(vector, limit = 5) {
   return data.result; // array of { id, score, payload }
 }
 
-module.exports = { ensureCollection, upsertPoints, search, COLLECTION };
+// Pages through every point's payload (no vectors). Used by the eval to
+// verify the index size and that each labeled window exists.
+async function scrollPayloads(pageSize = 500) {
+  const points = [];
+  let offset = null;
+  do {
+    const res = await fetch(`${QDRANT_URL}/collections/${COLLECTION}/points/scroll`, {
+      method: "POST",
+      headers: headers(),
+      body: JSON.stringify({ limit: pageSize, offset, with_payload: true, with_vector: false }),
+    });
+    if (!res.ok) {
+      throw new Error(`Qdrant scroll failed: ${res.status} ${await res.text()}`);
+    }
+    const data = await res.json();
+    points.push(...data.result.points);
+    offset = data.result.next_page_offset;
+  } while (offset != null);
+  return points;
+}
+
+module.exports = { ensureCollection, upsertPoints, search, scrollPayloads, COLLECTION };
