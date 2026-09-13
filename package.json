@@ -9,6 +9,7 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "eval": "node eval/run.js",
+    "eval:guardrail": "node eval/guardrail.js",
     "test": "node --test \"src/**/*.test.js\""
   },
   "dependencies": {
