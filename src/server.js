@@ -27,7 +27,7 @@ app.post("/chat", async (req, res) => {
     if (!allowed) {
       return res.json({
         answer:
-          "I can only help with questions about this course's content — what topic are you curious about?",
+          "I can only help with questions about this course and building apps with React Native and Expo. What would you like to know?",
         sources: [],
         blocked: true,
       });
