@@ -57,13 +57,18 @@ function createCachedLlm({ cacheOnly = false } = {}) {
         return text;
       } catch (err) {
         const status = Number((err.message.match(/failed: (\d{3})/) || [])[1]);
-        const retryable = status === 429 || status >= 500;
+        // fetch itself rejects with TypeError "fetch failed" on a dropped
+        // connection. Other statusless errors (a blocked response, a bug) would
+        // fail the same way again, so they are not retried.
+        const network = err instanceof TypeError && err.message === "fetch failed";
+        const retryable = status === 429 || status >= 500 || network;
         if (!retryable || attempt === MAX_ATTEMPTS) {
           stats.failures.push(err.message.slice(0, 200));
           throw err;
         }
         const backoff = 2000 * 2 ** attempt;
-        console.warn(`  [llm] ${status}, retrying in ${backoff / 1000}s (attempt ${attempt}/${MAX_ATTEMPTS})`);
+        const reason = network ? "network error" : status;
+        console.warn(`  [llm] ${reason}, retrying in ${backoff / 1000}s (attempt ${attempt}/${MAX_ATTEMPTS})`);
         await new Promise((r) => setTimeout(r, backoff));
       }
     }
