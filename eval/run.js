@@ -1,6 +1,6 @@
 // Retrieval ablation for LectureLens.
 //
-// Usage: node eval/run.js [--cache-only]
+// Usage: node eval/run.js [--cache-only | --dry-run]
 //
 // Runs every labeled question in eval/questions.json through retrieve()
 // from src/answer.js (the production code path) against the live Qdrant
@@ -11,19 +11,24 @@
 // does not cover: they skip the retrieval tables, and their answers are
 // checked for saying so. Writes eval/results.json and eval/results.md.
 //
+// HyDE runs at temperature 0.4, so the single-turn HyDE rows are also re-run
+// for HYDE_DRAWS independent draws and reported as min/mean/max.
+//
 // --cache-only  fail on any Gemini cache miss instead of calling the API,
 //               so the committed numbers can be reproduced with no quota.
+// --dry-run     print how many HyDE draws are missing from the cache and an
+//               upper bound on the API calls they cost, then exit.
 
 require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
 
-const { retrieve, answerQuestion } = require("../src/answer");
+const { retrieve, answerQuestion, hydeRequest } = require("../src/answer");
 const { extractCitations } = require("../src/citations");
 const { scrollPayloads, COLLECTION } = require("../src/qdrant");
 const { MODEL } = require("../src/gemini");
 const { createCachedLlm } = require("./llm-cache");
-const { overlapsWindow, scoreQuestion, aggregate, saysNotCovered } = require("./metrics");
+const { overlapsWindow, scoreQuestion, aggregate, summarizeDraws, saysNotCovered } = require("./metrics");
 const { formatTimestamp } = require("../src/chunker");
 
 const EXPECTED_POINTS = 1955;
@@ -34,6 +39,10 @@ const SINGLE_TURN_CONFIGS = [
   { id: "rerank", label: "+ Rerank (no HyDE)", opts: { hyde: false, rerank: true } },
   { id: "hyde+rerank", label: "+ HyDE + Rerank (production)", opts: { hyde: true, rerank: true } },
 ];
+
+// Draw 0 is the one in the tables above; draws 1..HYDE_DRAWS-1 are extra.
+const HYDE_DRAWS = 4;
+const HYDE_VARIANCE_CONFIGS = ["hyde", "hyde+rerank"];
 
 const lastUserTurn = (q) => [...q.history].reverse().find((h) => h.role === "user").content;
 
@@ -163,6 +172,13 @@ function toMarkdown(results) {
     "| Configuration | n | Avg results | Hit@1 | Hit@k | MRR@k | Lesson hit@k | Pool recall@10 |\n|---|---|---|---|---|---|---|---|";
   const single = SINGLE_TURN_CONFIGS.map((c) => row(results.configs[c.id]));
   const multi = MULTI_TURN_CONFIGS.map((c) => row(results.configs[c.id]));
+  const spread = (s, f) => `${f(s.min)} / ${f(s.mean)} / ${f(s.max)}`;
+  const mrr = (x) => x.toFixed(3);
+  const variance = HYDE_VARIANCE_CONFIGS.map((id) => {
+    const v = results.hydeVariance.configs[id];
+    return `| ${v.label} | ${spread(v.hit1, pct)} | ${spread(v.hit5, pct)} | ${spread(v.mrr5, mrr)} | ${spread(v.recall10, pct)} | ${v.flips} of ${results.configs[id].metrics.n} |`;
+  });
+  const hv = results.hydeVariance.configs[HYDE_VARIANCE_CONFIGS[0]];
   const comps = results.comparisons.map(
     (c) => `| ${results.configs[c.candidate].label} vs ${results.configs[c.baseline].label} | +${c.wins} | -${c.losses} |`
   );
@@ -180,6 +196,12 @@ function toMarkdown(results) {
     "",
     header,
     ...single,
+    "",
+    `**HyDE variance** (single-turn, ${hv.draws} independent HyDE draws at temperature 0.4, min / mean / max; ` +
+      `the table above is draw 1. Rerank parse fallbacks in draws 2 to ${hv.draws}: ${results.hydeVariance.fallbacks})`,
+    "",
+    "| Configuration | Hit@1 | Hit@k | MRR@k | Pool recall@10 | Questions whose hit@k flips |\n|---|---|---|---|---|---|",
+    ...variance,
     "",
     "**Multi-turn follow-ups** (all rows use HyDE + rerank)",
     "",
@@ -226,7 +248,19 @@ async function main() {
       `${notCovered.length} not-covered questions.`
   );
 
-  const { llm, stats } = createCachedLlm({ cacheOnly });
+  const { llm, has, stats } = createCachedLlm({ cacheOnly });
+
+  if (process.argv.includes("--dry-run")) {
+    let missing = 0;
+    for (let sample = 1; sample < HYDE_DRAWS; sample++) {
+      missing += single.filter((q) => !has(...hydeRequest(q.question, sample))).length;
+    }
+    console.log(
+      `HyDE variance: ${missing} of ${single.length * (HYDE_DRAWS - 1)} extra HyDE draws missing from the cache. ` +
+        `At most ${missing * 2} API calls (one HyDE and one rerank per missing draw). No calls made.`
+    );
+    return;
+  }
   const results = { model: MODEL, points, configs: {}, comparisons: [] };
   let totalFallbacks = 0;
 
@@ -244,6 +278,22 @@ async function main() {
 
   for (const c of SINGLE_TURN_CONFIGS) {
     await record(c, "single-turn", single, (q) => q.question, () => []);
+  }
+
+  // Both variance rows share a draw's HyDE passage; the reranked row then
+  // adds a rerank call, so each missing passage costs at most 2 calls.
+  results.hydeVariance = { configs: {}, fallbacks: 0 };
+  for (const id of HYDE_VARIANCE_CONFIGS) {
+    const base = SINGLE_TURN_CONFIGS.find((c) => c.id === id);
+    const draws = [results.configs[id].perQuestion];
+    for (let sample = 1; sample < HYDE_DRAWS; sample++) {
+      const config = { ...base, label: `${base.label}, draw ${sample + 1}`, opts: { ...base.opts, hydeSample: sample } };
+      process.stdout.write(`${config.label.padEnd(42)} `);
+      const { perQuestion, fallbacks } = await runConfig(config, single, llm, (q) => q.question, () => []);
+      results.hydeVariance.fallbacks += fallbacks;
+      draws.push(perQuestion);
+    }
+    results.hydeVariance.configs[id] = { label: base.label, ...summarizeDraws(draws) };
   }
   for (const c of MULTI_TURN_CONFIGS) {
     const config = { ...c, opts: { condense: c.condense, hyde: true, rerank: true } };

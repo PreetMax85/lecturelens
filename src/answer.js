@@ -85,9 +85,15 @@ tone and vocabulary an instructor would actually use in a lecture, not a formal 
 answer. This hypothetical passage is only used to improve semantic search - it is never
 shown to the student.`;
 
+// The exact (prompt, opts) of a HyDE call, shared with the eval's dry run so
+// it can check the cache for these calls without making them.
+function hydeRequest(question, sample = 0) {
+  return [question, { systemInstruction: HYDE_SYSTEM, temperature: 0.4, sample }];
+}
+
 async function generateHydePassage(question, llm = generate, sample = 0) {
   try {
-    return await llm(question, { systemInstruction: HYDE_SYSTEM, temperature: 0.4, sample });
+    return await llm(...hydeRequest(question, sample));
   } catch (err) {
     console.error("[hyde] generation failed, falling back to raw query only:", err.message);
     return null;
@@ -210,4 +216,4 @@ async function answerQuestion(userMessage, history = [], { llm = generate } = {}
   };
 }
 
-module.exports = { answerQuestion, retrieve };
+module.exports = { answerQuestion, retrieve, hydeRequest };
