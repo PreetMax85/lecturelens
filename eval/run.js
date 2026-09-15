@@ -192,7 +192,7 @@ function toMarkdown(results) {
       `Wrong timestamp: ${results.citations.wrongTimestamp}. Lesson not among the excerpts: ${results.citations.unknownSource}. ` +
       `Answers with no parseable citation: ${results.citations.answersWithoutCitations}. ` +
       `Timestamps outside a parseable citation: ${results.citations.strayTimestamps} ` +
-      `(compound citations naming two ranges at once; the parser reads the first).`,
+      `(compound citations naming several ranges at once; the parser reads the first).`,
     "",
     "**Questions the course does not cover** (full production answers)",
     "",

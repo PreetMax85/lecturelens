@@ -21,7 +21,7 @@ Model: `gemini-3.1-flash-lite`. Index: 1955 chunks. Rerank responses that failed
 
 **Citation accuracy** (full production answers, all questions)
 
-99 of 100 citations verified (99%) across 55 answers. Wrong timestamp: 1. Lesson not among the excerpts: 0. Answers with no parseable citation: 4. Timestamps outside a parseable citation: 10 (compound citations naming two ranges at once; the parser reads the first).
+99 of 100 citations verified (99%) across 55 answers. Wrong timestamp: 1. Lesson not among the excerpts: 0. Answers with no parseable citation: 4. Timestamps outside a parseable citation: 10 (compound citations naming several ranges at once; the parser reads the first).
 
 **Questions the course does not cover** (full production answers)
 

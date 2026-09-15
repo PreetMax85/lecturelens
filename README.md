@@ -114,12 +114,15 @@ of conversation history changes)
 | LLM condensation (production) | 12 | 2.5 | 75% | 83% (10/12) | 0.792 | 92% | 92% |
 
 **Citation accuracy**, measured on full production answers to all 55
-questions: 99 of 100 parsed citations verified (99%). The one failure cited an
-entire 19-minute lesson as a single range, which no retrieved excerpt spans. No
-answer cited a lesson that was not among its excerpts. Four answers carried no
-citation: three were correct declines to questions the course doesn't cover,
-and the fourth declined a question the course does answer, because retrieval
-missed that lesson. Four answers also wrote compound citations naming several
+questions: 99 of 100 parsed citations verified (99%). The one failure cited a
+single 19-minute range (00:00 to 19:26), which no retrieved excerpt spans. No
+answer cited a lesson that was not among its excerpts. Verification confirms
+that a cited location was among the excerpts, not that the passage supports the
+claim: three of the verified citations belong to the not-covered answer
+described below. Four answers carried no citation: three were correct declines
+to questions the course doesn't cover, and the fourth declined a question the
+course does answer, because rerank dropped the labeled passage from the
+candidates. Four answers also wrote compound citations naming several
 time ranges at once, of which the parser reads only the first, leaving 10
 timestamps outside any checked citation. So 100 is the parser's denominator,
 not the model's.
@@ -186,8 +189,8 @@ Read these before quoting any number above.
 - **Six of the eleven production misses land in the right lesson** but
   outside the labeled window, so a student would still have been sent to the
   right video, just not the right minute. The other five miss the lesson.
-- **Three of those six are boundary misses.** A hit needs at least one second
-  of overlap with the labeled window, and in those three cases the retrieved
+- **Four of those six are boundary misses.** A hit needs at least one second
+  of overlap with the labeled window, and in those four cases the retrieved
   chunk ends exactly where the labeled window starts, or starts exactly where
   it ends: retrieval landed on the immediately adjacent chunk. The strict rule
   is worth keeping, since a student sent 40 seconds early is still sent to the
