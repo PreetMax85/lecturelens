@@ -335,6 +335,41 @@
     ]
   },
   {
+    "id": "n01",
+    "author": "preet",
+    "question": "How do I configure background audio playback so audio keeps playing when the app is minimized or the phone screen is locked?",
+    "note": "Not covered. The audio lesson plays and records sound in the foreground only.",
+    "expected": []
+  },
+  {
+    "id": "n02",
+    "author": "preet",
+    "question": "What library or native API do we use to scan for and pair with nearby Bluetooth Low Energy (BLE) peripheral devices?",
+    "note": "Not covered. Module 10 lesson 1 names Bluetooth once, as something Expo Go can't run without a development build.",
+    "expected": []
+  },
+  {
+    "id": "n03",
+    "author": "preet",
+    "question": "How do we integrate RevenueCat into Expo to handle monthly recurring in-app subscriptions for iOS and Android?",
+    "note": "Not covered. RevenueCat and in-app purchases are never mentioned.",
+    "expected": []
+  },
+  {
+    "id": "n04",
+    "author": "preet",
+    "question": "How do I add native Apple Pay and Google Pay payment buttons to my app's checkout screen?",
+    "note": "Not covered. Stripe is named in passing as a third-party SDK (Module 5 lesson 3, Module 10 lesson 1), never implemented.",
+    "expected": []
+  },
+  {
+    "id": "n05",
+    "author": "preet",
+    "question": "I recorded a voice clip using the audio API, but how do I get the local file path so I can play it back in an audio player?",
+    "note": "Not covered. Module 8 lesson 2 says saving a recording needs a development build and skips it.",
+    "expected": []
+  },
+  {
     "id": "m01",
     "author": "generated",
     "history": [
