@@ -57,4 +57,16 @@ function aggregate(scores) {
   };
 }
 
-module.exports = { toSeconds, overlapsWindow, scoreQuestion, aggregate };
+// A question the course doesn't cover should get an answer that says so. The
+// answer prompt asks for "couldn't find that in the course", but the model
+// words it several ways, so this matches the common phrasings. It can't tell
+// whether the rest of the answer invents steps anyway, so those answers are
+// also read by hand.
+const NOT_COVERED =
+  /\b(couldn['’]t|could not|can['’]t|cannot|unable to) find\b|\b(isn['’]t|is not|aren['’]t|are not|not) (covered|mentioned|discussed)\b|\b(doesn['’]t|does not|don['’]t|do not) (cover|mention|discuss|include)\b|\bno (information|mention|details?)\b/i;
+
+function saysNotCovered(answer) {
+  return NOT_COVERED.test(answer);
+}
+
+module.exports = { toSeconds, overlapsWindow, scoreQuestion, aggregate, saysNotCovered };
