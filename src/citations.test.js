@@ -77,6 +77,20 @@ test("splits ranges separated by semicolons, including single timestamps", () =>
   );
 });
 
+test("does not read a prose timestamp after an unclosed citation as another range", () => {
+  const lesson = "Module 3, Lesson: Foo, at 01:00 – 02:00";
+  for (const tail of [", 10:30 AM is the deadline", " and 2:00 more minutes", ", and 03:00-ish"]) {
+    const cs = extractCitations(lesson + tail);
+    assert.equal(cs.length, 1, tail);
+    assert.equal(cs[0].text, lesson, tail);
+  }
+});
+
+test("does not read a longer digit run as a timestamp", () => {
+  const cs = extractCitations("Module 3, Lesson: Foo, at 01:00 – 02:00, 12:345");
+  assert.equal(cs.length, 1);
+});
+
 test("gives every range of a compound citation the full citation text", () => {
   const text = "Module 14, Lesson: EAS Update, at 03:29 – 04:09 and 04:09 – 04:48";
   const cs = extractCitations(`See (${text}).`);

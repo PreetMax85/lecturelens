@@ -13,11 +13,15 @@
 // 02:53 – 03:37, and 03:37 – 04:19"). Each range becomes its own citation and
 // is verified on its own; all of them carry the full compound text.
 
-const TS = String.raw`\d{1,2}:\d{2}(?::\d{2})?`;
+const TS = String.raw`\d{1,2}:\d{2}(?::\d{2})?(?!\d)`;
 const RANGE = String.raw`${TS}(?:\s*(?:–|—|-|to)\s*${TS})?`;
 const LIST_SEP = String.raw`(?:\s*[,;]\s*(?:and\s+)?|\s+and\s+)(?:at\s+)?`;
+// A later range must end where a citation or list item could end, so a
+// timestamp in prose after an unclosed citation ("..., 10:30 AM") isn't read
+// as another range.
+const LIST_ITEM = String.raw`${LIST_SEP}${RANGE}(?=\s*(?:[).;,\n]|and\b|$))`;
 const CITATION_RE = new RegExp(
-  String.raw`(Module\s+\d+(?:\s+hc)?)\s*,\s*Lesson:\s*([^()\n]+?)\s*,\s*at\s+(${RANGE}(?:${LIST_SEP}${RANGE})*)`,
+  String.raw`(Module\s+\d+(?:\s+hc)?)\s*,\s*Lesson:\s*([^()\n]+?)\s*,\s*at\s+(${RANGE}(?:${LIST_ITEM})*)`,
   "gi"
 );
 const RANGE_RE = new RegExp(String.raw`(${TS})(?:\s*(?:–|—|-|to)\s*(${TS}))?`, "g");
