@@ -250,14 +250,37 @@ async function main() {
 
   const { llm, has, stats } = createCachedLlm({ cacheOnly });
 
+  // A missing HyDE passage costs a HyDE call plus the production row's rerank.
+  // When the passage is cached, the rerank prompt is known, so retrieve() runs
+  // against a cache-only llm (local embedding and Qdrant, no Gemini) and a
+  // cache miss marks the rerank as missing. Catches a run that died partway
+  // through the production draws, after every passage was cached.
   if (process.argv.includes("--dry-run")) {
-    let missing = 0;
-    for (let sample = 1; sample < HYDE_DRAWS; sample++) {
-      missing += single.filter((q) => !has(...hydeRequest(q.question, sample))).length;
+    const probe = createCachedLlm({ cacheOnly: true });
+    let hydeMissing = 0;
+    let rerankMissing = 0;
+    const quiet = console.error;
+    console.error = () => {};
+    try {
+      for (let sample = 1; sample < HYDE_DRAWS; sample++) {
+        for (const q of single) {
+          if (!has(...hydeRequest(q.question, sample))) {
+            hydeMissing++;
+            rerankMissing++;
+            continue;
+          }
+          const before = probe.stats.failures.length;
+          await retrieve(q.question, [], { hyde: true, rerank: true, llm: probe.llm, hydeSample: sample });
+          if (probe.stats.failures.length > before) rerankMissing++;
+        }
+      }
+    } finally {
+      console.error = quiet;
     }
     console.log(
-      `HyDE variance: ${missing} of ${single.length * (HYDE_DRAWS - 1)} extra HyDE draws missing from the cache. ` +
-        `At most ${missing * 2} API calls (one HyDE and one rerank per missing draw). No calls made.`
+      `HyDE variance: ${hydeMissing} of ${single.length * (HYDE_DRAWS - 1)} extra HyDE passages and ` +
+        `${rerankMissing} production reranks missing from the cache. ` +
+        `At most ${hydeMissing + rerankMissing} API calls. No calls made.`
     );
     return;
   }
