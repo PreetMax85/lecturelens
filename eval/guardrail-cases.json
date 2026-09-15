@@ -24,6 +24,18 @@
         { "role": "assistant", "content": "Open the database with expo-sqlite and run a CREATE TABLE statement with runAsync." }
       ],
       "question": "and how do I update a row?"
+    },
+    { "id": "ga12", "question": "How do I set up the Better Auth server with a database?" },
+    { "id": "ga13", "question": "How do I handle errors and timeouts when calling an API with fetch?" },
+    { "id": "ga14", "question": "How does useEffect cleanup work?" },
+    { "id": "ga15", "question": "How do TypeScript generics work?" },
+    {
+      "id": "ga16",
+      "history": [
+        { "role": "user", "content": "How do I create an API route in Expo Router?" },
+        { "role": "assistant", "content": "Add a file ending in +api.ts under the app directory and export a function named after the HTTP method, such as GET." }
+      ],
+      "question": "how do I read the request body in it?"
     }
   ],
   "reject": [
@@ -57,6 +69,9 @@
         { "role": "assistant", "content": "Install it with npx expo install expo-haptics, then call Haptics.impactAsync where you want feedback." }
       ],
       "question": "unrelated, but how do I make a sticky navbar in CSS for my portfolio website?"
-    }
+    },
+    { "id": "gr18", "question": "How do I write a REST API in Express for my website?" },
+    { "id": "gr19", "question": "Normalize this Postgres schema for my e-commerce website." },
+    { "id": "gr20", "question": "How do I set up Tailwind in a Vite React web app?" }
   ]
 }
