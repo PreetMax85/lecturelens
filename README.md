@@ -62,11 +62,13 @@ cd frontend && npm run dev     # frontend on :5173
 
 ## Evaluation
 
-Retrieval here is measured, not asserted. `eval/questions.json` holds 30
-questions labeled with the module, lesson, and timestamp window that actually
-answers each one. `npm run eval` runs every question through the same
-`retrieve()` function the server uses, with pipeline stages switched on one at
-a time, against the live Qdrant index.
+Retrieval here is measured, not asserted. `eval/questions.json` holds 55
+questions. 50 are labeled with the module, lesson, and timestamp window that
+actually answers each one. The other 5 ask about things the course never
+teaches, to check that the bot says so instead of improvising. `npm run eval`
+runs every labeled question through the same `retrieve()` function the server
+uses, with pipeline stages switched on one at a time, against the live Qdrant
+index.
 
 Reproduce the published numbers without spending any API quota:
 
@@ -86,8 +88,8 @@ every strict hit plus the near misses and is always the larger number.
 
 The `k` in the table headers is not always 5. The reranker is told to drop
 excerpts it judges irrelevant rather than pad the list out, so the reranked
-rows return at most 5 results and usually fewer: a mean of 3.3 in the
-production configuration, with 4 of the 24 single-turn questions answered from
+rows return at most 5 results and usually fewer: a mean of 3.1 in the
+production configuration, with 8 of the 38 single-turn questions answered from
 a single excerpt. A shorter list can only lose hits, never gain them, so this
 handicaps those rows rather than flattering them. The candidate pool is 10
 except on the HyDE rows, where the raw and hypothetical-answer searches
@@ -97,67 +99,98 @@ sometimes return the same chunk and dedup to 9 (mean 9.8).
 
 | Configuration | n | Avg results | Hit@1 | Hit@k | MRR@k | Lesson hit@k | Pool recall@10 |
 |---|---|---|---|---|---|---|---|
-| Vector search only | 24 | 5.0 | 46% | 63% (15/24) | 0.524 | 88% | 63% |
-| + HyDE | 24 | 5.0 | 46% | 67% (16/24) | 0.549 | 92% | 75% |
-| + Rerank (no HyDE) | 24 | 3.2 | 54% | 63% (15/24) | 0.583 | 88% | 63% |
-| + HyDE + Rerank (production) | 24 | 3.3 | 67% | 71% (17/24) | 0.688 | 88% | 75% |
+| Vector search only | 38 | 5.0 | 39% | 61% (23/38) | 0.482 | 87% | 68% |
+| + HyDE | 38 | 5.0 | 45% | 63% (24/38) | 0.526 | 87% | 74% |
+| + Rerank (no HyDE) | 38 | 3.2 | 63% | 68% (26/38) | 0.658 | 87% | 68% |
+| + HyDE + Rerank (production) | 38 | 3.1 | 66% | 71% (27/38) | 0.684 | 87% | 74% |
 
 **Multi-turn follow-ups** (every row runs HyDE and rerank; only the handling
 of conversation history changes)
 
 | Configuration | n | Avg results | Hit@1 | Hit@k | MRR@k | Lesson hit@k | Pool recall@10 |
 |---|---|---|---|---|---|---|---|
-| Follow-up alone (no condensation) | 6 | 2.7 | 50% | 50% (3/6) | 0.500 | 67% | 50% |
-| Previous turn + follow-up, concatenated | 6 | 3.8 | 17% | 67% (4/6) | 0.375 | 83% | 67% |
-| LLM condensation (production) | 6 | 2.3 | 100% | 100% (6/6) | 1.000 | 100% | 100% |
+| Follow-up alone (no condensation) | 12 | 2.6 | 50% | 67% (8/12) | 0.563 | 83% | 67% |
+| Previous turn + follow-up, concatenated | 12 | 3.8 | 8% | 67% (8/12) | 0.354 | 83% | 67% |
+| LLM condensation (production) | 12 | 2.5 | 75% | 83% (10/12) | 0.792 | 92% | 92% |
 
-**Citation accuracy**, measured on full production answers to all 30
-questions: 56 of 57 parsed citations verified (98%). One answer cited a
-timestamp that matched no retrieved excerpt, no answer cited a lesson that was
-not among its excerpts, and every answer carried at least one parseable
-citation. Two answers also wrote compound citations naming two time ranges at
-once, of which the parser reads only the first, leaving 4 timestamps outside
-any checked citation. So 57 is the parser's denominator, not the model's.
+**Citation accuracy**, measured on full production answers to all 55
+questions: 99 of 100 parsed citations verified (99%). The one failure cited a
+single 19-minute range (00:00 to 19:26), which no retrieved excerpt spans. No
+answer cited a lesson that was not among its excerpts. Verification confirms
+that a cited location was among the excerpts, not that the passage supports the
+claim: three of the verified citations belong to the not-covered answer
+described below. Four answers carried no citation: three were correct declines
+to questions the course doesn't cover, and the fourth declined a question the
+course does answer, because rerank dropped the labeled passage from the
+candidates. Four answers also wrote compound citations naming several
+time ranges at once, of which the parser reads only the first, leaving 10
+timestamps outside any checked citation. So 100 is the parser's denominator,
+not the model's.
+
+**Questions the course does not cover**: 4 of 5 production answers said the
+course doesn't cover the topic. That count comes from a keyword check, and
+every answer was also read by hand, which agrees. The failure is instructive:
+asked how to get a recorded clip's file path, the answer took a remark that
+saving recordings needs a development build and joined it to image-saving code
+from a different module, producing a cited answer the course never gives. Five
+questions is a spot check, not a rate.
 
 ### What the numbers actually say
 
-- **Reranking cannot fix retrieval, only ordering.** Rerank alone changed
-  hit@k on exactly zero questions (+0 newly hit, -0 newly missed), because it
-  reorders a pool that vector search has already fixed. What it moved was
-  hit@1, 46% to 54%, and MRR, 0.524 to 0.583.
+- **Reranking cannot fix retrieval, only ordering.** It picks from the pool
+  vector search already produced, so its hit@k can never exceed that pool's
+  recall. Rerank alone lifted hit@k from 61% to 68% by pulling three answers up
+  from ranks 6 to 10, which is exactly the pool's recall@10 of 68%: it found
+  everything there was to find. Its larger effect is order, hit@1 39% to 63%
+  and MRR 0.482 to 0.658.
 - **HyDE is the stage that changes what gets found at all.** It lifts pool
-  recall@10 from 63% to 75%, because a hypothetical instructor-voice answer
-  matches spoken transcript phrasing better than a student's question does.
+  recall@10 from 68% to 74%, because a hypothetical instructor-voice answer
+  matches spoken transcript phrasing better than a student's question does. On
+  its own it is noisy at hit@k: 3 questions newly hit, 2 newly missed.
 - **The two compose.** HyDE widens the pool, rerank then picks better inside
-  it: hit@1 46% to 67%, MRR 0.524 to 0.688.
-- **Condensation is the whole story on follow-ups.** Concatenating the
-  previous turn beats using the follow-up alone on hit@k, but it drags the
-  earlier topic's vocabulary into the query and wrecks hit@1 (17%). Rewriting
-  the follow-up into a standalone question first is what makes it work.
+  it: hit@1 39% to 66%, MRR 0.482 to 0.684.
+- **Condensation is what makes follow-ups work.** Concatenating the previous
+  turn drags the earlier topic's vocabulary into the query and wrecks hit@1
+  (8%). Rewriting the follow-up into a standalone question first lifts hit@1
+  to 75% and pool recall from 67% to 92%.
 
 ### Caveats
 
 Read these before quoting any number above.
 
-- **n is small.** 24 single-turn and 6 multi-turn questions. One question is
-  worth about 4 percentage points, so a gap of one or two questions is noise.
-  The per-question win and loss table in `eval/results.md` is more
-  informative than the headline percentages.
+- **n is still small.** 38 single-turn and 12 multi-turn questions. One
+  question is worth about 3 percentage points on single-turn and 8 on
+  multi-turn, so a gap of one or two questions is noise. The per-question win
+  and loss table in `eval/results.md` is more informative than the headline
+  percentages.
 - **HyDE is sampled once at temperature 0.4**, so its rows would shift a
   little on a fresh run. The cache pins one sample, it does not make the
   number stable in principle.
-- **Question provenance matters, and it shows.** 22 questions were generated
-  and are marked `"author": "generated"`; 8 were written by hand, before
-  reading any transcript, and are marked `"author": "preet"`. The hand-written
-  ones score lower: 5 of 8 hit@k against 12 of 16 for the generated ones, in
-  the production configuration. Questions written by a model over the same
-  corpus share vocabulary with it, which flatters retrieval. The hand-written
-  subset is the more honest signal, and it is also the smaller one.
-- **Four of the seven production misses land in the right lesson** but outside
-  the labeled window, so a student would still have been sent to the right
-  video, just not the right minute. The other three miss the lesson entirely.
-- **Three of those four are boundary misses.** A hit needs at least one second
-  of overlap with the labeled window, and in those three cases the retrieved
+- **Question provenance matters.** 16 single-turn and 7 multi-turn questions
+  were generated and are marked `"author": "generated"`. The rest were written
+  by hand, before reading any transcript, and are marked `"author": "preet"`.
+  Generated questions share vocabulary with the corpus they were written from,
+  which flatters retrieval. In the production configuration the hand-written
+  single-turn questions hit 15 of 22 (68%) against 12 of 16 (75%) for the
+  generated ones, and on follow-ups 3 of 5 against 7 of 7. The hand-written
+  subset is the more honest signal, and it is now the larger one.
+- **One follow-up was rewritten after reading the transcripts.** The original
+  second turn of one hand-written thread duplicated an existing question, so
+  its replacement is marked generated and carries a note. The assistant turns
+  in every thread's history are short written summaries, not real production
+  answers.
+- **Two labels include a location that retrieval found first.** For the
+  questions about saving a downloaded image and about a loading spinner, a
+  production run returned a second valid passage the first labeling missed.
+  Both were confirmed against the transcript and added, and both questions hit
+  only through that second location. Without them production hit@k would be
+  25 of 38 (66%). Labels can be incomplete the other way too: the spinner
+  question's top result is a third valid passage that is not labeled.
+- **Six of the eleven production misses land in the right lesson** but
+  outside the labeled window, so a student would still have been sent to the
+  right video, just not the right minute. The other five miss the lesson.
+- **Four of those six are boundary misses.** A hit needs at least one second
+  of overlap with the labeled window, and in those four cases the retrieved
   chunk ends exactly where the labeled window starts, or starts exactly where
   it ends: retrieval landed on the immediately adjacent chunk. The strict rule
   is worth keeping, since a student sent 40 seconds early is still sent to the

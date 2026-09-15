@@ -6,12 +6,12 @@
       "label": "Vector search only",
       "set": "single-turn",
       "metrics": {
-        "n": 24,
-        "hit1": 0.4583333333333333,
-        "hit5": 0.625,
-        "mrr5": 0.5243055555555555,
-        "lessonHit5": 0.875,
-        "recall10": 0.625,
+        "n": 38,
+        "hit1": 0.39473684210526316,
+        "hit5": 0.6052631578947368,
+        "mrr5": 0.48245614035087714,
+        "lessonHit5": 0.868421052631579,
+        "recall10": 0.6842105263157895,
         "avgPool": 10,
         "avgReturned": 5
       },
@@ -375,6 +375,216 @@
             "Module 9 | 3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm | 01:25-02:08",
             "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 04:51-05:33"
           ]
+        },
+        "p09": {
+          "rank": null,
+          "lessonRank": 3,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "My SQLite query works when values are hardcoded, but how do I safely pass dynamic state variables into the SQL statement?",
+          "top5": [
+            "Module 6 | 5.notes-buddy-mini-project_epm | 02:51-03:31",
+            "Module 6 | 5.notes-buddy-mini-project_epm | 03:32-04:12",
+            "Module 6 | 3.expo-sqllite-creating-basic-crud-app_epm | 01:18-02:02",
+            "Module 6 | 5.notes-buddy-mini-project_epm | 20:15-20:59",
+            "Module 16 | chapter-2-create-header-and-content-components_epm | 06:23-07:02"
+          ]
+        },
+        "p10": {
+          "rank": 2,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do I save a downloaded image permanently to the device's local filesystem so it doesn't get wiped when the app restarts?",
+          "top5": [
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 14:27-15:10",
+            "Module 6 | 4. expo file system_epm | 07:50-08:31",
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 21:33-22:14",
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 16:26-17:10",
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 20:48-21:31"
+          ]
+        },
+        "p11": {
+          "rank": 2,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "Where in the course do we set up a custom 404 screen to catch broken or invalid screen routes in Expo Router?",
+          "top5": [
+            "Module 4 | 5-not-found-route_epm | 00:00-00:41",
+            "Module 4 | 5-not-found-route_epm | 00:41-01:24",
+            "Module 4 | 5-not-found-route_epm | 02:07-02:48",
+            "Module 4 | 1-Introduction to Expo Router_epm | 03:31-04:15",
+            "Module 4 | 1-Introduction to Expo Router_epm | 02:14-02:50"
+          ]
+        },
+        "p12": {
+          "rank": 2,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "Is there a built-in sensor API we can use to get the phone's physical compass heading and directional orientation?",
+          "top5": [
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 03:36-04:20",
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 00:43-01:26",
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 00:00-00:42",
+            "Module 7 | 4. Light Sensors & Ambient Illumination_epm | 00:44-01:26",
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 05:47-06:28"
+          ]
+        },
+        "p13": {
+          "rank": null,
+          "lessonRank": null,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "In a web browser I'd render a custom loading spinner SVG during an API fetch, but what React Native component do we use for a native activity spinner?",
+          "top5": [
+            "Module 2 | 01_native-components-vs-core-components_epm | 08:25-09:02",
+            "Module 2 | 04_list-&-data-display-components_epm | 02:08-02:46",
+            "Module 16 | chapter-2-create-header-and-content-components_epm | 09:07-09:52",
+            "Module 1 | 02_react-native-vs-expo_epm | 09:11-09:52",
+            "Module 2 | 02_essential-core-components(view , text , image , textinput , pressable , stylesheet)_epm | 05:46-06:27"
+          ]
+        },
+        "p14": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do I check the phone's current battery level so I can stop running heavy background tasks when the battery is low?",
+          "top5": [
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 04:15-04:56",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 08:28-09:13",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 05:41-06:17",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 00:42-01:26",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 02:51-03:31"
+          ]
+        },
+        "p15": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do I read the current ambient light level in lux using Expo's sensor module?",
+          "top5": [
+            "Module 7 | 4. Light Sensors & Ambient Illumination_epm | 03:33-04:13",
+            "Module 7 | 4. Light Sensors & Ambient Illumination_epm | 02:11-02:51",
+            "Module 7 | 5. Pedometer & Step Tracking_epm | 09:16-09:37",
+            "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 00:00-00:43",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 02:08-02:51"
+          ]
+        },
+        "p16": {
+          "rank": null,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "What prop or state toggle do we pass to the Expo Camera component to switch between the front selfie camera and the main back camera?",
+          "top5": [
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 00:00-00:41",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 17:29-18:07",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 13:09-13:54",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 05:26-06:07",
+            "Module 8 | 3.Build a Profile Pic Creator - Pick, Crop & Save User Photos_epm | 07:02-07:46"
+          ]
+        },
+        "p17": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do we configure separate app bundle IDs so I can have both a development build and a production build installed on the same phone at the same time?",
+          "top5": [
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 01:28-02:03",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 00:00-00:43",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 00:44-01:28",
+            "Module 14 | 03_how-to-publish-your-app-to-google-playstore-and-app-store_epm | 15:50-16:33",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 07:04-07:44"
+          ]
+        },
+        "p18": {
+          "rank": 4,
+          "lessonRank": 4,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "I have an array of lat/long coordinates, what React Native Maps component do we use to draw a continuous route path line connecting them?",
+          "top5": [
+            "Module 3 | 2. Setting Up React Navigation in Expo_epm | 06:21-07:04",
+            "Module 3 | mini-project-4-implementing-pokemondetail-screen_epm | 01:22-02:03",
+            "Module 2 | 02_essential-core-components(view , text , image , textinput , pressable , stylesheet)_epm | 00:42-01:26",
+            "Module 11 | chapter-5 Interactive Map Experiences From Pins to Paths polylines_epm | 00:39-01:22",
+            "Module 3 | 1. introduction to navigation in react native_epm | 13:02-13:46"
+          ]
+        },
+        "p19": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do I schedule a local notification to trigger at a specific date and time in the future rather than sending it immediately?",
+          "top5": [
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 03:28-04:08",
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 04:57-05:40",
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 04:13-04:56",
+            "Module 14 | 01_eas-workflows_epm | 05:57-06:40",
+            "Module 12 | chapter-1-what-is-notification-types-of-notificaiton-in-app-notification_epm | 03:25-04:09"
+          ]
+        },
+        "p20": {
+          "rank": null,
+          "lessonRank": 3,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "When configuring Google OAuth in Expo, what deep link redirect URI scheme format do we need to register so the browser redirects back to our app after sign-in?",
+          "top5": [
+            "Module 13 | chapter-5-implementing-credential-and-oauth-authentication-using-better-auth_epm | 24:45-25:30",
+            "Module 13 | chapter-4-implementing-github-authenitcation_epm | 15:42-16:26",
+            "Module 13 | chapter-3-implementing-google-oauth_epm | 03:36-04:17",
+            "Module 13 | chapter-3-implementing-google-oauth_epm | 02:10-02:55",
+            "Module 13 | chapter-3-implementing-google-oauth_epm | 00:00-00:41"
+          ]
+        },
+        "p21": {
+          "rank": null,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do we set up an automated EAS Workflow to trigger a cloud build every time code is pushed to the main branch?",
+          "top5": [
+            "Module 14 | 01_eas-workflows_epm | 00:43-01:27",
+            "Module 14 | 01_eas-workflows_epm | 03:00-03:45",
+            "Module 14 | 01_eas-workflows_epm | 01:30-02:14",
+            "Module 14 | 03_how-to-publish-your-app-to-google-playstore-and-app-store_epm | 03:35-04:18",
+            "Module 13 | chapter-3-implementing-google-oauth_epm | 41:02-41:45"
+          ]
+        },
+        "p22": {
+          "rank": null,
+          "lessonRank": null,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "I want a filter options popup that slides up over the current screen without defining a separate route page in the navigation stack, how do we build that modal?",
+          "top5": [
+            "Module 3 | mini-project-1-init-project-setup-screens-and-react-navigation_epm | 14:50-15:27",
+            "Module 3 | mini-project-3-implementing-homescreen-add-other-components_epm | 22:14-22:55",
+            "Module 4 | 8-stack-and-modal-navigation_epm | 02:47-03:31",
+            "Module 3 | 3. Navigation Between Screens_epm | 12:08-12:51",
+            "Module 3 | 1. introduction to navigation in react native_epm | 07:13-07:57"
+          ]
         }
       }
     },
@@ -382,13 +592,13 @@
       "label": "+ HyDE",
       "set": "single-turn",
       "metrics": {
-        "n": 24,
-        "hit1": 0.4583333333333333,
-        "hit5": 0.6666666666666666,
-        "mrr5": 0.548611111111111,
-        "lessonHit5": 0.9166666666666666,
-        "recall10": 0.75,
-        "avgPool": 9.833333333333334,
+        "n": 38,
+        "hit1": 0.4473684210526316,
+        "hit5": 0.631578947368421,
+        "mrr5": 0.5263157894736842,
+        "lessonHit5": 0.868421052631579,
+        "recall10": 0.7368421052631579,
+        "avgPool": 9.842105263157896,
         "avgReturned": 5
       },
       "perQuestion": {
@@ -751,6 +961,216 @@
             "Module 9 | 3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm | 01:25-02:08",
             "Module 2 | 02_essential-core-components(view , text , image , textinput , pressable , stylesheet)_epm | 10:47-11:29"
           ]
+        },
+        "p09": {
+          "rank": null,
+          "lessonRank": 3,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "My SQLite query works when values are hardcoded, but how do I safely pass dynamic state variables into the SQL statement?",
+          "top5": [
+            "Module 6 | 5.notes-buddy-mini-project_epm | 02:51-03:31",
+            "Module 6 | 5.notes-buddy-mini-project_epm | 03:32-04:12",
+            "Module 6 | 3.expo-sqllite-creating-basic-crud-app_epm | 01:18-02:02",
+            "Module 6 | 5.notes-buddy-mini-project_epm | 20:15-20:59",
+            "Module 16 | chapter-2-create-header-and-content-components_epm | 06:23-07:02"
+          ]
+        },
+        "p10": {
+          "rank": 3,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do I save a downloaded image permanently to the device's local filesystem so it doesn't get wiped when the app restarts?",
+          "top5": [
+            "Module 6 | 4. expo file system_epm | 08:31-09:13",
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 14:27-15:10",
+            "Module 6 | 4. expo file system_epm | 07:50-08:31",
+            "Module 8 | 3.Build a Profile Pic Creator - Pick, Crop & Save User Photos_epm | 07:02-07:46",
+            "Module 13 | chapter-3-implementing-google-oauth_epm | 36:36-37:19"
+          ]
+        },
+        "p11": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "Where in the course do we set up a custom 404 screen to catch broken or invalid screen routes in Expo Router?",
+          "top5": [
+            "Module 4 | 5-not-found-route_epm | 00:41-01:24",
+            "Module 4 | 5-not-found-route_epm | 00:00-00:41",
+            "Module 4 | 2-File-Based Routing Basics_epm | 00:00-00:41",
+            "Module 3 | 1. introduction to navigation in react native_epm | 15:53-16:36",
+            "Module 4 | 1-Introduction to Expo Router_epm | 03:31-04:15"
+          ]
+        },
+        "p12": {
+          "rank": 2,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "Is there a built-in sensor API we can use to get the phone's physical compass heading and directional orientation?",
+          "top5": [
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 03:36-04:20",
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 00:00-00:42",
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 00:43-01:26",
+            "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 14:05-14:17",
+            "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 00:43-01:18"
+          ]
+        },
+        "p13": {
+          "rank": null,
+          "lessonRank": null,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "In a web browser I'd render a custom loading spinner SVG during an API fetch, but what React Native component do we use for a native activity spinner?",
+          "top5": [
+            "Module 1 | 02_react-native-vs-expo_epm | 03:32-04:15",
+            "Module 2 | 01_native-components-vs-core-components_epm | 08:25-09:02",
+            "Module 3 | mini-project-3-implementing-homescreen-add-other-components_epm | 22:56-23:39",
+            "Module 2 | 04_list-&-data-display-components_epm | 02:08-02:46",
+            "Module 2 | 02_essential-core-components(view , text , image , textinput , pressable , stylesheet)_epm | 00:00-00:42"
+          ]
+        },
+        "p14": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 9,
+          "returned": 5,
+          "query": "How do I check the phone's current battery level so I can stop running heavy background tasks when the battery is low?",
+          "top5": [
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 04:15-04:56",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 08:28-09:13",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 00:42-01:26",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 05:41-06:17",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 00:00-00:42"
+          ]
+        },
+        "p15": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do I read the current ambient light level in lux using Expo's sensor module?",
+          "top5": [
+            "Module 7 | 4. Light Sensors & Ambient Illumination_epm | 03:33-04:13",
+            "Module 7 | 4. Light Sensors & Ambient Illumination_epm | 02:11-02:51",
+            "Module 7 | 5. Pedometer & Step Tracking_epm | 09:16-09:37",
+            "Module 7 | 4. Light Sensors & Ambient Illumination_epm | 05:37-06:12",
+            "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 00:00-00:43"
+          ]
+        },
+        "p16": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "What prop or state toggle do we pass to the Expo Camera component to switch between the front selfie camera and the main back camera?",
+          "top5": [
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 13:55-14:37",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 00:00-00:41",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 13:09-13:54",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 17:29-18:07",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 05:26-06:07"
+          ]
+        },
+        "p17": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do we configure separate app bundle IDs so I can have both a development build and a production build installed on the same phone at the same time?",
+          "top5": [
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 01:28-02:03",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 00:00-00:43",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 00:44-01:28",
+            "Module 14 | 03_how-to-publish-your-app-to-google-playstore-and-app-store_epm | 15:50-16:33",
+            "Module 10 | 1. What Is EAS Build Why You Need It & Dev Builds vs Expo Go_epm | 14:14-14:59"
+          ]
+        },
+        "p18": {
+          "rank": null,
+          "lessonRank": null,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "I have an array of lat/long coordinates, what React Native Maps component do we use to draw a continuous route path line connecting them?",
+          "top5": [
+            "Module 11 | chapter-2 Map Camera Jump Demo -Programmatically Move & Focus the Map_epm | 03:23-04:07",
+            "Module 3 | 2. Setting Up React Navigation in Expo_epm | 06:21-07:04",
+            "Module 2 | 02_essential-core-components(view , text , image , textinput , pressable , stylesheet)_epm | 00:42-01:26",
+            "Module 11 | chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm | 29:31-30:13",
+            "Module 3 | mini-project-4-implementing-pokemondetail-screen_epm | 01:22-02:03"
+          ]
+        },
+        "p19": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do I schedule a local notification to trigger at a specific date and time in the future rather than sending it immediately?",
+          "top5": [
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 04:57-05:40",
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 03:28-04:08",
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 04:13-04:56",
+            "Module 14 | 01_eas-workflows_epm | 05:57-06:40",
+            "Module 12 | chapter-1-what-is-notification-types-of-notificaiton-in-app-notification_epm | 03:25-04:09"
+          ]
+        },
+        "p20": {
+          "rank": null,
+          "lessonRank": 3,
+          "poolHit": false,
+          "poolSize": 9,
+          "returned": 5,
+          "query": "When configuring Google OAuth in Expo, what deep link redirect URI scheme format do we need to register so the browser redirects back to our app after sign-in?",
+          "top5": [
+            "Module 13 | chapter-4-implementing-github-authenitcation_epm | 15:42-16:26",
+            "Module 13 | chapter-5-implementing-credential-and-oauth-authentication-using-better-auth_epm | 24:45-25:30",
+            "Module 13 | chapter-3-implementing-google-oauth_epm | 05:45-06:29",
+            "Module 13 | chapter-3-implementing-google-oauth_epm | 03:36-04:17",
+            "Module 13 | chapter-3-implementing-google-oauth_epm | 02:10-02:55"
+          ]
+        },
+        "p21": {
+          "rank": null,
+          "lessonRank": 1,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do we set up an automated EAS Workflow to trigger a cloud build every time code is pushed to the main branch?",
+          "top5": [
+            "Module 14 | 01_eas-workflows_epm | 00:43-01:27",
+            "Module 14 | 01_eas-workflows_epm | 01:30-02:14",
+            "Module 14 | 01_eas-workflows_epm | 03:00-03:45",
+            "Module 14 | 01_eas-workflows_epm | 02:15-03:00",
+            "Module 14 | 02_eas-update_epm | 18:23-19:05"
+          ]
+        },
+        "p22": {
+          "rank": null,
+          "lessonRank": null,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "I want a filter options popup that slides up over the current screen without defining a separate route page in the navigation stack, how do we build that modal?",
+          "top5": [
+            "Module 4 | 8-stack-and-modal-navigation_epm | 00:00-00:39",
+            "Module 3 | 1. introduction to navigation in react native_epm | 08:42-09:22",
+            "Module 3 | 1. introduction to navigation in react native_epm | 09:22-10:05",
+            "Module 3 | mini-project-1-init-project-setup-screens-and-react-navigation_epm | 14:50-15:27",
+            "Module 3 | 5. Navigation Patterns , Tab , modal & drawer_epm | 00:00-00:41"
+          ]
         }
       }
     },
@@ -758,14 +1178,14 @@
       "label": "+ Rerank (no HyDE)",
       "set": "single-turn",
       "metrics": {
-        "n": 24,
-        "hit1": 0.5416666666666666,
-        "hit5": 0.625,
-        "mrr5": 0.5833333333333334,
-        "lessonHit5": 0.875,
-        "recall10": 0.625,
+        "n": 38,
+        "hit1": 0.631578947368421,
+        "hit5": 0.6842105263157895,
+        "mrr5": 0.6578947368421053,
+        "lessonHit5": 0.868421052631579,
+        "recall10": 0.6842105263157895,
         "avgPool": 10,
-        "avgReturned": 3.1666666666666665
+        "avgReturned": 3.1842105263157894
       },
       "perQuestion": {
         "c01": {
@@ -1083,6 +1503,191 @@
             "Module 9 | 3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm | 02:09-02:52",
             "Module 9 | 3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm | 04:59-05:40"
           ]
+        },
+        "p09": {
+          "rank": null,
+          "lessonRank": 3,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "My SQLite query works when values are hardcoded, but how do I safely pass dynamic state variables into the SQL statement?",
+          "top5": [
+            "Module 6 | 5.notes-buddy-mini-project_epm | 02:51-03:31",
+            "Module 6 | 5.notes-buddy-mini-project_epm | 03:32-04:12",
+            "Module 6 | 3.expo-sqllite-creating-basic-crud-app_epm | 01:18-02:02",
+            "Module 6 | 5.notes-buddy-mini-project_epm | 20:15-20:59",
+            "Module 16 | chapter-2-create-header-and-content-components_epm | 06:23-07:02"
+          ]
+        },
+        "p10": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 4,
+          "query": "How do I save a downloaded image permanently to the device's local filesystem so it doesn't get wiped when the app restarts?",
+          "top5": [
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 21:33-22:14",
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 20:08-20:47",
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 20:48-21:31",
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 14:27-15:10"
+          ]
+        },
+        "p11": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 3,
+          "query": "Where in the course do we set up a custom 404 screen to catch broken or invalid screen routes in Expo Router?",
+          "top5": [
+            "Module 4 | 5-not-found-route_epm | 00:41-01:24",
+            "Module 4 | 5-not-found-route_epm | 00:00-00:41",
+            "Module 4 | 5-not-found-route_epm | 02:07-02:48"
+          ]
+        },
+        "p12": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "Is there a built-in sensor API we can use to get the phone's physical compass heading and directional orientation?",
+          "top5": [
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 00:43-01:26",
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 03:36-04:20",
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 05:47-06:28",
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 00:00-00:42",
+            "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 00:43-01:18"
+          ]
+        },
+        "p13": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 1,
+          "query": "In a web browser I'd render a custom loading spinner SVG during an API fetch, but what React Native component do we use for a native activity spinner?",
+          "top5": [
+            "Module 5 | 3. Consuming external apis_epm | 04:45-05:26"
+          ]
+        },
+        "p14": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do I check the phone's current battery level so I can stop running heavy background tasks when the battery is low?",
+          "top5": [
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 04:15-04:56",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 07:02-07:46",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 06:17-07:02",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 02:51-03:31",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 00:42-01:26"
+          ]
+        },
+        "p15": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 2,
+          "query": "How do I read the current ambient light level in lux using Expo's sensor module?",
+          "top5": [
+            "Module 7 | 4. Light Sensors & Ambient Illumination_epm | 03:33-04:13",
+            "Module 7 | 4. Light Sensors & Ambient Illumination_epm | 04:14-04:56"
+          ]
+        },
+        "p16": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 2,
+          "query": "What prop or state toggle do we pass to the Expo Camera component to switch between the front selfie camera and the main back camera?",
+          "top5": [
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 13:55-14:37",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 13:09-13:54"
+          ]
+        },
+        "p17": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 4,
+          "query": "How do we configure separate app bundle IDs so I can have both a development build and a production build installed on the same phone at the same time?",
+          "top5": [
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 00:44-01:28",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 01:28-02:03",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 07:04-07:44",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 00:00-00:43"
+          ]
+        },
+        "p18": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 2,
+          "query": "I have an array of lat/long coordinates, what React Native Maps component do we use to draw a continuous route path line connecting them?",
+          "top5": [
+            "Module 11 | chapter-5 Interactive Map Experiences From Pins to Paths polylines_epm | 00:39-01:22",
+            "Module 11 | chapter-4-Build Smart Maps - Map Controls, Markers & Routing in Expo_epm | 00:43-01:27"
+          ]
+        },
+        "p19": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 4,
+          "query": "How do I schedule a local notification to trigger at a specific date and time in the future rather than sending it immediately?",
+          "top5": [
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 04:13-04:56",
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 03:28-04:08",
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 04:57-05:40",
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 09:49-10:33"
+          ]
+        },
+        "p20": {
+          "rank": null,
+          "lessonRank": null,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 1,
+          "query": "When configuring Google OAuth in Expo, what deep link redirect URI scheme format do we need to register so the browser redirects back to our app after sign-in?",
+          "top5": [
+            "Module 13 | chapter-5-implementing-credential-and-oauth-authentication-using-better-auth_epm | 24:45-25:30"
+          ]
+        },
+        "p21": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do we set up an automated EAS Workflow to trigger a cloud build every time code is pushed to the main branch?",
+          "top5": [
+            "Module 14 | 01_eas-workflows_epm | 06:41-07:25",
+            "Module 14 | 01_eas-workflows_epm | 05:57-06:40",
+            "Module 14 | 01_eas-workflows_epm | 01:30-02:14",
+            "Module 14 | 01_eas-workflows_epm | 00:43-01:27",
+            "Module 14 | 01_eas-workflows_epm | 03:00-03:45"
+          ]
+        },
+        "p22": {
+          "rank": null,
+          "lessonRank": null,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 2,
+          "query": "I want a filter options popup that slides up over the current screen without defining a separate route page in the navigation stack, how do we build that modal?",
+          "top5": [
+            "Module 4 | 8-stack-and-modal-navigation_epm | 00:00-00:39",
+            "Module 4 | 8-stack-and-modal-navigation_epm | 02:47-03:31"
+          ]
         }
       }
     },
@@ -1090,14 +1695,14 @@
       "label": "+ HyDE + Rerank (production)",
       "set": "single-turn",
       "metrics": {
-        "n": 24,
-        "hit1": 0.6666666666666666,
-        "hit5": 0.7083333333333334,
-        "mrr5": 0.6875,
-        "lessonHit5": 0.875,
-        "recall10": 0.75,
-        "avgPool": 9.833333333333334,
-        "avgReturned": 3.25
+        "n": 38,
+        "hit1": 0.6578947368421053,
+        "hit5": 0.7105263157894737,
+        "mrr5": 0.6842105263157895,
+        "lessonHit5": 0.868421052631579,
+        "recall10": 0.7368421052631579,
+        "avgPool": 9.842105263157896,
+        "avgReturned": 3.1052631578947367
       },
       "perQuestion": {
         "c01": {
@@ -1417,6 +2022,186 @@
             "Module 9 | 3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm | 02:09-02:52",
             "Module 9 | 3.Add Real Touch Feedback - Master Expo Haptics in Your App_epm | 04:18-04:59"
           ]
+        },
+        "p09": {
+          "rank": null,
+          "lessonRank": 1,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 1,
+          "query": "My SQLite query works when values are hardcoded, but how do I safely pass dynamic state variables into the SQL statement?",
+          "top5": [
+            "Module 6 | 3.expo-sqllite-creating-basic-crud-app_epm | 03:21-04:00"
+          ]
+        },
+        "p10": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 4,
+          "query": "How do I save a downloaded image permanently to the device's local filesystem so it doesn't get wiped when the app restarts?",
+          "top5": [
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 21:33-22:14",
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 20:48-21:31",
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 16:26-17:10",
+            "Module 16 | chapter-4-implementing-imageDetailModal-components_epm | 14:27-15:10"
+          ]
+        },
+        "p11": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 3,
+          "query": "Where in the course do we set up a custom 404 screen to catch broken or invalid screen routes in Expo Router?",
+          "top5": [
+            "Module 4 | 5-not-found-route_epm | 00:41-01:24",
+            "Module 4 | 5-not-found-route_epm | 00:00-00:41",
+            "Module 4 | 5-not-found-route_epm | 02:07-02:48"
+          ]
+        },
+        "p12": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 4,
+          "query": "Is there a built-in sensor API we can use to get the phone's physical compass heading and directional orientation?",
+          "top5": [
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 00:43-01:26",
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 03:36-04:20",
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 05:47-06:28",
+            "Module 7 | 3. Magnetometer - Turn Your App Into a Digital Compass_epm | 00:00-00:42"
+          ]
+        },
+        "p13": {
+          "rank": 2,
+          "lessonRank": 2,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 2,
+          "query": "In a web browser I'd render a custom loading spinner SVG during an API fetch, but what React Native component do we use for a native activity spinner?",
+          "top5": [
+            "Module 3 | mini-project-3-implementing-homescreen-add-other-components_epm | 22:56-23:39",
+            "Module 5 | 3. Consuming external apis_epm | 04:45-05:26"
+          ]
+        },
+        "p14": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 9,
+          "returned": 5,
+          "query": "How do I check the phone's current battery level so I can stop running heavy background tasks when the battery is low?",
+          "top5": [
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 04:15-04:56",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 02:51-03:31",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 07:02-07:46",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 06:17-07:02",
+            "Module 9 | 4. Expo Battery Essentials - Detect Battery Level & Power State_epm | 00:42-01:26"
+          ]
+        },
+        "p15": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 2,
+          "query": "How do I read the current ambient light level in lux using Expo's sensor module?",
+          "top5": [
+            "Module 7 | 4. Light Sensors & Ambient Illumination_epm | 03:33-04:13",
+            "Module 7 | 4. Light Sensors & Ambient Illumination_epm | 04:14-04:56"
+          ]
+        },
+        "p16": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 2,
+          "query": "What prop or state toggle do we pass to the Expo Camera component to switch between the front selfie camera and the main back camera?",
+          "top5": [
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 13:55-14:37",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 13:09-13:54"
+          ]
+        },
+        "p17": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do we configure separate app bundle IDs so I can have both a development build and a production build installed on the same phone at the same time?",
+          "top5": [
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 00:44-01:28",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 01:28-02:03",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 07:04-07:44",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 09:11-09:56",
+            "Module 10 | 4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm | 00:00-00:43"
+          ]
+        },
+        "p18": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 1,
+          "query": "I have an array of lat/long coordinates, what React Native Maps component do we use to draw a continuous route path line connecting them?",
+          "top5": [
+            "Module 11 | chapter-5 Interactive Map Experiences From Pins to Paths polylines_epm | 00:39-01:22"
+          ]
+        },
+        "p19": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do I schedule a local notification to trigger at a specific date and time in the future rather than sending it immediately?",
+          "top5": [
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 04:13-04:56",
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 04:57-05:40",
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 03:28-04:08",
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 05:41-06:23",
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 09:49-10:33"
+          ]
+        },
+        "p20": {
+          "rank": null,
+          "lessonRank": null,
+          "poolHit": false,
+          "poolSize": 9,
+          "returned": 1,
+          "query": "When configuring Google OAuth in Expo, what deep link redirect URI scheme format do we need to register so the browser redirects back to our app after sign-in?",
+          "top5": [
+            "Module 13 | chapter-5-implementing-credential-and-oauth-authentication-using-better-auth_epm | 24:45-25:30"
+          ]
+        },
+        "p21": {
+          "rank": null,
+          "lessonRank": 1,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 4,
+          "query": "How do we set up an automated EAS Workflow to trigger a cloud build every time code is pushed to the main branch?",
+          "top5": [
+            "Module 14 | 01_eas-workflows_epm | 01:30-02:14",
+            "Module 14 | 01_eas-workflows_epm | 02:15-03:00",
+            "Module 14 | 01_eas-workflows_epm | 03:00-03:45",
+            "Module 14 | 01_eas-workflows_epm | 00:43-01:27"
+          ]
+        },
+        "p22": {
+          "rank": null,
+          "lessonRank": null,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 1,
+          "query": "I want a filter options popup that slides up over the current screen without defining a separate route page in the navigation stack, how do we build that modal?",
+          "top5": [
+            "Module 3 | 5. Navigation Patterns , Tab , modal & drawer_epm | 00:00-00:41"
+          ]
         }
       }
     },
@@ -1424,14 +2209,14 @@
       "label": "Follow-up alone (no condensation)",
       "set": "multi-turn",
       "metrics": {
-        "n": 6,
+        "n": 12,
         "hit1": 0.5,
-        "hit5": 0.5,
-        "mrr5": 0.5,
-        "lessonHit5": 0.6666666666666666,
-        "recall10": 0.5,
+        "hit5": 0.6666666666666666,
+        "mrr5": 0.5625,
+        "lessonHit5": 0.8333333333333334,
+        "recall10": 0.6666666666666666,
         "avgPool": 10,
-        "avgReturned": 2.6666666666666665
+        "avgReturned": 2.5833333333333335
       },
       "perQuestion": {
         "m01": {
@@ -1509,6 +2294,81 @@
             "Module 11 | chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm | 02:49-03:32",
             "Module 10 | 1. What Is EAS Build Why You Need It & Dev Builds vs Expo Go_epm | 14:14-14:59"
           ]
+        },
+        "m07": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 3,
+          "query": "And what's the recommended way to handle it in the UI if the user denies the permission request?",
+          "top5": [
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 09:40-10:20",
+            "Module 15 | chapter-2-adding-assets-and weather-api_epm | 04:46-05:24",
+            "Module 8 | 3.Build a Profile Pic Creator - Pick, Crop & Save User Photos_epm | 03:23-04:06"
+          ]
+        },
+        "m08": {
+          "rank": 4,
+          "lessonRank": 3,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 4,
+          "query": "If I want the map to automatically center and zoom on that marker position when the screen loads, how do I set the initial region?",
+          "top5": [
+            "Module 11 | chapter-2 Map Camera Jump Demo -Programmatically Move & Focus the Map_epm | 01:19-01:57",
+            "Module 11 | chapter-2 Map Camera Jump Demo -Programmatically Move & Focus the Map_epm | 02:37-03:22",
+            "Module 11 | chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm | 20:17-20:56",
+            "Module 11 | chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm | 18:07-18:49"
+          ]
+        },
+        "m09": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 2,
+          "query": "Since the native header is hidden, how do I trigger a go-back navigation action programmatically from my own custom back icon button?",
+          "top5": [
+            "Module 3 | 3. Navigation Between Screens_epm | 09:19-09:59",
+            "Module 3 | 3. Navigation Between Screens_epm | 00:00-00:43"
+          ]
+        },
+        "m10": {
+          "rank": null,
+          "lessonRank": 1,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 3,
+          "query": "Once the browser redirect finishes, how do we extract the authorization code from the response URL to exchange it for an access token?",
+          "top5": [
+            "Module 13 | chapter-4-implementing-github-authenitcation_epm | 06:26-07:08",
+            "Module 13 | chapter-4-implementing-github-authenitcation_epm | 07:08-07:53",
+            "Module 13 | chapter-3-implementing-google-oauth_epm | 32:52-33:36"
+          ]
+        },
+        "m11": {
+          "rank": 2,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 2,
+          "query": "It's triggering state updates way too fast and causing screen lag, how do I slow down the sensor update interval frequency?",
+          "top5": [
+            "Module 7 | 6. Tilt the Ball Game - Mini Project_epm | 05:40-06:24",
+            "Module 7 | 6. Tilt the Ball Game - Mini Project_epm | 03:29-04:12"
+          ]
+        },
+        "m12": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 1,
+          "query": "If the user deletes a reminder before it goes off, how do I stop that scheduled notification from showing up?",
+          "top5": [
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 06:23-07:04"
+          ]
         }
       }
     },
@@ -1516,14 +2376,14 @@
       "label": "Previous turn + follow-up, concatenated",
       "set": "multi-turn",
       "metrics": {
-        "n": 6,
-        "hit1": 0.16666666666666666,
+        "n": 12,
+        "hit1": 0.08333333333333333,
         "hit5": 0.6666666666666666,
-        "mrr5": 0.375,
+        "mrr5": 0.3541666666666667,
         "lessonHit5": 0.8333333333333334,
         "recall10": 0.6666666666666666,
         "avgPool": 9.833333333333334,
-        "avgReturned": 3.8333333333333335
+        "avgReturned": 3.75
       },
       "perQuestion": {
         "m01": {
@@ -1608,6 +2468,88 @@
             "Module 12 | chapter-2-push-notification_epm | 09:09-09:48",
             "Module 12 | chapter-2-push-notification_epm | 09:48-10:31"
           ]
+        },
+        "m07": {
+          "rank": 2,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 9,
+          "returned": 4,
+          "query": "How do I request camera permissions before rendering the camera preview in Expo? And what's the recommended way to handle it in the UI if the user denies the permission request?",
+          "top5": [
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 08:16-08:58",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 09:40-10:20",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 04:47-05:22",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 10:20-11:01"
+          ]
+        },
+        "m08": {
+          "rank": 2,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 4,
+          "query": "How do I drop a custom pin marker at a specific latitude and longitude on a React Native Map? If I want the map to automatically center and zoom on that marker position when the screen loads, how do I set the initial region?",
+          "top5": [
+            "Module 11 | chapter-4-Build Smart Maps - Map Controls, Markers & Routing in Expo_epm | 00:43-01:27",
+            "Module 11 | chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm | 18:07-18:49",
+            "Module 11 | chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm | 20:17-20:56",
+            "Module 11 | chapter-2 Map Camera Jump Demo -Programmatically Move & Focus the Map_epm | 03:23-04:07"
+          ]
+        },
+        "m09": {
+          "rank": 2,
+          "lessonRank": 2,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 2,
+          "query": "How do I hide the default top header bar for a specific screen inside an Expo Router Stack layout? Since the native header is hidden, how do I trigger a go-back navigation action programmatically from my own custom back icon button?",
+          "top5": [
+            "Module 5 | 5. added news-feed-card-and-search-bar-functions_epm | 11:16-11:55",
+            "Module 3 | 3. Navigation Between Screens_epm | 09:19-09:59"
+          ]
+        },
+        "m10": {
+          "rank": null,
+          "lessonRank": 1,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 4,
+          "query": "How do we initiate a GitHub OAuth login flow using Expo AuthSession? Once the browser redirect finishes, how do we extract the authorization code from the response URL to exchange it for an access token?",
+          "top5": [
+            "Module 13 | chapter-4-implementing-github-authenitcation_epm | 02:48-03:33",
+            "Module 13 | chapter-4-implementing-github-authenitcation_epm | 03:33-04:14",
+            "Module 13 | chapter-4-implementing-github-authenitcation_epm | 12:57-13:33",
+            "Module 13 | chapter-5-implementing-credential-and-oauth-authentication-using-better-auth_epm | 24:45-25:30"
+          ]
+        },
+        "m11": {
+          "rank": 2,
+          "lessonRank": 2,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do I subscribe to continuous motion data updates from the accelerometer? It's triggering state updates way too fast and causing screen lag, how do I slow down the sensor update interval frequency?",
+          "top5": [
+            "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 14:05-14:17",
+            "Module 7 | 6. Tilt the Ball Game - Mini Project_epm | 03:29-04:12",
+            "Module 7 | 6. Tilt the Ball Game - Mini Project_epm | 05:40-06:24",
+            "Module 7 | 5. Pedometer & Step Tracking_epm | 07:12-07:56",
+            "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 06:55-07:38"
+          ]
+        },
+        "m12": {
+          "rank": null,
+          "lessonRank": null,
+          "poolHit": false,
+          "poolSize": 10,
+          "returned": 3,
+          "query": "How do I request user permission to send local notifications in Expo? If the user deletes a reminder before it goes off, how do I stop that scheduled notification from showing up?",
+          "top5": [
+            "Module 12 | chapter-1-what-is-notification-types-of-notificaiton-in-app-notification_epm | 19:06-19:49",
+            "Module 12 | chapter-1-what-is-notification-types-of-notificaiton-in-app-notification_epm | 18:23-19:06",
+            "Module 12 | chapter-1-what-is-notification-types-of-notificaiton-in-app-notification_epm | 13:20-14:02"
+          ]
         }
       }
     },
@@ -1615,14 +2557,14 @@
       "label": "LLM condensation (production)",
       "set": "multi-turn",
       "metrics": {
-        "n": 6,
-        "hit1": 1,
-        "hit5": 1,
-        "mrr5": 1,
-        "lessonHit5": 1,
-        "recall10": 1,
-        "avgPool": 10,
-        "avgReturned": 2.3333333333333335
+        "n": 12,
+        "hit1": 0.75,
+        "hit5": 0.8333333333333334,
+        "mrr5": 0.7916666666666666,
+        "lessonHit5": 0.9166666666666666,
+        "recall10": 0.9166666666666666,
+        "avgPool": 9.916666666666666,
+        "avgReturned": 2.5
       },
       "perQuestion": {
         "m01": {
@@ -1698,6 +2640,82 @@
           "top5": [
             "Module 12 | chapter-2-push-notification_epm | 07:00-07:38"
           ]
+        },
+        "m07": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 3,
+          "query": "What is the recommended way to handle the UI in Expo if the user denies the camera permission request?",
+          "top5": [
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 09:40-10:20",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 12:26-13:08",
+            "Module 8 | 1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm | 08:16-08:58"
+          ]
+        },
+        "m08": {
+          "rank": 2,
+          "lessonRank": 2,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 4,
+          "query": "How do I set the initial region of a React Native Map to automatically center and zoom on a specific marker position when the screen loads?",
+          "top5": [
+            "Module 11 | chapter-2 Map Camera Jump Demo -Programmatically Move & Focus the Map_epm | 03:23-04:07",
+            "Module 11 | chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm | 18:07-18:49",
+            "Module 11 | chapter-2 Map Camera Jump Demo -Programmatically Move & Focus the Map_epm | 01:19-01:57",
+            "Module 11 | chapter-4-Build Smart Maps - Map Controls, Markers & Routing in Expo_epm | 00:00-00:41"
+          ]
+        },
+        "m09": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 2,
+          "query": "How do I trigger a go-back navigation action programmatically from a custom back icon button in Expo Router?",
+          "top5": [
+            "Module 3 | 3. Navigation Between Screens_epm | 09:19-09:59",
+            "Module 3 | 3. Navigation Between Screens_epm | 08:34-09:18"
+          ]
+        },
+        "m10": {
+          "rank": null,
+          "lessonRank": 1,
+          "poolHit": false,
+          "poolSize": 9,
+          "returned": 1,
+          "query": "Once the browser redirect finishes, how do we extract the authorization code from the response URL provided by Expo AuthSession to exchange it for an access token?",
+          "top5": [
+            "Module 13 | chapter-4-implementing-github-authenitcation_epm | 06:26-07:08"
+          ]
+        },
+        "m11": {
+          "rank": null,
+          "lessonRank": null,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 5,
+          "query": "How do I slow down the sensor update interval frequency for the Accelerometer in expo-sensors to prevent screen lag caused by frequent state updates?",
+          "top5": [
+            "Module 7 | 5. Pedometer & Step Tracking_epm | 07:56-08:34",
+            "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 14:05-14:17",
+            "Module 1 hc | Expo Version change so quickly_epm | 01:57-02:37",
+            "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 08:56-09:39",
+            "Module 7 | 01_introduction-of-expo-sensor-and-accelerometer_epm | 06:55-07:38"
+          ]
+        },
+        "m12": {
+          "rank": 1,
+          "lessonRank": 1,
+          "poolHit": true,
+          "poolSize": 10,
+          "returned": 1,
+          "query": "How do I cancel a scheduled local notification in Expo if the user deletes the associated reminder before the notification triggers?",
+          "top5": [
+            "Module 12 | chapter-3-remainder-buddy-application-using-expo-push-notification_epm | 06:23-07:04"
+          ]
         }
       }
     }
@@ -1706,54 +2724,54 @@
     {
       "candidate": "hyde",
       "baseline": "vector",
-      "wins": 2,
-      "losses": 1
+      "wins": 3,
+      "losses": 2
     },
     {
       "candidate": "rerank",
       "baseline": "vector",
-      "wins": 0,
+      "wins": 3,
       "losses": 0
     },
     {
       "candidate": "hyde+rerank",
       "baseline": "hyde",
-      "wins": 2,
+      "wins": 4,
       "losses": 1
     },
     {
       "candidate": "hyde+rerank",
       "baseline": "rerank",
       "wins": 3,
-      "losses": 1
+      "losses": 2
     },
     {
       "candidate": "concat",
       "baseline": "followup-only",
       "wins": 2,
-      "losses": 1
+      "losses": 2
     },
     {
       "candidate": "condense",
       "baseline": "concat",
-      "wins": 2,
-      "losses": 0
+      "wins": 3,
+      "losses": 1
     },
     {
       "candidate": "condense",
       "baseline": "followup-only",
       "wins": 3,
-      "losses": 0
+      "losses": 1
     }
   ],
   "citations": {
-    "answers": 30,
-    "citations": 57,
-    "verified": 56,
+    "answers": 55,
+    "citations": 100,
+    "verified": 99,
     "wrongTimestamp": 1,
     "unknownSource": 0,
-    "answersWithoutCitations": 0,
-    "strayTimestamps": 4,
+    "answersWithoutCitations": 4,
+    "strayTimestamps": 10,
     "perQuestion": {
       "c01": {
         "total": 3,
@@ -1904,6 +2922,120 @@
         "unverified": [],
         "strayTimestamps": 0
       },
+      "p09": {
+        "total": 1,
+        "verified": 1,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p10": {
+        "total": 2,
+        "verified": 2,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p11": {
+        "total": 2,
+        "verified": 2,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p12": {
+        "total": 3,
+        "verified": 3,
+        "unverified": [],
+        "strayTimestamps": 2
+      },
+      "p13": {
+        "total": 2,
+        "verified": 2,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p14": {
+        "total": 3,
+        "verified": 3,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p15": {
+        "total": 2,
+        "verified": 2,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p16": {
+        "total": 1,
+        "verified": 1,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p17": {
+        "total": 5,
+        "verified": 5,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p18": {
+        "total": 1,
+        "verified": 1,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p19": {
+        "total": 4,
+        "verified": 4,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p20": {
+        "total": 1,
+        "verified": 1,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p21": {
+        "total": 5,
+        "verified": 5,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "p22": {
+        "total": 1,
+        "verified": 1,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "n01": {
+        "total": 1,
+        "verified": 1,
+        "unverified": [],
+        "strayTimestamps": 4
+      },
+      "n02": {
+        "total": 0,
+        "verified": 0,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "n03": {
+        "total": 0,
+        "verified": 0,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "n04": {
+        "total": 0,
+        "verified": 0,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "n05": {
+        "total": 3,
+        "verified": 3,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
       "m01": {
         "total": 1,
         "verified": 1,
@@ -1939,8 +3071,76 @@
         "verified": 1,
         "unverified": [],
         "strayTimestamps": 0
+      },
+      "m07": {
+        "total": 1,
+        "verified": 1,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "m08": {
+        "total": 2,
+        "verified": 2,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "m09": {
+        "total": 1,
+        "verified": 1,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "m10": {
+        "total": 1,
+        "verified": 1,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "m11": {
+        "total": 0,
+        "verified": 0,
+        "unverified": [],
+        "strayTimestamps": 0
+      },
+      "m12": {
+        "total": 1,
+        "verified": 1,
+        "unverified": [],
+        "strayTimestamps": 0
       }
     }
   },
+  "notCovered": [
+    {
+      "id": "n01",
+      "question": "How do I configure background audio playback so audio keeps playing when the app is minimized or the phone screen is locked?",
+      "saysNotCovered": true,
+      "answer": "I couldn't find information regarding how to configure background audio playback for when the app is minimized or the screen is locked in the provided course materials. The course content for this module focuses on basic playback, pausing, and stopping audio within the app (Module 8, Lesson: Microphone & Audio in Expo   Permissions, Recording & Playback, at 02:11 – 02:51, 02:53 – 03:37, and 03:37 – 04:19)."
+    },
+    {
+      "id": "n02",
+      "question": "What library or native API do we use to scan for and pair with nearby Bluetooth Low Energy (BLE) peripheral devices?",
+      "saysNotCovered": true,
+      "answer": "I couldn't find that in the course."
+    },
+    {
+      "id": "n03",
+      "question": "How do we integrate RevenueCat into Expo to handle monthly recurring in-app subscriptions for iOS and Android?",
+      "saysNotCovered": true,
+      "answer": "I couldn't find that in the course."
+    },
+    {
+      "id": "n04",
+      "question": "How do I add native Apple Pay and Google Pay payment buttons to my app's checkout screen?",
+      "saysNotCovered": true,
+      "answer": "I couldn't find that in the course."
+    },
+    {
+      "id": "n05",
+      "question": "I recorded a voice clip using the audio API, but how do I get the local file path so I can play it back in an audio player?",
+      "saysNotCovered": false,
+      "answer": "To save a recording and access the local file system, you need to use `expo-file-system` (Module 8, Lesson: Microphone & Audio in Expo   Permissions, Recording & Playback, at 05:48 – 06:28). Please note that to have complete permission to access the local file system, you must create an Android or iOS build (Module 8, Lesson: Microphone & Audio in Expo   Permissions, Recording & Playback, at 05:48 – 06:28). \n\nOnce you have the file, you can use `mediaLibrary.saveToLibraryAsync` by passing the file, which will contain the URI (Module 16, Lesson: Chapter 4 Implementing Imagedetailmodal Components, at 21:33 – 22:14)."
+    }
+  ],
   "rerankParseFallbacks": 0
 }

@@ -7,7 +7,9 @@
 // index, with pipeline stages switched on one at a time, and reports hit@k
 // and MRR per configuration. Then generates full production answers and
 // measures how many of their citations verify against the retrieved
-// excerpts. Writes eval/results.json and eval/results.md.
+// excerpts. Questions labeled with no expected windows are ones the course
+// does not cover: they skip the retrieval tables, and their answers are
+// checked for saying so. Writes eval/results.json and eval/results.md.
 //
 // --cache-only  fail on any Gemini cache miss instead of calling the API,
 //               so the committed numbers can be reproduced with no quota.
@@ -21,7 +23,7 @@ const { extractCitations } = require("../src/citations");
 const { scrollPayloads, COLLECTION } = require("../src/qdrant");
 const { MODEL } = require("../src/gemini");
 const { createCachedLlm } = require("./llm-cache");
-const { overlapsWindow, scoreQuestion, aggregate } = require("./metrics");
+const { overlapsWindow, scoreQuestion, aggregate, saysNotCovered } = require("./metrics");
 const { formatTimestamp } = require("../src/chunker");
 
 const EXPECTED_POINTS = 1955;
@@ -118,11 +120,12 @@ async function runConfig(config, questions, llm, queryOf, historyOf) {
 // Full production answers (condense + HyDE + rerank + generation). Also
 // counts timestamps outside any parsed citation, since a citation written
 // in a shape the parser doesn't recognise would otherwise go unchecked.
-async function runCitationCheck(questions, llm) {
+async function runCitationCheck(questions, llm, answers) {
   const perQuestion = {};
   process.stdout.write(`${"Production answers (citation check)".padEnd(42)} `);
   for (const q of questions) {
     const { answer, citationCheck } = await answerQuestion(q.question, q.history || [], { llm });
+    answers[q.id] = answer;
     let rest = answer;
     for (const c of extractCitations(answer)) rest = rest.replace(c.text, "");
     perQuestion[q.id] = {
@@ -189,7 +192,17 @@ function toMarkdown(results) {
       `Wrong timestamp: ${results.citations.wrongTimestamp}. Lesson not among the excerpts: ${results.citations.unknownSource}. ` +
       `Answers with no parseable citation: ${results.citations.answersWithoutCitations}. ` +
       `Timestamps outside a parseable citation: ${results.citations.strayTimestamps} ` +
-      `(compound citations naming two ranges at once; the parser reads the first).`,
+      `(compound citations naming several ranges at once; the parser reads the first).`,
+    "",
+    "**Questions the course does not cover** (full production answers)",
+    "",
+    `${results.notCovered.filter((r) => r.saysNotCovered).length} of ${results.notCovered.length} answers said ` +
+      "the course does not cover it (keyword check; the full answers are in results.json and are read by hand).",
+    "",
+    "| Question | Said not covered | Citations |\n|---|---|---|",
+    ...results.notCovered.map(
+      (r) => `| ${r.id}: ${r.question} | ${r.saysNotCovered ? "yes" : "no"} | ${results.citations.perQuestion[r.id].total} |`
+    ),
     "",
     "**Per-question changes in hit@k**",
     "",
@@ -202,11 +215,15 @@ function toMarkdown(results) {
 async function main() {
   const cacheOnly = process.argv.includes("--cache-only");
   const questions = JSON.parse(fs.readFileSync(path.join(__dirname, "questions.json"), "utf8"));
-  const single = questions.filter((q) => !q.history);
-  const multi = questions.filter((q) => q.history);
+  const notCovered = questions.filter((q) => !q.expected.length);
+  const single = questions.filter((q) => !q.history && q.expected.length);
+  const multi = questions.filter((q) => q.history && q.expected.length);
 
   const points = await preflight(questions);
-  console.log(`Index OK: ${points} points. ${single.length} single-turn, ${multi.length} multi-turn questions.`);
+  console.log(
+    `Index OK: ${points} points. ${single.length} single-turn, ${multi.length} multi-turn, ` +
+      `${notCovered.length} not-covered questions.`
+  );
 
   const { llm, stats } = createCachedLlm({ cacheOnly });
   const results = { model: MODEL, points, configs: {}, comparisons: [] };
@@ -244,7 +261,14 @@ async function main() {
     });
   }
 
-  results.citations = await runCitationCheck(questions, llm);
+  const answers = {};
+  results.citations = await runCitationCheck(questions, llm, answers);
+  results.notCovered = notCovered.map((q) => ({
+    id: q.id,
+    question: q.question,
+    saysNotCovered: saysNotCovered(answers[q.id]),
+    answer: answers[q.id],
+  }));
 
   console.log(`\nLLM: ${stats.calls} API calls, ${stats.hits} cache hits, ${stats.failures.length} failures.`);
   if (stats.failures.length) {

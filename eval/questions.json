@@ -212,6 +212,164 @@
     ]
   },
   {
+    "id": "p09",
+    "author": "preet",
+    "question": "My SQLite query works when values are hardcoded, but how do I safely pass dynamic state variables into the SQL statement?",
+    "expected": [
+      { "module": "Module 6", "lesson": "3.expo-sqllite-creating-basic-crud-app_epm", "start": "06:08", "end": "08:13" }
+    ]
+  },
+  {
+    "id": "p10",
+    "author": "preet",
+    "question": "How do I save a downloaded image permanently to the device's local filesystem so it doesn't get wiped when the app restarts?",
+    "expected": [
+      { "module": "Module 6", "lesson": "4. expo file system_epm", "start": "06:20", "end": "08:31" },
+      { "module": "Module 16", "lesson": "chapter-4-implementing-imageDetailModal-components_epm", "start": "20:48", "end": "22:14" }
+    ]
+  },
+  {
+    "id": "p11",
+    "author": "preet",
+    "question": "Where in the course do we set up a custom 404 screen to catch broken or invalid screen routes in Expo Router?",
+    "expected": [
+      { "module": "Module 4", "lesson": "5-not-found-route_epm", "start": "00:41", "end": "01:24" },
+      { "module": "Module 4", "lesson": "5-not-found-route_epm", "start": "02:49", "end": "04:17" }
+    ]
+  },
+  {
+    "id": "p12",
+    "author": "preet",
+    "question": "Is there a built-in sensor API we can use to get the phone's physical compass heading and directional orientation?",
+    "expected": [
+      { "module": "Module 7", "lesson": "3. Magnetometer - Turn Your App Into a Digital Compass_epm", "start": "00:00", "end": "01:26" },
+      { "module": "Module 7", "lesson": "3. Magnetometer - Turn Your App Into a Digital Compass_epm", "start": "02:11", "end": "02:50" }
+    ]
+  },
+  {
+    "id": "p13",
+    "author": "preet",
+    "question": "In a web browser I'd render a custom loading spinner SVG during an API fetch, but what React Native component do we use for a native activity spinner?",
+    "expected": [
+      { "module": "Module 2", "lesson": "05_profile-card-gallery_epm", "start": "03:36", "end": "04:18" },
+      { "module": "Module 2", "lesson": "05_profile-card-gallery_epm", "start": "06:25", "end": "07:51" },
+      { "module": "Module 5", "lesson": "3. Consuming external apis_epm", "start": "04:45", "end": "05:26" }
+    ]
+  },
+  {
+    "id": "p14",
+    "author": "preet",
+    "question": "How do I check the phone's current battery level so I can stop running heavy background tasks when the battery is low?",
+    "expected": [
+      { "module": "Module 9", "lesson": "4. Expo Battery Essentials - Detect Battery Level & Power State_epm", "start": "00:42", "end": "01:26" },
+      { "module": "Module 9", "lesson": "4. Expo Battery Essentials - Detect Battery Level & Power State_epm", "start": "04:15", "end": "04:56" }
+    ]
+  },
+  {
+    "id": "p15",
+    "author": "preet",
+    "question": "How do I read the current ambient light level in lux using Expo's sensor module?",
+    "expected": [
+      { "module": "Module 7", "lesson": "4. Light Sensors & Ambient Illumination_epm", "start": "02:11", "end": "02:51" },
+      { "module": "Module 7", "lesson": "4. Light Sensors & Ambient Illumination_epm", "start": "03:33", "end": "04:13" }
+    ]
+  },
+  {
+    "id": "p16",
+    "author": "preet",
+    "question": "What prop or state toggle do we pass to the Expo Camera component to switch between the front selfie camera and the main back camera?",
+    "expected": [
+      { "module": "Module 8", "lesson": "1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm", "start": "07:34", "end": "08:15" },
+      { "module": "Module 8", "lesson": "1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm", "start": "11:02", "end": "11:42" },
+      { "module": "Module 8", "lesson": "1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm", "start": "13:55", "end": "14:37" }
+    ]
+  },
+  {
+    "id": "p17",
+    "author": "preet",
+    "question": "How do we configure separate app bundle IDs so I can have both a development build and a production build installed on the same phone at the same time?",
+    "expected": [
+      { "module": "Module 10", "lesson": "4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm", "start": "00:00", "end": "02:03" },
+      { "module": "Module 10", "lesson": "4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm", "start": "06:21", "end": "07:04" }
+    ]
+  },
+  {
+    "id": "p18",
+    "author": "preet",
+    "question": "I have an array of lat/long coordinates, what React Native Maps component do we use to draw a continuous route path line connecting them?",
+    "expected": [
+      { "module": "Module 11", "lesson": "chapter-5 Interactive Map Experiences From Pins to Paths polylines_epm", "start": "00:00", "end": "01:22" }
+    ]
+  },
+  {
+    "id": "p19",
+    "author": "preet",
+    "question": "How do I schedule a local notification to trigger at a specific date and time in the future rather than sending it immediately?",
+    "expected": [
+      { "module": "Module 12", "lesson": "chapter-3-remainder-buddy-application-using-expo-push-notification_epm", "start": "03:28", "end": "05:40" }
+    ]
+  },
+  {
+    "id": "p20",
+    "author": "preet",
+    "question": "When configuring Google OAuth in Expo, what deep link redirect URI scheme format do we need to register so the browser redirects back to our app after sign-in?",
+    "expected": [
+      { "module": "Module 13", "lesson": "chapter-3-implementing-google-oauth_epm", "start": "16:29", "end": "17:58" }
+    ]
+  },
+  {
+    "id": "p21",
+    "author": "preet",
+    "question": "How do we set up an automated EAS Workflow to trigger a cloud build every time code is pushed to the main branch?",
+    "expected": [
+      { "module": "Module 14", "lesson": "01_eas-workflows_epm", "start": "03:45", "end": "04:28" },
+      { "module": "Module 14", "lesson": "01_eas-workflows_epm", "start": "06:41", "end": "07:25" }
+    ]
+  },
+  {
+    "id": "p22",
+    "author": "preet",
+    "question": "I want a filter options popup that slides up over the current screen without defining a separate route page in the navigation stack, how do we build that modal?",
+    "expected": [
+      { "module": "Module 16", "lesson": "chapter-3-Implementing-filtermodal-components_epm", "start": "03:29", "end": "04:08" }
+    ]
+  },
+  {
+    "id": "n01",
+    "author": "preet",
+    "question": "How do I configure background audio playback so audio keeps playing when the app is minimized or the phone screen is locked?",
+    "note": "Not covered. The audio lesson plays and records sound in the foreground only.",
+    "expected": []
+  },
+  {
+    "id": "n02",
+    "author": "preet",
+    "question": "What library or native API do we use to scan for and pair with nearby Bluetooth Low Energy (BLE) peripheral devices?",
+    "note": "Not covered. Module 10 lesson 1 names Bluetooth once, as something Expo Go can't run without a development build.",
+    "expected": []
+  },
+  {
+    "id": "n03",
+    "author": "preet",
+    "question": "How do we integrate RevenueCat into Expo to handle monthly recurring in-app subscriptions for iOS and Android?",
+    "note": "Not covered. RevenueCat and in-app purchases are never mentioned.",
+    "expected": []
+  },
+  {
+    "id": "n04",
+    "author": "preet",
+    "question": "How do I add native Apple Pay and Google Pay payment buttons to my app's checkout screen?",
+    "note": "Not covered. Stripe is named in passing as a third-party SDK (Module 5 lesson 3, Module 10 lesson 1), never implemented.",
+    "expected": []
+  },
+  {
+    "id": "n05",
+    "author": "preet",
+    "question": "I recorded a voice clip using the audio API, but how do I get the local file path so I can play it back in an audio player?",
+    "note": "Not covered. Module 8 lesson 2 says saving a recording needs a development build and skips it.",
+    "expected": []
+  },
+  {
     "id": "m01",
     "author": "generated",
     "history": [
@@ -284,6 +442,84 @@
     "question": "What about iPhones?",
     "expected": [
       { "module": "Module 12", "lesson": "chapter-2-push-notification_epm", "start": "07:00", "end": "07:38" }
+    ]
+  },
+  {
+    "id": "m07",
+    "author": "preet",
+    "history": [
+      { "role": "user", "content": "How do I request camera permissions before rendering the camera preview in Expo?" },
+      { "role": "assistant", "content": "Use the useCameraPermissions hook from expo-camera. It returns the current permission and a requestPermission function, and you only render CameraView once permission.granted is true." }
+    ],
+    "question": "And what's the recommended way to handle it in the UI if the user denies the permission request?",
+    "expected": [
+      { "module": "Module 8", "lesson": "1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm", "start": "08:58", "end": "10:20" },
+      { "module": "Module 8", "lesson": "1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm", "start": "12:26", "end": "13:08" }
+    ]
+  },
+  {
+    "id": "m08",
+    "author": "preet",
+    "history": [
+      { "role": "user", "content": "How do I drop a custom pin marker at a specific latitude and longitude on a React Native Map?" },
+      { "role": "assistant", "content": "Pass a markers array to the Google map component from Expo Maps. Each marker has coordinates with a latitude and longitude, a title, a snippet, and a draggable flag." }
+    ],
+    "question": "If I want the map to automatically center and zoom on that marker position when the screen loads, how do I set the initial region?",
+    "expected": [
+      { "module": "Module 11", "lesson": "chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm", "start": "17:26", "end": "18:49" },
+      { "module": "Module 11", "lesson": "chapter-4-Build Smart Maps - Map Controls, Markers & Routing in Expo_epm", "start": "00:00", "end": "00:41" }
+    ]
+  },
+  {
+    "id": "m09",
+    "author": "preet",
+    "history": [
+      { "role": "user", "content": "How do I hide the default top header bar for a specific screen inside an Expo Router Stack layout?" },
+      { "role": "assistant", "content": "Set headerShown to false, either in the Stack's screenOptions for every screen or in the options of that one Stack.Screen." }
+    ],
+    "question": "Since the native header is hidden, how do I trigger a go-back navigation action programmatically from my own custom back icon button?",
+    "expected": [
+      { "module": "Module 17", "lesson": "chapter-2_epm", "start": "17:15", "end": "17:59" },
+      { "module": "Module 3", "lesson": "3. Navigation Between Screens_epm", "start": "09:19", "end": "10:41" }
+    ]
+  },
+  {
+    "id": "m10",
+    "author": "preet",
+    "history": [
+      { "role": "user", "content": "How do we initiate a GitHub OAuth login flow using Expo AuthSession?" },
+      { "role": "assistant", "content": "The app sets up a GitHub auth request with useAuthRequest and starts it with promptAsync. The request goes to an API route that redirects to GitHub's authorize URL with the client ID, redirect URI, scope and state." }
+    ],
+    "question": "Once the browser redirect finishes, how do we extract the authorization code from the response URL to exchange it for an access token?",
+    "expected": [
+      { "module": "Module 13", "lesson": "chapter-4-implementing-github-authenitcation_epm", "start": "04:14", "end": "04:57" },
+      { "module": "Module 13", "lesson": "chapter-4-implementing-github-authenitcation_epm", "start": "05:40", "end": "06:25" }
+    ]
+  },
+  {
+    "id": "m11",
+    "author": "preet",
+    "history": [
+      { "role": "user", "content": "How do I subscribe to continuous motion data updates from the accelerometer?" },
+      { "role": "assistant", "content": "Call Accelerometer.addListener from expo-sensors inside a useEffect. The callback receives x, y and z values, and you call remove() on the returned subscription when the component unmounts." }
+    ],
+    "question": "It's triggering state updates way too fast and causing screen lag, how do I slow down the sensor update interval frequency?",
+    "expected": [
+      { "module": "Module 7", "lesson": "2. Understanding the Gyroscope The Secret Behind Motion & Orientation_epm", "start": "05:54", "end": "06:38" },
+      { "module": "Module 7", "lesson": "6. Tilt the Ball Game - Mini Project_epm", "start": "03:29", "end": "04:12" }
+    ]
+  },
+  {
+    "id": "m12",
+    "author": "generated",
+    "note": "Turn 1 is Preet's. The scored follow-up was rewritten after reading the transcripts, because his original follow-up duplicated c12.",
+    "history": [
+      { "role": "user", "content": "How do I request user permission to send local notifications in Expo?" },
+      { "role": "assistant", "content": "Check the current status with Notifications.getPermissionsAsync. If it isn't granted, call Notifications.requestPermissionsAsync and show an alert when the user refuses." }
+    ],
+    "question": "If the user deletes a reminder before it goes off, how do I stop that scheduled notification from showing up?",
+    "expected": [
+      { "module": "Module 12", "lesson": "chapter-3-remainder-buddy-application-using-expo-push-notification_epm", "start": "06:23", "end": "07:04" }
     ]
   }
 ]
