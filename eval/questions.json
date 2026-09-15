@@ -443,5 +443,83 @@
     "expected": [
       { "module": "Module 12", "lesson": "chapter-2-push-notification_epm", "start": "07:00", "end": "07:38" }
     ]
+  },
+  {
+    "id": "m07",
+    "author": "preet",
+    "history": [
+      { "role": "user", "content": "How do I request camera permissions before rendering the camera preview in Expo?" },
+      { "role": "assistant", "content": "Use the useCameraPermissions hook from expo-camera. It returns the current permission and a requestPermission function, and you only render CameraView once permission.granted is true." }
+    ],
+    "question": "And what's the recommended way to handle it in the UI if the user denies the permission request?",
+    "expected": [
+      { "module": "Module 8", "lesson": "1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm", "start": "08:58", "end": "10:20" },
+      { "module": "Module 8", "lesson": "1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm", "start": "12:26", "end": "13:08" }
+    ]
+  },
+  {
+    "id": "m08",
+    "author": "preet",
+    "history": [
+      { "role": "user", "content": "How do I drop a custom pin marker at a specific latitude and longitude on a React Native Map?" },
+      { "role": "assistant", "content": "Pass a markers array to the Google map component from Expo Maps. Each marker has coordinates with a latitude and longitude, a title, a snippet, and a draggable flag." }
+    ],
+    "question": "If I want the map to automatically center and zoom on that marker position when the screen loads, how do I set the initial region?",
+    "expected": [
+      { "module": "Module 11", "lesson": "chapter-1 Bring Native Maps Into Your App - Expo Maps Overview_epm", "start": "17:26", "end": "18:49" },
+      { "module": "Module 11", "lesson": "chapter-4-Build Smart Maps - Map Controls, Markers & Routing in Expo_epm", "start": "00:00", "end": "00:41" }
+    ]
+  },
+  {
+    "id": "m09",
+    "author": "preet",
+    "history": [
+      { "role": "user", "content": "How do I hide the default top header bar for a specific screen inside an Expo Router Stack layout?" },
+      { "role": "assistant", "content": "Set headerShown to false, either in the Stack's screenOptions for every screen or in the options of that one Stack.Screen." }
+    ],
+    "question": "Since the native header is hidden, how do I trigger a go-back navigation action programmatically from my own custom back icon button?",
+    "expected": [
+      { "module": "Module 17", "lesson": "chapter-2_epm", "start": "17:15", "end": "17:59" },
+      { "module": "Module 3", "lesson": "3. Navigation Between Screens_epm", "start": "09:19", "end": "10:41" }
+    ]
+  },
+  {
+    "id": "m10",
+    "author": "preet",
+    "history": [
+      { "role": "user", "content": "How do we initiate a GitHub OAuth login flow using Expo AuthSession?" },
+      { "role": "assistant", "content": "The app sets up a GitHub auth request with useAuthRequest and starts it with promptAsync. The request goes to an API route that redirects to GitHub's authorize URL with the client ID, redirect URI, scope and state." }
+    ],
+    "question": "Once the browser redirect finishes, how do we extract the authorization code from the response URL to exchange it for an access token?",
+    "expected": [
+      { "module": "Module 13", "lesson": "chapter-4-implementing-github-authenitcation_epm", "start": "04:14", "end": "04:57" },
+      { "module": "Module 13", "lesson": "chapter-4-implementing-github-authenitcation_epm", "start": "05:40", "end": "06:25" }
+    ]
+  },
+  {
+    "id": "m11",
+    "author": "preet",
+    "history": [
+      { "role": "user", "content": "How do I subscribe to continuous motion data updates from the accelerometer?" },
+      { "role": "assistant", "content": "Call Accelerometer.addListener from expo-sensors inside a useEffect. The callback receives x, y and z values, and you call remove() on the returned subscription when the component unmounts." }
+    ],
+    "question": "It's triggering state updates way too fast and causing screen lag, how do I slow down the sensor update interval frequency?",
+    "expected": [
+      { "module": "Module 7", "lesson": "2. Understanding the Gyroscope The Secret Behind Motion & Orientation_epm", "start": "05:54", "end": "06:38" },
+      { "module": "Module 7", "lesson": "6. Tilt the Ball Game - Mini Project_epm", "start": "03:29", "end": "04:12" }
+    ]
+  },
+  {
+    "id": "m12",
+    "author": "generated",
+    "note": "Turn 1 is Preet's. The scored follow-up was rewritten after reading the transcripts, because his original follow-up duplicated c12.",
+    "history": [
+      { "role": "user", "content": "How do I request user permission to send local notifications in Expo?" },
+      { "role": "assistant", "content": "Check the current status with Notifications.getPermissionsAsync. If it isn't granted, call Notifications.requestPermissionsAsync and show an alert when the user refuses." }
+    ],
+    "question": "If the user deletes a reminder before it goes off, how do I stop that scheduled notification from showing up?",
+    "expected": [
+      { "module": "Module 12", "lesson": "chapter-3-remainder-buddy-application-using-expo-push-notification_epm", "start": "06:23", "end": "07:04" }
+    ]
   }
 ]
