@@ -149,8 +149,12 @@ questions is a spot check, not a rate.
   hypothetical instructor-voice answer matches spoken transcript phrasing
   better than a student's question does. On its own it is noisy at hit@k: 3
   questions newly hit, 2 newly missed, and 4 questions flip between draws.
-- **The two compose.** HyDE widens the pool, rerank then picks better inside
-  it: hit@1 39% to 66%, MRR 0.482 to 0.684.
+- **The two compose, but HyDE's share is recall, not ordering.** HyDE widens
+  the pool, rerank then picks better inside it: hit@1 39% to 66%, MRR 0.482 to
+  0.684. Against rerank alone, production is ahead on hit@k (27 to 29 hits
+  against 26) and pool recall (28 to 30 against 26) in all 4 HyDE draws. Its
+  hit@1 and MRR gains over rerank alone are within draw noise: the worst draw
+  scores hit@1 61%, below rerank alone at 63%.
 - **Condensation is what makes follow-ups work.** Concatenating the previous
   turn drags the earlier topic's vocabulary into the query and wrecks hit@1
   (8%). Rewriting the follow-up into a standalone question first lifts hit@1
