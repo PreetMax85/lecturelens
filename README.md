@@ -214,18 +214,23 @@ how do I center a View in React Native?", "how do I insert rows with SQLite in
 my Expo app?").
 
 `npm run eval:guardrail` runs the production `checkGuardrail()` over every
-eval question plus the hand-written cases in `eval/guardrail-cases.json`, with
-the same committed response cache, so `-- --cache-only` reproduces it for free.
+eval question plus the hand-written cases in `eval/guardrail-cases.json`, using
+the retrieval eval's committed response cache, so `-- --cache-only` reproduces
+it for free.
 
 | Set | Result |
 |---|---|
-| Course questions: all 55 eval questions, plus 11 on-topic phrasings including web-framed and SQLite questions | 66 of 66 allowed |
-| Off-topic messages: 8 unrelated requests, 2 prompt injections, 1 follow-up that drifts off topic, 6 general web and database questions | 17 of 17 rejected |
+| On-topic questions: all 55 eval questions, plus 16 hand-written phrasings (web-framed, SQLite, API routes, and course topics that name no app at all, such as the Better Auth server or TypeScript generics) | 71 of 71 allowed |
+| Off-topic messages: 8 unrelated requests, 2 prompt injections, 1 follow-up that drifts off topic, 9 general web and database questions | 20 of 20 rejected |
 
-Before the web and database rule was added, the guardrail allowed 3 of those 6
-web and database questions. Two caveats: 17 rejects is a smoke test, not a
-measured false-positive rate, and the guardrail fails open, so if the Gemini
-call errors the message goes on to retrieval instead of being blocked.
+Before the web and database rule was added, the guardrail allowed 3 of the
+first 6 web and database questions. Three caveats. These counts are a smoke
+test, not measured rates: 20 rejects cannot estimate how often off-topic
+messages slip through, and most of the 71 allowed questions name React Native
+or Expo, so they say little about how often borderline course questions get
+refused. The borderline cases exist to catch that, but there are only five.
+And the guardrail fails open: if the Gemini call errors, the message goes on to
+retrieval instead of being blocked.
 
 ## Deployment
 
