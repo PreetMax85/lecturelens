@@ -18,7 +18,7 @@ Pipeline stages, mapped to the original reference diagram:
 | Stage | Diagram equivalent | Status |
 |---|---|---|
 | Chunking + embedding | Data ingestion | Done (local embeddings, no rate limits) |
-| Input guardrail | Guardrails / PII detection | Done: single on-topic/off-topic classifier, history-aware |
+| Input guardrail | Guardrails / PII detection | Done: strict scope classifier (course and mobile app development only), history-aware |
 | Query condensation | (multi-turn extension, not in original diagram) | Done: resolves follow-ups like "what about on iOS?" |
 | HyDE | HyDE | Done: bridges spoken-lecture phrasing vs. formal questions |
 | Reranking | RANK | Done: LLM reranks merged candidates before final selection |
@@ -201,6 +201,36 @@ Read these before quoting any number above.
   states that files inside the tabs directory become tabs but never addresses
   the symptom. It is labeled against that statement, and the production
   pipeline misses it.
+
+### Guardrail
+
+The input guardrail is deliberately strict. It answers questions about the
+course and about building mobile apps with React Native and Expo, and nothing
+else. Small talk, unrelated requests, prompt injection, and general web
+development or database questions with no mobile angle ("how do I center a div
+in CSS?", "explain SQL joins") get a refusal before retrieval runs. The same
+topics asked about a mobile app still get answered ("in CSS I'd use flexbox,
+how do I center a View in React Native?", "how do I insert rows with SQLite in
+my Expo app?").
+
+`npm run eval:guardrail` runs the production `checkGuardrail()` over every
+eval question plus the hand-written cases in `eval/guardrail-cases.json`, using
+the retrieval eval's committed response cache, so `-- --cache-only` reproduces
+it for free.
+
+| Set | Result |
+|---|---|
+| On-topic questions: all 55 eval questions, plus 16 hand-written phrasings (web-framed, SQLite, API routes, and course topics that name no app at all, such as the Better Auth server or TypeScript generics) | 71 of 71 allowed |
+| Off-topic messages: 8 unrelated requests, 2 prompt injections, 1 follow-up that drifts off topic, 9 general web and database questions | 20 of 20 rejected |
+
+Before the web and database rule was added, the guardrail allowed 3 of the
+first 6 web and database questions. Three caveats. These counts are a smoke
+test, not measured rates: 20 rejects cannot estimate how often off-topic
+messages slip through, and most of the 71 allowed questions name React Native
+or Expo, so they say little about how often borderline course questions get
+refused. The borderline cases exist to catch that, but there are only five.
+And the guardrail fails open: if the Gemini call errors, the message goes on to
+retrieval instead of being blocked.
 
 ## Deployment
 
