@@ -145,9 +145,10 @@ questions is a spot check, not a rate.
   everything there was to find. Its larger effect is order, hit@1 39% to 63%
   and MRR 0.482 to 0.658.
 - **HyDE is the stage that changes what gets found at all.** It lifts pool
-  recall@10 from 68% to 74%, because a hypothetical instructor-voice answer
-  matches spoken transcript phrasing better than a student's question does. On
-  its own it is noisy at hit@k: 3 questions newly hit, 2 newly missed.
+  recall@10 from 68% to 74% (74% to 79% across 4 draws), because a
+  hypothetical instructor-voice answer matches spoken transcript phrasing
+  better than a student's question does. On its own it is noisy at hit@k: 3
+  questions newly hit, 2 newly missed, and 4 questions flip between draws.
 - **The two compose.** HyDE widens the pool, rerank then picks better inside
   it: hit@1 39% to 66%, MRR 0.482 to 0.684.
 - **Condensation is what makes follow-ups work.** Concatenating the previous
@@ -164,9 +165,14 @@ Read these before quoting any number above.
   multi-turn, so a gap of one or two questions is noise. The per-question win
   and loss table in `eval/results.md` is more informative than the headline
   percentages.
-- **HyDE is sampled once at temperature 0.4**, so its rows would shift a
-  little on a fresh run. The cache pins one sample, it does not make the
-  number stable in principle.
+- **HyDE runs at temperature 0.4, so its rows move between runs.** The
+  tables above are one draw. Across 4 independent HyDE draws the production
+  row scored hit@k 71% to 76% (mean 73%), hit@1 61% to 71%, and MRR 0.658 to
+  0.728, with 6 of 38 questions switching between hit and miss. Pool
+  recall@10 on both HyDE rows ranged 74% to 79%. The published draw sits at
+  the low end for hit@k and pool recall, so it does not flatter HyDE, but
+  its "+ HyDE" hit@1 of 45% is the highest of the 4 draws (range 32% to
+  45%). The full spread is in `eval/results.md`.
 - **Question provenance matters.** 16 single-turn and 7 multi-turn questions
   were generated and are marked `"author": "generated"`. The rest were written
   by hand, before reading any transcript, and are marked `"author": "preet"`.
