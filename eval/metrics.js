@@ -72,16 +72,17 @@ function summarizeDraws(draws) {
       max: Math.max(...values),
     };
   };
-  const flips = Object.keys(draws[0]).filter(
+  const flipped = Object.keys(draws[0]).filter(
     (id) => new Set(draws.map((d) => d[id].rank != null)).size > 1
-  ).length;
+  );
   return {
     draws: draws.length,
     hit1: spread("hit1"),
     hit5: spread("hit5"),
     mrr5: spread("mrr5"),
     recall10: spread("recall10"),
-    flips,
+    flips: flipped.length,
+    flipped,
   };
 }
 

@@ -24,6 +24,7 @@ test("counts questions whose hit@k changes between any two draws", () => {
     { a: score(2), b: score(2), c: score(3) },
   ];
   assert.equal(summarizeDraws(draws).flips, 2);
+  assert.deepEqual(summarizeDraws(draws).flipped, ["b", "c"]);
 });
 
 test("recognises the answer prompt's own refusal wording", () => {

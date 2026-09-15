@@ -40,7 +40,8 @@ const SINGLE_TURN_CONFIGS = [
   { id: "hyde+rerank", label: "+ HyDE + Rerank (production)", opts: { hyde: true, rerank: true } },
 ];
 
-// Draw 0 is the one in the tables above; draws 1..HYDE_DRAWS-1 are extra.
+// Draw 1 (HyDE sample 0) is the one in the tables above; draws 2..HYDE_DRAWS
+// use samples 1..HYDE_DRAWS-1.
 const HYDE_DRAWS = 4;
 const HYDE_VARIANCE_CONFIGS = ["hyde", "hyde+rerank"];
 
@@ -176,7 +177,7 @@ function toMarkdown(results) {
   const mrr = (x) => x.toFixed(3);
   const variance = HYDE_VARIANCE_CONFIGS.map((id) => {
     const v = results.hydeVariance.configs[id];
-    return `| ${v.label} | ${spread(v.hit1, pct)} | ${spread(v.hit5, pct)} | ${spread(v.mrr5, mrr)} | ${spread(v.recall10, pct)} | ${v.flips} of ${results.configs[id].metrics.n} |`;
+    return `| ${v.label} | ${spread(v.hit1, pct)} | ${spread(v.hit5, pct)} | ${spread(v.mrr5, mrr)} | ${spread(v.recall10, pct)} | ${v.flips} of ${results.configs[id].metrics.n} (${v.flipped.join(", ")}) |`;
   });
   const hv = results.hydeVariance.configs[HYDE_VARIANCE_CONFIGS[0]];
   const comps = results.comparisons.map(
@@ -198,10 +199,12 @@ function toMarkdown(results) {
     ...single,
     "",
     `**HyDE variance** (single-turn, ${hv.draws} independent HyDE draws at temperature 0.4, min / mean / max; ` +
-      `the table above is draw 1. Rerank parse fallbacks in draws 2 to ${hv.draws}: ${results.hydeVariance.fallbacks})`,
+      "the table above is draw 1)",
     "",
     "| Configuration | Hit@1 | Hit@k | MRR@k | Pool recall@10 | Questions whose hit@k flips |\n|---|---|---|---|---|---|",
     ...variance,
+    "",
+    `Rerank responses that failed to parse in the extra draws: ${results.hydeVariance.fallbacks}.`,
     "",
     "**Multi-turn follow-ups** (all rows use HyDE + rerank)",
     "",
