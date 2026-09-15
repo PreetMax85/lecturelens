@@ -118,8 +118,8 @@ questions: 104 of 105 parsed citations verified (99%). The one failure cited a
 single 19-minute range (00:00 to 19:26), which no retrieved excerpt spans. No
 answer cited a lesson that was not among its excerpts. Verification confirms
 that a cited location was among the excerpts, not that the passage supports the
-claim: three of the verified citations belong to the not-covered answer
-described below. Four answers carried no citation: three were correct declines
+claim: three of the verified citations belong to the not-covered answer about
+a recording's file path, described below. Four answers carried no citation: three were correct declines
 to questions the course doesn't cover, and the fourth declined a question the
 course does answer, because rerank dropped the labeled passage from the
 candidates. Four answers also wrote compound citations naming several time
