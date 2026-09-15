@@ -57,6 +57,34 @@ function aggregate(scores) {
   };
 }
 
+// HyDE is sampled at temperature 0.4, so a HyDE row is one draw of a noisy
+// number. `draws` holds one perQuestion score map per draw, all over the same
+// questions. Flips counts questions that are a hit@k in some draws and a miss
+// in others, which says whether the spread comes from a few unstable
+// questions or from many.
+function summarizeDraws(draws) {
+  const metrics = draws.map((d) => aggregate(Object.values(d)));
+  const spread = (key) => {
+    const values = metrics.map((m) => m[key]);
+    return {
+      min: Math.min(...values),
+      mean: values.reduce((a, b) => a + b, 0) / values.length,
+      max: Math.max(...values),
+    };
+  };
+  const flips = Object.keys(draws[0]).filter(
+    (id) => new Set(draws.map((d) => d[id].rank != null)).size > 1
+  ).length;
+  return {
+    draws: draws.length,
+    hit1: spread("hit1"),
+    hit5: spread("hit5"),
+    mrr5: spread("mrr5"),
+    recall10: spread("recall10"),
+    flips,
+  };
+}
+
 // A question the course doesn't cover should get an answer that says so. The
 // answer prompt asks for "couldn't find that in the course", but the model
 // words it several ways, so this matches the common phrasings. It can't tell
@@ -69,4 +97,4 @@ function saysNotCovered(answer) {
   return NOT_COVERED.test(answer);
 }
 
-module.exports = { toSeconds, overlapsWindow, scoreQuestion, aggregate, saysNotCovered };
+module.exports = { toSeconds, overlapsWindow, scoreQuestion, aggregate, summarizeDraws, saysNotCovered };
