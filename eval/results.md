@@ -21,7 +21,7 @@ Model: `gemini-3.1-flash-lite`. Index: 1955 chunks. Rerank responses that failed
 
 **Citation accuracy** (full production answers, all questions)
 
-99 of 100 citations verified (99%) across 55 answers. Wrong timestamp: 1. Lesson not among the excerpts: 0. Answers with no parseable citation: 4. Timestamps outside a parseable citation: 10 (compound citations naming several ranges at once; the parser reads the first).
+104 of 105 citations verified (99%) across 55 answers. Wrong timestamp: 1. Lesson not among the excerpts: 0. Answers with no parseable citation: 4. Timestamps outside a parseable citation: 0 (a citation written in a shape the parser does not recognise; compound citations are split into one citation per range).
 
 **Questions the course does not cover** (full production answers)
 
@@ -29,7 +29,7 @@ Model: `gemini-3.1-flash-lite`. Index: 1955 chunks. Rerank responses that failed
 
 | Question | Said not covered | Citations |
 |---|---|---|
-| n01: How do I configure background audio playback so audio keeps playing when the app is minimized or the phone screen is locked? | yes | 1 |
+| n01: How do I configure background audio playback so audio keeps playing when the app is minimized or the phone screen is locked? | yes | 3 |
 | n02: What library or native API do we use to scan for and pair with nearby Bluetooth Low Energy (BLE) peripheral devices? | yes | 0 |
 | n03: How do we integrate RevenueCat into Expo to handle monthly recurring in-app subscriptions for iOS and Android? | yes | 0 |
 | n04: How do I add native Apple Pay and Google Pay payment buttons to my app's checkout screen? | yes | 0 |
