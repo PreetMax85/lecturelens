@@ -212,6 +212,129 @@
     ]
   },
   {
+    "id": "p09",
+    "author": "preet",
+    "question": "My SQLite query works when values are hardcoded, but how do I safely pass dynamic state variables into the SQL statement?",
+    "expected": [
+      { "module": "Module 6", "lesson": "3.expo-sqllite-creating-basic-crud-app_epm", "start": "06:08", "end": "08:13" }
+    ]
+  },
+  {
+    "id": "p10",
+    "author": "preet",
+    "question": "How do I save a downloaded image permanently to the device's local filesystem so it doesn't get wiped when the app restarts?",
+    "expected": [
+      { "module": "Module 6", "lesson": "4. expo file system_epm", "start": "06:20", "end": "08:31" },
+      { "module": "Module 16", "lesson": "chapter-4-implementing-imageDetailModal-components_epm", "start": "20:48", "end": "22:14" }
+    ]
+  },
+  {
+    "id": "p11",
+    "author": "preet",
+    "question": "Where in the course do we set up a custom 404 screen to catch broken or invalid screen routes in Expo Router?",
+    "expected": [
+      { "module": "Module 4", "lesson": "5-not-found-route_epm", "start": "00:41", "end": "01:24" },
+      { "module": "Module 4", "lesson": "5-not-found-route_epm", "start": "02:49", "end": "04:17" }
+    ]
+  },
+  {
+    "id": "p12",
+    "author": "preet",
+    "question": "Is there a built-in sensor API we can use to get the phone's physical compass heading and directional orientation?",
+    "expected": [
+      { "module": "Module 7", "lesson": "3. Magnetometer - Turn Your App Into a Digital Compass_epm", "start": "00:00", "end": "01:26" },
+      { "module": "Module 7", "lesson": "3. Magnetometer - Turn Your App Into a Digital Compass_epm", "start": "02:11", "end": "02:50" }
+    ]
+  },
+  {
+    "id": "p13",
+    "author": "preet",
+    "question": "In a web browser I'd render a custom loading spinner SVG during an API fetch, but what React Native component do we use for a native activity spinner?",
+    "expected": [
+      { "module": "Module 2", "lesson": "05_profile-card-gallery_epm", "start": "03:36", "end": "04:18" },
+      { "module": "Module 2", "lesson": "05_profile-card-gallery_epm", "start": "06:25", "end": "07:51" },
+      { "module": "Module 5", "lesson": "3. Consuming external apis_epm", "start": "04:45", "end": "05:26" }
+    ]
+  },
+  {
+    "id": "p14",
+    "author": "preet",
+    "question": "How do I check the phone's current battery level so I can stop running heavy background tasks when the battery is low?",
+    "expected": [
+      { "module": "Module 9", "lesson": "4. Expo Battery Essentials - Detect Battery Level & Power State_epm", "start": "00:42", "end": "01:26" },
+      { "module": "Module 9", "lesson": "4. Expo Battery Essentials - Detect Battery Level & Power State_epm", "start": "04:15", "end": "04:56" }
+    ]
+  },
+  {
+    "id": "p15",
+    "author": "preet",
+    "question": "How do I read the current ambient light level in lux using Expo's sensor module?",
+    "expected": [
+      { "module": "Module 7", "lesson": "4. Light Sensors & Ambient Illumination_epm", "start": "02:11", "end": "02:51" },
+      { "module": "Module 7", "lesson": "4. Light Sensors & Ambient Illumination_epm", "start": "03:33", "end": "04:13" }
+    ]
+  },
+  {
+    "id": "p16",
+    "author": "preet",
+    "question": "What prop or state toggle do we pass to the Expo Camera component to switch between the front selfie camera and the main back camera?",
+    "expected": [
+      { "module": "Module 8", "lesson": "1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm", "start": "07:34", "end": "08:15" },
+      { "module": "Module 8", "lesson": "1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm", "start": "11:02", "end": "11:42" },
+      { "module": "Module 8", "lesson": "1.Getting Started with Expo Camera - Setup, Permissions & First Capture_epm", "start": "13:55", "end": "14:37" }
+    ]
+  },
+  {
+    "id": "p17",
+    "author": "preet",
+    "question": "How do we configure separate app bundle IDs so I can have both a development build and a production build installed on the same phone at the same time?",
+    "expected": [
+      { "module": "Module 10", "lesson": "4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm", "start": "00:00", "end": "02:03" },
+      { "module": "Module 10", "lesson": "4. Configure Multiple App Variants with EAS - Install & Test on One Device_epm", "start": "06:21", "end": "07:04" }
+    ]
+  },
+  {
+    "id": "p18",
+    "author": "preet",
+    "question": "I have an array of lat/long coordinates, what React Native Maps component do we use to draw a continuous route path line connecting them?",
+    "expected": [
+      { "module": "Module 11", "lesson": "chapter-5 Interactive Map Experiences From Pins to Paths polylines_epm", "start": "00:00", "end": "01:22" }
+    ]
+  },
+  {
+    "id": "p19",
+    "author": "preet",
+    "question": "How do I schedule a local notification to trigger at a specific date and time in the future rather than sending it immediately?",
+    "expected": [
+      { "module": "Module 12", "lesson": "chapter-3-remainder-buddy-application-using-expo-push-notification_epm", "start": "03:28", "end": "05:40" }
+    ]
+  },
+  {
+    "id": "p20",
+    "author": "preet",
+    "question": "When configuring Google OAuth in Expo, what deep link redirect URI scheme format do we need to register so the browser redirects back to our app after sign-in?",
+    "expected": [
+      { "module": "Module 13", "lesson": "chapter-3-implementing-google-oauth_epm", "start": "16:29", "end": "17:58" }
+    ]
+  },
+  {
+    "id": "p21",
+    "author": "preet",
+    "question": "How do we set up an automated EAS Workflow to trigger a cloud build every time code is pushed to the main branch?",
+    "expected": [
+      { "module": "Module 14", "lesson": "01_eas-workflows_epm", "start": "03:45", "end": "04:28" },
+      { "module": "Module 14", "lesson": "01_eas-workflows_epm", "start": "06:41", "end": "07:25" }
+    ]
+  },
+  {
+    "id": "p22",
+    "author": "preet",
+    "question": "I want a filter options popup that slides up over the current screen without defining a separate route page in the navigation stack, how do we build that modal?",
+    "expected": [
+      { "module": "Module 16", "lesson": "chapter-3-Implementing-filtermodal-components_epm", "start": "03:29", "end": "04:08" }
+    ]
+  },
+  {
     "id": "m01",
     "author": "generated",
     "history": [
