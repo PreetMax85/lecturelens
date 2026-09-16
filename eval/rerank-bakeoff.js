@@ -27,9 +27,12 @@
 //              question, so both lists are the same length. No threshold is
 //              tuned, so nothing is fitted to these questions.
 //
-// Before scoring, the no-rerank and LLM rows are checked rank for rank against
-// eval/results.json, so the bake-off provably uses the same pools and orders
-// as the published eval.
+// Before scoring, the no-rerank and LLM rows are checked against every
+// per-question retrieval field in eval/results.json, including the returned
+// chunks, so the bake-off uses the same pools and orders as the published eval.
+//
+// The LLM order is one cached temperature-0 response per pool, and HyDE is
+// one draw, so neither side's sampling variance is measured here.
 //
 // Latency covers only the rerank step: tokenizing and scoring one pool, timed
 // after a warm-up, over TIMING_REPEATS passes of every pool. The LLM row's
@@ -47,7 +50,8 @@ const { AutoTokenizer, AutoModelForSequenceClassification } = require("@xenova/t
 
 const { retrieve } = require("../src/answer");
 const { createCachedLlm } = require("./llm-cache");
-const { scoreQuestion, aggregate } = require("./metrics");
+const { scoreQuestion, aggregate, signTestP } = require("./metrics");
+const { formatTimestamp } = require("../src/chunker");
 const { median, percentile } = require("./perf-metrics");
 const { orderByScores, cutToK } = require("./rerank-select");
 
@@ -111,10 +115,26 @@ async function strictRetrieve(question, opts) {
   }
 }
 
+// Same label format as describe() in eval/run.js, which is not exported.
+const describe = (r) =>
+  `${r.payload.module} | ${r.payload.lessonFolder} | ${formatTimestamp(r.payload.start)}-${formatTimestamp(r.payload.end)}`;
+
+// Every per-question field eval/run.js publishes about retrieval: first-hit
+// ranks, pool recall, pool size, how many results came back, and the returned
+// chunks themselves. Matching all of them means the pools and orders here are
+// the published ones, not merely ones with the same first-hit rank.
+const CHECKED_FIELDS = ["rank", "lessonRank", "poolHit", "poolSize", "returned"];
+
 function checkAgainstPublished(published, row, perQuestion) {
-  const mismatched = Object.keys(perQuestion).filter((id) => published.configs[row].perQuestion[id].rank !== perQuestion[id].rank);
+  const mismatched = [];
+  for (const [id, { q, results }] of Object.entries(perQuestion)) {
+    const expected = published.configs[row].perQuestion[id];
+    const actual = { ...scoreQuestion(q, results), top5: results.results.map(describe) };
+    const fields = [...CHECKED_FIELDS, "top5"].filter((f) => JSON.stringify(actual[f]) !== JSON.stringify(expected[f]));
+    if (fields.length) mismatched.push(`${id} (${fields.join(", ")})`);
+  }
   if (mismatched.length) {
-    throw new Error(`Ranks differ from eval/results.json row "${row}" on ${mismatched.join(", ")}`);
+    throw new Error(`Differs from eval/results.json row "${row}" on ${mismatched.join("; ")}`);
   }
 }
 
@@ -125,20 +145,27 @@ function headToHead(a, b) {
     wins: qs.filter((id) => hit(a[id]) && !hit(b[id])),
     losses: qs.filter((id) => !hit(a[id]) && hit(b[id])),
   });
-  return { hit1: count((s) => s.rank === 1), hitK: count((s) => s.rank != null) };
+  const withP = (c) => ({ ...c, p: signTestP(c.wins.length, c.losses.length) });
+  return { hit1: withP(count((s) => s.rank === 1)), hitK: withP(count((s) => s.rank != null)) };
 }
 
 const pct = (x) => `${Math.round(x * 100)}%`;
+const pValue = (p) => (p < 0.01 ? "< 0.01" : p.toFixed(2));
 const ms = (x) => (x >= 1000 ? `${(x / 1000).toFixed(2)} s` : `${Math.round(x)} ms`);
 
 function toMarkdown(results) {
   const lines = [
     `Candidate pools from the ${results.questions} single-turn questions in eval/questions.json, ` +
-      "the same pools and LLM rerank orders as eval/results.md (checked rank for rank). " +
+      "the same pools and LLM rerank orders as eval/results.md (checked against every per-question retrieval " +
+      "field in eval/results.json). " +
       "0 Gemini calls: the LLM rows replay eval/cache/llm.json.",
     "",
-    `One question moves a hit rate by ${(100 / results.questions).toFixed(1)} points, so gaps of one or two ` +
-      "questions are noise. The head-to-head table lists the questions behind each gap.",
+    `One question moves a hit rate by ${(100 / results.questions).toFixed(1)} points. The head-to-head tables ` +
+      "list the questions behind each gap and give p, an exact two-sided sign test on the questions where the " +
+      "two rerankers disagree. The arms are not independent tests, so read p per arm, not as a family.",
+    "",
+    "The LLM order is one cached temperature-0 response per pool and the HyDE pool is one draw, so neither " +
+      "side's sampling variance is measured.",
     "",
     "Arms:",
     "",
@@ -167,10 +194,13 @@ function toMarkdown(results) {
       );
     }
     lines.push("", `Head-to-head against the LLM reranker (questions a cross-encoder arm gets that the LLM does not, and the reverse):`, "");
-    lines.push("| Arm | Hit@1 wins | Hit@1 losses | Hit@k wins | Hit@k losses |\n|---|---|---|---|---|");
+    lines.push("| Arm | Hit@1 wins | Hit@1 losses | Hit@1 p | Hit@k wins | Hit@k losses | Hit@k p |\n|---|---|---|---|---|---|---|");
     const list = (qs) => (qs.length ? `${qs.length} (${qs.join(", ")})` : "0");
     for (const h of pool.headToHead) {
-      lines.push(`| ${h.label} | ${list(h.hit1.wins)} | ${list(h.hit1.losses)} | ${list(h.hitK.wins)} | ${list(h.hitK.losses)} |`);
+      lines.push(
+        `| ${h.label} | ${list(h.hit1.wins)} | ${list(h.hit1.losses)} | ${pValue(h.hit1.p)} | ` +
+          `${list(h.hitK.wins)} | ${list(h.hitK.losses)} | ${pValue(h.hitK.p)} |`
+      );
     }
     lines.push("");
   }
@@ -223,6 +253,10 @@ async function main() {
       process.stdout.write(".");
     }
     process.stdout.write("\n");
+    // Fail before the several-minute timing loop, not after it.
+    const byId = (key) => Object.fromEntries(perQuestion.map((p) => [p.q.id, { q: p.q, results: p[key] }]));
+    checkAgainstPublished(published, pool.vectorRow, byId("vector"));
+    checkAgainstPublished(published, pool.llmRow, byId("llm"));
     pools.push({ pool, perQuestion });
   }
 
@@ -283,8 +317,6 @@ async function main() {
         }
       }
     }
-    checkAgainstPublished(published, pool.vectorRow, rows.vector);
-    checkAgainstPublished(published, pool.llmRow, rows.llm);
 
     const llmLatency = `${ms(llmPerf.medianMs)} / ${ms(llmPerf.p95Ms)}`;
     const localLatency = (id) => `${ms(results.timing.perReranker[id].medianMs)} / ${ms(results.timing.perReranker[id].p95Ms)}`;
