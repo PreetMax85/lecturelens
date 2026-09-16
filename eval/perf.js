@@ -35,6 +35,7 @@ const { answerQuestion } = require("../src/answer");
 const { embedText } = require("../src/local-embed");
 const { generate, MODEL } = require("../src/gemini");
 const { createTrace } = require("../src/trace");
+const { COLLECTION } = require("../src/qdrant");
 const {
   summarizeStages,
   summarizeWall,
@@ -94,13 +95,33 @@ function createPerfLlm() {
   };
 }
 
-// Runs are spaced apart to respect the free-tier rate limit, which is long
-// enough for the keep-alive socket to lapse. Without this the first LLM call of
-// every run re-pays DNS and TLS, and that cost lands on whichever stage happens
-// to go first (the guardrail) rather than on the stage that caused it. A plain
-// GET to the API host is not a model call, so it costs no quota.
+// Runs are spaced apart to respect the free-tier rate limit, which is longer
+// than the keep-alive idle timeout. Without this, the first call to each host
+// in every run re-pays DNS and TLS: for Gemini that lands on the guardrail
+// just because it goes first, and for Qdrant it lands on the search. Neither
+// request is a model call, so they cost no quota. Bodies are read so the
+// sockets go back to the pool for the run to reuse.
 async function warmConnection() {
-  await fetch("https://generativelanguage.googleapis.com/", { method: "GET" }).catch(() => {});
+  await Promise.all([
+    fetch("https://generativelanguage.googleapis.com/")
+      .then((r) => r.arrayBuffer())
+      .catch(() => {}),
+    fetch(`${process.env.QDRANT_URL}/collections/${COLLECTION}`, {
+      headers: { "api-key": process.env.QDRANT_API_KEY },
+    })
+      .then((r) => r.arrayBuffer())
+      .catch(() => {}),
+  ]);
+}
+
+// Checked once before any Gemini call is spent, so a bad Qdrant URL or key
+// fails in a second instead of after the first run.
+async function checkQdrant() {
+  const res = await fetch(`${process.env.QDRANT_URL}/collections/${COLLECTION}`, {
+    headers: { "api-key": process.env.QDRANT_API_KEY },
+  });
+  if (!res.ok) throw new Error(`Qdrant collection "${COLLECTION}" not reachable: HTTP ${res.status}`);
+  await res.arrayBuffer();
 }
 
 async function measureRun(question, perf) {
@@ -289,6 +310,8 @@ async function main() {
     console.log("Dry run, nothing called.");
     return;
   }
+
+  await checkQdrant();
 
   // Warm the embedder first so no measured run pays the model load.
   const loadStart = process.hrtime.bigint();
