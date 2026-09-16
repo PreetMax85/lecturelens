@@ -314,6 +314,50 @@ Caveats:
   million output tokens, checked on 2026-09-16. Actual spend is zero on the
   free tier.
 
+### Rerank bake-off: LLM against local cross-encoders
+
+Rerank is the stage that lifts hit@1 from 39% to 63%, and at about a second per
+question it is one of the slower ones, so it is the obvious stage to swap for a
+free local model. `npm run eval:rerank-bakeoff` scores the exact candidate pools
+behind the eval tables with two cross-encoders running in Transformers.js,
+`Xenova/ms-marco-MiniLM-L-6-v2` and `mixedbread-ai/mxbai-rerank-xsmall-v1`, and
+compares them with the production Gemini reranker. It makes no Gemini calls:
+the pools and LLM rerank orders are replayed from the eval cache and checked
+rank for rank against `eval/results.json`. Production code is unchanged. Full
+tables are in `eval/rerank-bakeoff.md`.
+
+Best cross-encoder setup against the LLM reranker, on the production pool (HyDE
+draw 1), with each cross-encoder list cut to the length the LLM returned for the
+same question:
+
+| Reranker | Hit@1 | Hit@k | MRR@k | Rerank latency, median |
+|---|---|---|---|---|
+| No rerank | 45% | 63% | 0.526 | none |
+| Gemini LLM rerank (production) | 66% | 71% | 0.684 | 1.05 s |
+| MiniLM-L-6, lesson header + text | 50% | 63% | 0.566 | about 130 ms |
+| mxbai-rerank-xsmall, lesson header + text | 34% | 58% | 0.456 | about 600 ms |
+
+- **The LLM reranker stays.** The best cross-encoder loses 9 questions at rank
+  1 and wins 3. The gap is about 6 questions, well past the one or two that
+  count as noise at n = 38, and the pool without HyDE shows the same (8 losses
+  against 2 wins). 7 of the 9 losses are hand-written questions.
+- **The cross-encoders are free and faster**, about 8 times for MiniLM and 2
+  times for mxbai, but mxbai does worse than plain vector order at rank 1, and
+  MiniLM recovers only about a quarter of the hit@1 the LLM adds.
+- **Lesson titles help MiniLM a little.** Giving it the same
+  `[module | lesson | timestamp]` header the LLM sees moved hit@1 from 45% to
+  50%, two questions, which is within noise. That arm was added after the first
+  run to rule out the header as the LLM's advantage. It is an input choice, not
+  a tuned threshold, and there is no threshold arm.
+
+Caveats: the latencies come from a laptop CPU, not the deployed host, and move
+by a few tens of milliseconds between runs. The LLM latency is the rerank
+stage from `npm run perf`, not re-measured.
+Cross-encoder scores use fp32 weights, because the quantized exports scored the
+same pair differently depending on the rest of the batch. They were
+bit-identical across two local runs but are not proven identical across
+machines, so the bake-off is not part of the CI drift check.
+
 ## Deployment
 
 ### Backend (Render)
