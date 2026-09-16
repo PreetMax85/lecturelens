@@ -243,6 +243,71 @@ refused. The borderline cases exist to catch that, but there are only five.
 And the guardrail fails open: if the Gemini call errors, the message goes on to
 retrieval instead of being blocked.
 
+### Speed and cost
+
+`npm run perf` asks 10 labeled questions (8 single-turn, 2 follow-ups) 3 times
+each through the same path the server takes, the guardrail and then
+`answerQuestion()`, and times every stage. Token counts are the exact ones
+Gemini reports with each response, not estimates. Full output, including every
+run, is in `eval/perf.md` and `eval/perf.json`.
+
+| Stage | Median | p95 | Cost per question |
+|---|---|---|---|
+| HyDE passage (LLM) | 1.22 s | 1.88 s | $0.000171 |
+| Answer generation (LLM) | 1.22 s | 3.02 s | $0.000435 |
+| Rerank (LLM) | 1.05 s | 1.65 s | $0.000269 |
+| Condensation (LLM, follow-ups only) | 1.01 s | 1.93 s | $0.000014 |
+| Vector search (Qdrant, both searches added) | 977 ms | 1.48 s | free |
+| Guardrail (LLM) | 936 ms | 1.93 s | $0.000098 |
+| Both embeddings and citation checks (local) | about 40 ms | about 50 ms | free |
+
+| End to end | |
+|---|---|
+| Median wait for an answer | 5.75 s (5.65 s single-turn, 6.76 s follow-ups) |
+| p95 wait | 9.97 s |
+| Cost per question at paid rates | about $0.001, or roughly 1,000 questions per dollar |
+
+What the numbers say:
+
+- **The wait is LLM round trips.** Four or five Gemini calls of about a second
+  each make up almost all of it. Everything that runs locally, both embeddings
+  and citation verification, adds about 40 ms in total, so a faster embedding
+  model would change nothing a student notices.
+- **The guardrail costs about a second on every question** to produce one
+  token, roughly a sixth of the median wait and a tenth of the cost. It is the
+  most obvious stage to replace with something cheaper.
+- **Answer generation is the most expensive stage but not the largest prompt.**
+  Rerank sends more input tokens (about 1,030 against 910), but output tokens
+  cost six times as much and the answer is the only long output, so it is
+  about 44% of the cost to rerank's 27%.
+- **Streaming would help more than any single speedup.** The answer is the last
+  stage and its call starts about 4.5 s in, so streamed text would begin to
+  appear shortly after that instead of the whole answer arriving at 5.75 s.
+
+Caveats:
+
+- **These times cannot be reproduced from the cache.** A cached response comes
+  back in microseconds, so every call behind this table was a real one, made
+  on 2026-09-16 from a laptop in India against Gemini and a Qdrant
+  Cloud free cluster. Re-running `npm run perf` spends about 127 requests of
+  the 500-per-day free quota and will give somewhat different times. CI
+  therefore checks the retrieval numbers but not these.
+- **30 runs is a small sample.** p95 is the second slowest run, not a smooth
+  estimate.
+- **Two of the 30 runs were dropped**, one after a 429 and one after a 503 from
+  Gemini. Any run in which a call failed is dropped rather than kept, because
+  a retry pauses in the middle of the pipeline and a failure that is not
+  retried is quietly absorbed by the pipeline's fallbacks, either of which
+  would publish a sample of a pipeline that did not really run.
+- **The times are warm.** The embedding model is loaded and the connections
+  to Gemini and Qdrant are opened before each measured run. A free-tier Render
+  server waking from sleep pays for the model load and those connections again
+  on its first question.
+- **Cost is what the paid tier would charge**, at Gemini's published rates for
+  `gemini-3.1-flash-lite` of $0.25 per million input tokens and $1.50 per
+  million output tokens, checked on 2026-09-16. Actual spend is zero on the
+  free tier.
+
 ## Deployment
 
 ### Backend (Render)
