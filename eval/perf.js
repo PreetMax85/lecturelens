@@ -51,7 +51,9 @@ const {
 // actually answered.
 const SAMPLE_IDS = ["c01", "c05", "c09", "c13", "p02", "p07", "p13", "p19", "m01", "m05"];
 const REPEATS = 3;
-const PAUSE_BETWEEN_RUNS_MS = Number(process.env.PERF_PAUSE_MS || 6000);
+// 12 s keeps a run of 4-5 calls well under the free tier's per-minute limit. At
+// 6 s about one run in six hit a 429 and had to be dropped.
+const PAUSE_BETWEEN_RUNS_MS = Number(process.env.PERF_PAUSE_MS || 12000);
 const MAX_ATTEMPTS = 4;
 
 const OUT_JSON = path.join(__dirname, "perf.json");
@@ -171,7 +173,7 @@ const STAGE_LABELS = {
   "verify-citations": "Verify citations (local)",
 };
 
-function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWarmupMs, startedAt }) {
+function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWarmupMs, startedAt, sampleIds, repeats }) {
   const lines = [];
   const singleTurn = usable.filter((r) => !r.multiTurn);
   const multiTurn = usable.filter((r) => r.multiTurn);
@@ -179,7 +181,7 @@ function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWar
 
   lines.push(
     `Model: \`${MODEL}\`. Measured on ${startedAt.slice(0, 10)} from ${usable.length} runs ` +
-      `(${SAMPLE_IDS.length} questions x ${REPEATS} repeats), against the live Qdrant index.`
+      `(${sampleIds.length} questions x ${repeats} repeats), against the live Qdrant index.`
   );
   lines.push("");
   lines.push(
@@ -192,7 +194,7 @@ function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWar
 
   lines.push("**Per stage**");
   lines.push("");
-  lines.push("| Stage | Runs | Median | p95 | Mean input tokens | Mean output tokens | Cost per question |");
+  lines.push("| Stage | Runs | Median | p95 | Input tokens per question | Output tokens per question | Cost per question |");
   lines.push("|---|---|---|---|---|---|---|");
   for (const s of stages) {
     const label = STAGE_LABELS[s.stage] || s.stage;
@@ -220,7 +222,9 @@ function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWar
   }
   lines.push(`| Median summed stage time | ${fmtMs(wall.medianSummedStageMs)} |`);
   lines.push(`| Cost per question | ${fmtUsd(wall.costUsd)} |`);
-  lines.push(`| Questions per US dollar | ${Math.round(1 / wall.costUsd).toLocaleString("en-US")} |`);
+  if (wall.costUsd > 0) {
+    lines.push(`| Questions per US dollar | ${Math.round(1 / wall.costUsd).toLocaleString("en-US")} |`);
+  }
   lines.push("");
 
   lines.push(
@@ -236,9 +240,14 @@ function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWar
   lines.push("");
   const p95Rank = Math.max(1, Math.ceil(0.95 * wall.n));
   const fromSlowest = wall.n - p95Rank + 1;
+  const ordinal = (n) => {
+    const tens = n % 100;
+    if (tens >= 11 && tens <= 13) return `${n}th`;
+    return `${n}${{ 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th"}`;
+  };
   lines.push(
     `p95 here is the nearest-rank value over ${wall.n} runs, which makes it the ` +
-      `${fromSlowest === 1 ? "slowest" : `${fromSlowest}${fromSlowest === 2 ? "nd" : "th"} slowest`} ` +
+      `${fromSlowest === 1 ? "slowest" : `${ordinal(fromSlowest)} slowest`} ` +
       "observation rather than a smooth estimate. Treat it as an indication, not a guarantee."
   );
   lines.push("");
@@ -266,7 +275,7 @@ function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWar
   lines.push("");
   lines.push("| Question | Turns | Median | Calls | Answer chars | Citations |");
   lines.push("|---|---|---|---|---|---|");
-  for (const id of SAMPLE_IDS) {
+  for (const id of sampleIds) {
     const forId = usable.filter((r) => r.id === id);
     if (!forId.length) continue;
     lines.push(
@@ -282,12 +291,21 @@ function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWar
 async function main() {
   const args = process.argv.slice(2);
   const dryRun = args.includes("--dry-run");
-  const flag = (name, fallback) => {
+  const flag = (name, fallback, max = Infinity) => {
+    const inline = args.find((a) => a.startsWith(`${name}=`));
     const i = args.indexOf(name);
-    return i >= 0 && args[i + 1] ? Number(args[i + 1]) : fallback;
+    const raw = inline ? inline.slice(name.length + 1) : i >= 0 ? args[i + 1] : undefined;
+    if (raw === undefined) return fallback;
+    const n = Number(raw);
+    if (!Number.isInteger(n) || n < 1 || n > max) {
+      const range = max === Infinity ? "a whole number of at least 1" : `a whole number from 1 to ${max}`;
+      console.error(`${name} must be ${range}, got "${raw}".`);
+      process.exit(1);
+    }
+    return n;
   };
   const repeats = flag("--repeats", REPEATS);
-  const limit = flag("--questions", SAMPLE_IDS.length);
+  const limit = flag("--questions", SAMPLE_IDS.length, SAMPLE_IDS.length);
 
   const questions = require("./questions.json");
   const byId = new Map(questions.map((q) => [q.id, q]));
@@ -297,8 +315,9 @@ async function main() {
     return q;
   });
 
-  // 4 calls for a single-turn question, 5 for a follow-up (condensation).
-  const plannedCalls = sample.reduce((a, q) => a + (q.history?.length ? 5 : 4), 0) * repeats;
+  // 4 calls for a single-turn question, 5 for a follow-up (condensation), plus
+  // the one warm-up call.
+  const plannedCalls = sample.reduce((a, q) => a + (q.history?.length ? 5 : 4), 0) * repeats + 1;
   const runCount = sample.length * repeats;
   console.log(
     `${sample.length} questions x ${repeats} repeats = ${runCount} runs, ` +
@@ -374,12 +393,22 @@ async function main() {
   fs.writeFileSync(
     OUT_JSON,
     JSON.stringify(
-      { model: MODEL, startedAt, repeats, sampleIds: SAMPLE_IDS.slice(0, limit), modelLoadMs, connectionWarmupMs, prices: PRICE_PER_MTOK, priceCheckedOn: PRICE_CHECKED_ON, stages, wall, runs },
+      { model: MODEL, startedAt, repeats, sampleIds: sample.map((q) => q.id), modelLoadMs, connectionWarmupMs, prices: PRICE_PER_MTOK, priceCheckedOn: PRICE_CHECKED_ON, stages, wall, runs },
       null,
       2
     ) + "\n"
   );
-  const markdown = renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWarmupMs, startedAt });
+  const markdown = renderMarkdown({
+    runs,
+    usable,
+    stages,
+    wall,
+    modelLoadMs,
+    connectionWarmupMs,
+    startedAt,
+    sampleIds: sample.map((q) => q.id),
+    repeats,
+  });
   fs.writeFileSync(OUT_MD, markdown);
 
   console.log(`\n${markdown}`);
