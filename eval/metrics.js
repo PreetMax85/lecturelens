@@ -98,4 +98,22 @@ function saysNotCovered(answer) {
   return NOT_COVERED.test(answer);
 }
 
-module.exports = { toSeconds, overlapsWindow, scoreQuestion, aggregate, summarizeDraws, saysNotCovered };
+// Exact two-sided sign test for a paired comparison on the same questions.
+// Only discordant questions count: `wins` that one system gets and the other
+// misses, and `losses` the reverse. Returns the probability of a split at least
+// this uneven if either system were equally likely to win each of them.
+function signTestP(wins, losses) {
+  if (![wins, losses].every((x) => Number.isInteger(x) && x >= 0)) {
+    throw new Error("wins and losses must be non-negative integers");
+  }
+  const n = wins + losses;
+  let choose = 1; // C(n, 0)
+  let tail = 0;
+  for (let i = 0; i <= Math.min(wins, losses); i++) {
+    tail += choose;
+    choose = (choose * (n - i)) / (i + 1);
+  }
+  return Math.min(1, (2 * tail) / 2 ** n);
+}
+
+module.exports = { toSeconds, overlapsWindow, scoreQuestion, aggregate, summarizeDraws, saysNotCovered, signTestP };

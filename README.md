@@ -314,6 +314,59 @@ Caveats:
   million output tokens, checked on 2026-09-16. Actual spend is zero on the
   free tier.
 
+### Rerank bake-off: LLM against local cross-encoders
+
+Rerank is the stage that lifts hit@1 from 39% to 63%, and at about a second per
+question it is one of the slower ones, so it is the obvious stage to swap for a
+free local model. `npm run eval:rerank-bakeoff` scores the exact candidate pools
+behind the eval tables with two cross-encoders running in Transformers.js,
+`Xenova/ms-marco-MiniLM-L-6-v2` and `mixedbread-ai/mxbai-rerank-xsmall-v1`, and
+compares them with the production Gemini reranker. It makes no Gemini calls:
+the pools and LLM rerank orders are replayed from the eval cache and checked
+against every per-question retrieval field in `eval/results.json`, including
+the returned chunks. Production code is unchanged. Full tables, including a
+top-5 cut and text-only inputs, are in `eval/rerank-bakeoff.md`.
+
+Both cross-encoders scoring `[module | lesson | timestamp]` plus the chunk text,
+the same header the LLM sees, on the production pool (HyDE draw 1). Each
+cross-encoder list is cut to the length the LLM returned for the same question,
+so the reranked rows compare at equal k:
+
+| Reranker | Hit@1 | Hit@k (k = 5 for no rerank) | MRR@k | Rerank latency, median |
+|---|---|---|---|---|
+| No rerank | 45% | 63% | 0.526 | none |
+| Gemini LLM rerank (production) | 66% | 71% | 0.684 | 1.05 s |
+| MiniLM-L-6 | 50% | 63% | 0.566 | about 120 ms |
+| mxbai-rerank-xsmall | 34% | 58% | 0.456 | about 550 ms |
+
+- **Neither cross-encoder is a replacement.** The better one, MiniLM with the
+  header, loses 9 questions at rank 1 and wins 3 (exact paired sign test
+  p = 0.15), and 8 against 2 on the pool without HyDE (p = 0.11). The
+  direction is consistent, but at n = 38 that gap is not statistically
+  significant on its own. The weaker setups lose clearly: MiniLM on text alone
+  10 against 2 (p = 0.04) and mxbai 13 or 14 against 2 (p < 0.01). 7 of
+  MiniLM's 9 losses are hand-written questions, which are 22 of the 38.
+- **They are free and, on a laptop CPU, faster**: about 8 times for MiniLM and
+  about 2 times for mxbai. On the production pool mxbai does worse than plain
+  vector order at rank 1, and MiniLM recovers only about a quarter of the hit@1
+  the LLM adds. Whether they would still be fast, or fit in memory, on a small
+  free-tier server was not measured.
+- **Lesson titles help MiniLM a little.** The header moved its hit@1 from 45%
+  to 50%, a net two questions (three gained, one lost), which is within noise.
+  That input was added after the first run to rule out the header as the LLM's
+  advantage. It is an input choice, not a tuned threshold, and there is no
+  threshold arm.
+
+Caveats: the LLM order is one cached temperature-0 response per question and
+the production pool is one HyDE draw, so neither side's sampling variance is
+measured. Cross-encoder latencies come from a laptop CPU, not the deployed
+host, and move by a few tens of milliseconds between runs. The LLM latency is
+the rerank stage from `npm run perf`, not re-measured. Cross-encoder scores use
+fp32 weights, because the quantized exports scored the same pair differently
+depending on the rest of the batch. They were bit-identical across two local
+runs but are not proven identical across machines, so the bake-off is not part
+of the CI drift check.
+
 ## Deployment
 
 ### Backend (Render)
