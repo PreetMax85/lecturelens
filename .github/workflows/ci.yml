@@ -26,9 +26,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "24"
           cache: npm
@@ -39,7 +39,7 @@ jobs:
       # The embedding model is a ~23MB download into node_modules, which npm ci
       # wipes, so it is cached separately and restored after the install.
       - name: Cache the embedding model
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules/@xenova/transformers/.cache
           key: xenova-all-MiniLM-L6-v2
@@ -69,7 +69,7 @@ jobs:
 
       - name: Upload the regenerated results when they differ
         if: failure() && steps.drift.outcome == 'failure'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: regenerated-eval-results
           path: |
