@@ -81,6 +81,12 @@ so a cache-only run replays the exact calls behind the tables below. A run
 that hits any API error refuses to write results at all, so a partially failed
 run cannot quietly turn into a published number.
 
+Because that run is deterministic, CI does it on every pull request and on
+every push to `main`, and fails the build if the regenerated `eval/results.md`
+or `eval/results.json` differs from the committed one. A change that moves
+retrieval cannot land while the numbers quoted here still describe the old
+behaviour.
+
 A retrieved chunk counts as a hit only if it comes from the labeled lesson and
 overlaps the labeled time window by at least one second. Lesson hit is the
 looser version of the same measure, right lesson at any timestamp, so it counts

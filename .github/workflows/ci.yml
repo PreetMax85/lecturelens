@@ -1,0 +1,78 @@
+# The numbers in the README are the most valuable thing in this repo and the
+# easiest to break by accident, so every change is checked against them.
+#
+# The eval is deterministic: every Gemini response is committed in
+# eval/cache/llm.json, so `--cache-only` replays the exact calls behind the
+# published tables and rewrites eval/results.md and eval/results.json byte for
+# byte. If a regenerated file differs from the committed one, something about
+# retrieval changed and the results files were not updated with it, so the job
+# fails and the two regenerated files are uploaded for comparison.
+#
+# Needs repo secrets QDRANT_URL and QDRANT_API_KEY (QDRANT_COLLECTION is
+# optional, defaults to course_chunks). A cache-only run makes no API calls, so
+# no Gemini key is needed. Secrets are not available to pull requests opened
+# from forks, so the eval step is skipped there and only the tests run.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The embedding model is a ~23MB download into node_modules, which npm ci
+      # wipes, so it is cached separately and restored after the install.
+      - name: Cache the embedding model
+        uses: actions/cache@v6
+        with:
+          path: node_modules/@xenova/transformers/.cache
+          key: xenova-all-MiniLM-L6-v2
+
+      - name: Download the embedding model if it was not cached
+        run: npm run build
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Reproduce the published eval numbers from the committed cache
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+          QDRANT_COLLECTION: ${{ secrets.QDRANT_COLLECTION }}
+        run: npm run eval -- --cache-only
+
+      - name: Fail if the regenerated numbers differ from the committed ones
+        id: drift
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if ! git diff --exit-code --stat eval/results.md eval/results.json; then
+            echo "::error::The eval produced different numbers than eval/results.md and eval/results.json contain. Re-run 'npm run eval -- --cache-only' locally and commit the updated results files."
+            exit 1
+          fi
+
+      - name: Upload the regenerated results when they differ
+        if: failure() && steps.drift.outcome == 'failure'
+        uses: actions/upload-artifact@v7
+        with:
+          name: regenerated-eval-results
+          path: |
+            eval/results.md
+            eval/results.json
+          if-no-files-found: ignore
