@@ -2766,12 +2766,12 @@
   ],
   "citations": {
     "answers": 55,
-    "citations": 100,
-    "verified": 99,
+    "citations": 105,
+    "verified": 104,
     "wrongTimestamp": 1,
     "unknownSource": 0,
     "answersWithoutCitations": 4,
-    "strayTimestamps": 10,
+    "strayTimestamps": 0,
     "perQuestion": {
       "c01": {
         "total": 3,
@@ -2816,10 +2816,10 @@
         "strayTimestamps": 0
       },
       "c08": {
-        "total": 1,
-        "verified": 1,
+        "total": 2,
+        "verified": 2,
         "unverified": [],
-        "strayTimestamps": 2
+        "strayTimestamps": 0
       },
       "c09": {
         "total": 2,
@@ -2858,10 +2858,10 @@
         "strayTimestamps": 0
       },
       "c15": {
-        "total": 4,
-        "verified": 4,
+        "total": 5,
+        "verified": 5,
         "unverified": [],
-        "strayTimestamps": 2
+        "strayTimestamps": 0
       },
       "c16": {
         "total": 3,
@@ -2941,10 +2941,10 @@
         "strayTimestamps": 0
       },
       "p12": {
-        "total": 3,
-        "verified": 3,
+        "total": 4,
+        "verified": 4,
         "unverified": [],
-        "strayTimestamps": 2
+        "strayTimestamps": 0
       },
       "p13": {
         "total": 2,
@@ -3007,10 +3007,10 @@
         "strayTimestamps": 0
       },
       "n01": {
-        "total": 1,
-        "verified": 1,
+        "total": 3,
+        "verified": 3,
         "unverified": [],
-        "strayTimestamps": 4
+        "strayTimestamps": 0
       },
       "n02": {
         "total": 0,

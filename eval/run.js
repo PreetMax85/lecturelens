@@ -127,7 +127,8 @@ async function runCitationCheck(questions, llm, answers) {
     const { answer, citationCheck } = await answerQuestion(q.question, q.history || [], { llm });
     answers[q.id] = answer;
     let rest = answer;
-    for (const c of extractCitations(answer)) rest = rest.replace(c.text, "");
+    // ranges of one compound citation share its text, so blank each distinct text
+    for (const text of new Set(extractCitations(answer).map((c) => c.text))) rest = rest.replaceAll(text, "");
     perQuestion[q.id] = {
       ...citationCheck,
       strayTimestamps: (rest.match(/\b\d{1,2}:\d{2}\b/g) || []).length,
@@ -192,7 +193,7 @@ function toMarkdown(results) {
       `Wrong timestamp: ${results.citations.wrongTimestamp}. Lesson not among the excerpts: ${results.citations.unknownSource}. ` +
       `Answers with no parseable citation: ${results.citations.answersWithoutCitations}. ` +
       `Timestamps outside a parseable citation: ${results.citations.strayTimestamps} ` +
-      `(compound citations naming several ranges at once; the parser reads the first).`,
+      `(nonzero means some citation was written in a shape the parser does not recognise).`,
     "",
     "**Questions the course does not cover** (full production answers)",
     "",

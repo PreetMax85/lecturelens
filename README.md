@@ -114,18 +114,19 @@ of conversation history changes)
 | LLM condensation (production) | 12 | 2.5 | 75% | 83% (10/12) | 0.792 | 92% | 92% |
 
 **Citation accuracy**, measured on full production answers to all 55
-questions: 99 of 100 parsed citations verified (99%). The one failure cited a
+questions: 104 of 105 parsed citations verified (99%). The one failure cited a
 single 19-minute range (00:00 to 19:26), which no retrieved excerpt spans. No
 answer cited a lesson that was not among its excerpts. Verification confirms
 that a cited location was among the excerpts, not that the passage supports the
-claim: three of the verified citations belong to the not-covered answer
-described below. Four answers carried no citation: three were correct declines
+claim: three of the verified citations belong to the not-covered answer about
+a recording's file path, described below. Four answers carried no citation: three were correct declines
 to questions the course doesn't cover, and the fourth declined a question the
 course does answer, because rerank dropped the labeled passage from the
-candidates. Four answers also wrote compound citations naming several
-time ranges at once, of which the parser reads only the first, leaving 10
-timestamps outside any checked citation. So 100 is the parser's denominator,
-not the model's.
+candidates. Four answers also wrote compound citations naming several time
+ranges for one lesson, one of them listing three. The parser splits these and
+checks each range as its own citation, so 105 counts ranges rather than
+parentheticals, and no timestamp in any answer falls outside a checked
+citation.
 
 **Questions the course does not cover**: 4 of 5 production answers said the
 course doesn't cover the topic. That count comes from a keyword check, and
