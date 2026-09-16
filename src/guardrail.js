@@ -1,4 +1,5 @@
 const { generate } = require("./gemini");
+const { NOOP_TRACE } = require("./trace");
 
 const GUARDRAIL_SYSTEM = `You are a binary classifier for a course-support chatbot.
 The course teaches mobile app development with React Native and Expo. The
@@ -35,16 +36,19 @@ function formatHistory(history, limit) {
 }
 
 // `llm` is injectable so eval/guardrail.js can cache Gemini calls.
-async function checkGuardrail(userMessage, history = [], { llm = generate } = {}) {
+async function checkGuardrail(userMessage, history = [], { llm = generate, trace = NOOP_TRACE } = {}) {
   const input = history.length
     ? `Recent conversation:\n${formatHistory(history, 4)}\n\nFinal message: ${userMessage}`
     : userMessage;
 
   try {
-    const verdict = await llm(input, {
-      systemInstruction: GUARDRAIL_SYSTEM,
-      temperature: 0,
-    });
+    const verdict = await trace.span("guardrail", () =>
+      llm(input, {
+        systemInstruction: GUARDRAIL_SYSTEM,
+        temperature: 0,
+        onUsage: trace.onUsage("guardrail"),
+      })
+    );
     const clean = verdict.trim().toUpperCase();
     return clean.startsWith("ALLOW");
   } catch (err) {

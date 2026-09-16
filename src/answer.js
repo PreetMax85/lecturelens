@@ -3,6 +3,7 @@ const { generate } = require("./gemini");
 const { search } = require("./qdrant");
 const { formatTimestamp } = require("./chunker");
 const { verifyCitations } = require("./citations");
+const { NOOP_TRACE } = require("./trace");
 
 function buildContext(results) {
   return results
@@ -64,12 +65,14 @@ function formatHistory(history, limit) {
     .join("\n");
 }
 
-async function condenseQuery(userMessage, history, llm = generate) {
+async function condenseQuery(userMessage, history, llm = generate, trace = NOOP_TRACE) {
   if (!history || history.length === 0) return userMessage;
   try {
-    const rewritten = await llm(
-      `Conversation so far:\n${formatHistory(history, 6)}\n\nNew message: ${userMessage}`,
-      { systemInstruction: CONDENSE_SYSTEM, temperature: 0 }
+    const rewritten = await trace.span("condense", () =>
+      llm(
+        `Conversation so far:\n${formatHistory(history, 6)}\n\nNew message: ${userMessage}`,
+        { systemInstruction: CONDENSE_SYSTEM, temperature: 0, onUsage: trace.onUsage("condense") }
+      )
     );
     return rewritten.trim() || userMessage;
   } catch (err) {
@@ -91,9 +94,12 @@ function hydeRequest(question, sample = 0) {
   return [question, { systemInstruction: HYDE_SYSTEM, temperature: 0.4, sample }];
 }
 
-async function generateHydePassage(question, llm = generate, sample = 0) {
+async function generateHydePassage(question, llm = generate, sample = 0, trace = NOOP_TRACE) {
   try {
-    return await llm(...hydeRequest(question, sample));
+    const [prompt, opts] = hydeRequest(question, sample);
+    return await trace.span("hyde", () =>
+      llm(prompt, { ...opts, onUsage: trace.onUsage("hyde") })
+    );
   } catch (err) {
     console.error("[hyde] generation failed, falling back to raw query only:", err.message);
     return null;
@@ -118,7 +124,7 @@ relevant to answering the question. Exclude numbers for excerpts that are not
 actually relevant. Respond with ONLY the JSON array, e.g. [3,1,5] - no other
 text, no explanation, no markdown fences.`;
 
-async function rerankResults(question, results, llm = generate) {
+async function rerankResults(question, results, llm = generate, trace = NOOP_TRACE) {
   if (results.length <= 1) return results;
 
   const listing = results
@@ -129,10 +135,13 @@ async function rerankResults(question, results, llm = generate) {
     .join("\n\n");
 
   try {
-    const raw = await llm(`Question: ${question}\n\nCandidates:\n${listing}`, {
-      systemInstruction: RERANK_SYSTEM,
-      temperature: 0,
-    });
+    const raw = await trace.span("rerank", () =>
+      llm(`Question: ${question}\n\nCandidates:\n${listing}`, {
+        systemInstruction: RERANK_SYSTEM,
+        temperature: 0,
+        onUsage: trace.onUsage("rerank"),
+      })
+    );
     const match = raw.match(/\[[\d,\s]*\]/);
     if (!match) throw new Error("no JSON array found in rerank response");
     const order = JSON.parse(match[0]);
@@ -153,32 +162,38 @@ const FINAL_K = 5;
 async function retrieve(
   userMessage,
   history = [],
-  { condense = true, hyde = true, rerank = true, llm = generate, hydeSample = 0 } = {}
+  { condense = true, hyde = true, rerank = true, llm = generate, hydeSample = 0, trace = NOOP_TRACE } = {}
 ) {
-  const standaloneQuery = condense ? await condenseQuery(userMessage, history, llm) : userMessage;
+  const standaloneQuery = condense
+    ? await condenseQuery(userMessage, history, llm, trace)
+    : userMessage;
 
   const [queryVector, hydePassage] = await Promise.all([
-    embedText(standaloneQuery),
-    hyde ? generateHydePassage(standaloneQuery, llm, hydeSample) : null,
+    trace.span("embed-query", () => embedText(standaloneQuery)),
+    hyde ? generateHydePassage(standaloneQuery, llm, hydeSample, trace) : null,
   ]);
 
   // Two searches of 8 merge to up to 10 unique candidates; without a HyDE
   // passage, fetch the full pool from the raw query instead.
-  const searchPromises = [search(queryVector, hydePassage ? 8 : CANDIDATE_POOL)];
+  const searchPromises = [
+    trace.span("search", () => search(queryVector, hydePassage ? 8 : CANDIDATE_POOL)),
+  ];
   if (hydePassage) {
-    const hydeVector = await embedText(hydePassage);
-    searchPromises.push(search(hydeVector, 8));
+    const hydeVector = await trace.span("embed-hyde", () => embedText(hydePassage));
+    searchPromises.push(trace.span("search", () => search(hydeVector, 8)));
   }
 
   const resultSets = await Promise.all(searchPromises);
   const candidates = mergeResults(resultSets, CANDIDATE_POOL);
 
-  const ordered = rerank ? await rerankResults(standaloneQuery, candidates, llm) : candidates;
+  const ordered = rerank
+    ? await rerankResults(standaloneQuery, candidates, llm, trace)
+    : candidates;
   return { standaloneQuery, candidates, results: ordered.slice(0, FINAL_K) };
 }
 
-async function answerQuestion(userMessage, history = [], { llm = generate } = {}) {
-  const { results } = await retrieve(userMessage, history, { llm });
+async function answerQuestion(userMessage, history = [], { llm = generate, trace = NOOP_TRACE } = {}) {
+  const { results } = await retrieve(userMessage, history, { llm, trace });
 
   if (!results.length) {
     return {
@@ -192,9 +207,13 @@ async function answerQuestion(userMessage, history = [], { llm = generate } = {}
   const historyBlock = history.length ? `Recent conversation:\n${formatHistory(history, 6)}\n\n` : "";
   const prompt = `${ANSWER_SYSTEM}\n\n${historyBlock}Source excerpts:\n${context}\n\nStudent question: ${userMessage}`;
 
-  const answer = await llm(prompt, { temperature: 0.2 });
+  const answer = await trace.span("answer", () =>
+    llm(prompt, { temperature: 0.2, onUsage: trace.onUsage("answer") })
+  );
 
-  const check = verifyCitations(answer, results.map((r) => r.payload));
+  const check = await trace.span("verify-citations", () =>
+    verifyCitations(answer, results.map((r) => r.payload))
+  );
   const unverified = check.citations
     .filter((c) => c.status !== "verified")
     .map(({ text, status }) => ({ text, status }));
