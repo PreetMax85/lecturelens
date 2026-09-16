@@ -11,6 +11,15 @@ Model: `gemini-3.1-flash-lite`. Index: 1955 chunks. Rerank responses that failed
 | + Rerank (no HyDE) | 38 | 3.2 | 63% | 68% (26/38) | 0.658 | 87% | 68% |
 | + HyDE + Rerank (production) | 38 | 3.1 | 66% | 71% (27/38) | 0.684 | 87% | 74% |
 
+**HyDE variance** (single-turn, 4 independent HyDE draws at temperature 0.4, min / mean / max; the table above is draw 1)
+
+| Configuration | Hit@1 | Hit@k | MRR@k | Pool recall@10 | Questions whose hit@k flips |
+|---|---|---|---|---|---|
+| + HyDE | 32% / 39% / 45% | 63% / 66% / 68% | 0.455 / 0.501 / 0.536 | 74% / 76% / 79% | 4 of 38 (c04, c10, p01, p18) |
+| + HyDE + Rerank (production) | 61% / 65% / 71% | 71% / 73% / 76% | 0.658 / 0.685 / 0.728 | 74% / 76% / 79% | 6 of 38 (c04, c07, c13, c14, p01, p13) |
+
+Rerank responses that failed to parse in the extra draws: 0.
+
 **Multi-turn follow-ups** (all rows use HyDE + rerank)
 
 | Configuration | n | Avg results | Hit@1 | Hit@k | MRR@k | Lesson hit@k | Pool recall@10 |
