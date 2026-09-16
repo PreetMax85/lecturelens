@@ -42,3 +42,8 @@ test("cutToK rejects a negative or fractional k", () => {
   assert.throws(() => cutToK([c("a")], -1), /non-negative integer/);
   assert.throws(() => cutToK([c("a")], 1.5), /non-negative integer/);
 });
+
+test("orderByScores rejects a NaN or infinite score", () => {
+  assert.throws(() => orderByScores([c("a"), c("b")], [1, NaN]), /finite/);
+  assert.throws(() => orderByScores([c("a"), c("b")], [Infinity, 1]), /finite/);
+});

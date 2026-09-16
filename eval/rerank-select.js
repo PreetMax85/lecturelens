@@ -13,6 +13,9 @@ function orderByScores(candidates, scores) {
   if (candidates.length !== scores.length) {
     throw new Error(`${candidates.length} candidates but ${scores.length} scores`);
   }
+  // A NaN makes the comparator inconsistent, so the order would depend on the engine.
+  const bad = scores.findIndex((x) => !Number.isFinite(x));
+  if (bad !== -1) throw new Error(`score ${bad} is not finite: ${scores[bad]}`);
   return candidates
     .map((candidate, i) => ({ candidate, score: scores[i] }))
     .sort((a, b) => b.score - a.score)
