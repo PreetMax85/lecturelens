@@ -16,8 +16,9 @@
 // The free tier allows about 30 requests a minute, and a single-turn question
 // makes 4 calls. Runs are therefore spaced apart, but nothing sleeps *inside* a
 // run, since a pause in the middle of the pipeline would corrupt the very thing
-// being measured. A run that hits a 429 is flagged and left out of the
-// published numbers instead of quietly becoming a slow sample.
+// being measured. A run that has to retry any call (a 429, a 5xx or a dropped
+// connection) sleeps mid-pipeline, so it is left out of the published numbers
+// instead of quietly becoming a slow sample.
 //
 // --dry-run   print the sample, the call count and the estimated wall time,
 //             then exit without calling the API.
