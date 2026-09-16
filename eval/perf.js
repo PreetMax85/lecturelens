@@ -16,9 +16,12 @@
 // The free tier allows about 30 requests a minute, and a single-turn question
 // makes 4 calls. Runs are therefore spaced apart, but nothing sleeps *inside* a
 // run, since a pause in the middle of the pipeline would corrupt the very thing
-// being measured. A run that has to retry any call (a 429, a 5xx or a dropped
-// connection) sleeps mid-pipeline, so it is left out of the published numbers
-// instead of quietly becoming a slow sample.
+// being measured. A run is left out of the published numbers if any call in it
+// failed at all: a retry sleeps mid-pipeline, and a failure that is not retried
+// is swallowed by the pipeline's fallbacks (the guardrail fails open, HyDE and
+// rerank are skipped), which would otherwise publish a fast, cheap, wrong
+// sample. A run that throws is recorded and dropped rather than ending the
+// whole measurement.
 //
 // --dry-run   print the sample, the call count and the estimated wall time,
 //             then exit without calling the API.
@@ -55,11 +58,11 @@ const OUT_MD = path.join(__dirname, "perf.md");
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// Real calls, no cache, with retries that record whether they happened. The
-// pipeline swallows a failed stage and falls back, so without this a 429 would
-// show up as a suspiciously fast stage rather than an error.
+// Real calls, no cache. Every error is recorded before anything else happens,
+// because the pipeline catches most stage failures and falls back silently, so
+// the run itself would otherwise look normal.
 function createPerfLlm() {
-  let retried = null;
+  let problem = null;
   let calls = 0;
 
   async function llm(prompt, opts = {}) {
@@ -70,14 +73,12 @@ function createPerfLlm() {
       } catch (err) {
         const status = Number((err.message.match(/failed: (\d{3})/) || [])[1]);
         const network = err instanceof TypeError && err.message === "fetch failed";
+        const reason = network ? "network error" : status ? `HTTP ${status}` : err.message.slice(0, 80);
+        problem = problem || reason;
         const retryable = status === 429 || status >= 500 || network;
         if (!retryable || attempt === MAX_ATTEMPTS) throw err;
-        // Any retry sleeps in the middle of the pipeline, so this run's timing
-        // is meaningless regardless of what caused it. Record why, and let the
-        // caller drop the run rather than publish a stall as latency.
-        retried = network ? "network error" : `HTTP ${status}`;
         const backoff = 3000 * 2 ** attempt;
-        console.warn(`    [llm] ${retried}, retrying in ${backoff / 1000}s`);
+        console.warn(`    [llm] ${reason}, retrying in ${backoff / 1000}s`);
         await sleep(backoff);
       }
     }
@@ -86,10 +87,10 @@ function createPerfLlm() {
   return {
     llm,
     startRun: () => {
-      retried = null;
+      problem = null;
       calls = 0;
     },
-    runStats: () => ({ retried, calls }),
+    runStats: () => ({ problem, calls }),
   };
 }
 
@@ -115,7 +116,7 @@ async function measureRun(question, perf) {
     ? await answerQuestion(question.question, history, { llm: perf.llm, trace })
     : null;
 
-  const { retried, calls } = perf.runStats();
+  const { problem, calls } = perf.runStats();
   return {
     id: question.id,
     multiTurn: history.length > 0,
@@ -126,7 +127,7 @@ async function measureRun(question, perf) {
     answerChars: result ? result.answer.length : 0,
     citations: result ? result.citationCheck.total : 0,
     calls,
-    retried,
+    problem,
   };
 }
 
@@ -232,8 +233,8 @@ function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWar
     lines.push(
       `${excluded} of ${runs.length} runs were excluded: ` +
         runs
-          .filter((r) => r.retried || !r.allowed)
-          .map((r) => `${r.id} (${r.retried ? `retried after ${r.retried}, so it slept mid-pipeline` : "rejected by the guardrail"})`)
+          .filter((r) => r.problem || !r.allowed)
+          .map((r) => `${r.id} repeat ${r.repeat} (${r.problem || "rejected by the guardrail"})`)
           .join(", ") +
         "."
     );
@@ -309,9 +310,28 @@ async function main() {
 
   for (let repeat = 1; repeat <= repeats; repeat++) {
     for (const question of sample) {
-      const run = await measureRun(question, perf);
+      let run;
+      try {
+        run = await measureRun(question, perf);
+      } catch (err) {
+        // An error the pipeline does not catch (the answer call, a Qdrant
+        // search, the embedder) would otherwise end the whole measurement and
+        // throw away every run so far.
+        run = {
+          id: question.id,
+          multiTurn: (question.history || []).length > 0,
+          allowed: true,
+          wallMs: 0,
+          stageTotals: {},
+          tokenTotals: {},
+          answerChars: 0,
+          citations: 0,
+          calls: perf.runStats().calls,
+          problem: `threw: ${err.message.slice(0, 80)}`,
+        };
+      }
       runs.push({ ...run, repeat });
-      const flags = [run.retried ? `RETRIED (${run.retried})` : null, run.allowed ? null : "REJECTED"]
+      const flags = [run.problem ? `DROPPED (${run.problem})` : null, run.allowed ? null : "REJECTED"]
         .filter(Boolean)
         .join(" ");
       console.log(
@@ -322,8 +342,8 @@ async function main() {
     }
   }
 
-  const usable = runs.filter((r) => r.allowed && !r.retried);
-  if (!usable.length) throw new Error("Every run retried or was rejected; refusing to write results.");
+  const usable = runs.filter((r) => r.allowed && !r.problem);
+  if (!usable.length) throw new Error("Every run failed or was rejected; refusing to write results.");
 
   const stages = summarizeStages(usable);
   const wall = summarizeWall(usable);
