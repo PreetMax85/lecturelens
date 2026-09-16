@@ -9,7 +9,12 @@ if (!GEMINI_KEY) {
 }
 
 // LLM generation. temperature low for factual/grounded answers.
-async function generate(prompt, { temperature = 0.2, systemInstruction } = {}) {
+//
+// `onUsage`, if given, is called with the token counts Gemini reports for this
+// call. It is a callback rather than part of the return value so that generate
+// keeps returning a plain string: eval/llm-cache.js caches that string by
+// value, and widening the return type would invalidate the committed cache.
+async function generate(prompt, { temperature = 0.2, systemInstruction, onUsage } = {}) {
   const body = {
     contents: [{ parts: [{ text: prompt }] }],
     generationConfig: { temperature },
@@ -32,6 +37,12 @@ async function generate(prompt, { temperature = 0.2, systemInstruction } = {}) {
   const data = await res.json();
   const candidate = data.candidates?.[0];
   if (!candidate) throw new Error("Gemini returned no candidates (likely blocked)");
+  if (onUsage && data.usageMetadata) {
+    onUsage({
+      inputTokens: data.usageMetadata.promptTokenCount ?? 0,
+      outputTokens: data.usageMetadata.candidatesTokenCount ?? 0,
+    });
+  }
   return candidate.content.parts.map((p) => p.text).join("");
 }
 
