@@ -42,9 +42,15 @@ test("totalMs per stage sums repeats of the same name", async () => {
   await trace.span("search", () => sleep(10));
   await trace.span("search", () => sleep(10));
   await trace.span("rerank", () => sleep(5));
+  // Compared against the recorded spans rather than the sleep lengths: timers
+  // fire off a millisecond-rounded loop clock, so a 10 ms sleep can measure
+  // 9.8 ms on hrtime and a fixed threshold fails now and then.
+  const spans = trace.spans();
+  const sumOf = (name) => spans.filter((s) => s.name === name).reduce((a, s) => a + s.ms, 0);
   const totals = trace.stageTotals();
-  assert.ok(totals.search >= 20, `expected search >= 20, got ${totals.search}`);
-  assert.ok(totals.rerank >= 4, `expected rerank >= 4, got ${totals.rerank}`);
+  assert.strictEqual(totals.search, sumOf("search"));
+  assert.strictEqual(totals.rerank, sumOf("rerank"));
+  assert.ok(totals.search > spans.find((s) => s.name === "search").ms);
 });
 
 test("usage records token counts under a stage name", () => {
