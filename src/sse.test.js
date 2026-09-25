@@ -55,3 +55,16 @@ test("accepts a CRLF pair split across two chunks", () => {
   parser.push("\n\r\n");
   assert.deepEqual(events, ["a"]);
 });
+
+test("the frontend's copy of the parser has not drifted from this one", () => {
+  const fs = require("fs");
+  const path = require("path");
+  const body = (file) => {
+    const source = fs.readFileSync(path.join(__dirname, file), "utf8");
+    return source
+      .slice(source.indexOf("function createSseParser"))
+      .replace(/\nmodule\.exports[^\n]*\n?/, "")
+      .trim();
+  };
+  assert.equal(body("../frontend/src/sse.js"), body("sse.js"));
+});
