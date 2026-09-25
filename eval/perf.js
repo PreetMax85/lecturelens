@@ -155,7 +155,8 @@ async function measureRun(question, perf) {
 
 function fmtMs(ms) {
   if (ms == null) return "n/a";
-  return ms >= 1000 ? `${(ms / 1000).toFixed(2)} s` : `${Math.round(ms)} ms`;
+  // 999.5 ms and up would round to "1000 ms", so it switches to seconds there.
+  return ms >= 999.5 ? `${(ms / 1000).toFixed(2)} s` : `${Math.round(ms)} ms`;
 }
 
 const fmtUsd = (usd) => `$${usd.toFixed(6)}`;
