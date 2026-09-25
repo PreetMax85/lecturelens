@@ -15,16 +15,20 @@ function chunk(text, { outputTokens, finishReason } = {}) {
   };
 }
 
-// Serves the events split at awkward places, the way the network does.
-function stubFetch(t, events) {
-  const body = events.map((e) => `data: ${JSON.stringify(e)}\r\n\r\n`).join("");
-  const pieces = [body.slice(0, 7), body.slice(7, 60), body.slice(60)];
+// Serves the events as bytes split at awkward places, the way the network
+// does, or at the given byte offsets.
+function stubFetch(t, events, cuts = [7, 60]) {
+  const body = new TextEncoder().encode(
+    events.map((e) => `data: ${JSON.stringify(e)}\r\n\r\n`).join("")
+  );
+  const bounds = [0, ...cuts, body.length];
+  const pieces = bounds.slice(1).map((end, i) => body.slice(bounds[i], end));
   const calls = [];
   t.mock.method(globalThis, "fetch", async (url, init) => {
     calls.push({ url, init });
     const stream = new ReadableStream({
       start(controller) {
-        for (const p of pieces) controller.enqueue(new TextEncoder().encode(p));
+        for (const p of pieces) controller.enqueue(p);
         controller.close();
       },
     });
@@ -67,4 +71,26 @@ test("with onText, throws when Gemini cuts the answer off after streaming part o
 test("with onText, a MAX_TOKENS finish still returns the text it got", async (t) => {
   stubFetch(t, [chunk("long answer", { outputTokens: 5, finishReason: "MAX_TOKENS" })]);
   assert.equal(await generate("q", { onText: () => {} }), "long answer");
+});
+
+test("with onText, a character split across two network chunks arrives whole", async (t) => {
+  const events = [chunk("at 04:12 – 05:30", { outputTokens: 5, finishReason: "STOP" })];
+  const raw = new TextEncoder().encode(`data: ${JSON.stringify(events[0])}`);
+  // Cut inside the three bytes of the en dash.
+  const dash = raw.indexOf(0xe2);
+  stubFetch(t, events, [dash + 1]);
+  assert.equal(await generate("q", { onText: () => {} }), "at 04:12 – 05:30");
+});
+
+test("with onText, throws when the stream ends without saying the answer is finished", async (t) => {
+  stubFetch(t, [chunk("half an answ", { outputTokens: 4 })]);
+  await assert.rejects(() => generate("q", { onText: () => {} }), /ended before/);
+});
+
+test("with onText, throws when Gemini reports an error partway through the stream", async (t) => {
+  stubFetch(t, [
+    chunk("half an answ", { outputTokens: 4 }),
+    { error: { code: 503, message: "overloaded", status: "UNAVAILABLE" } },
+  ]);
+  await assert.rejects(() => generate("q", { onText: () => {} }), /503/);
 });

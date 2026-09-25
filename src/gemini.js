@@ -83,6 +83,10 @@ async function generateStream(body, { onUsage, onText }) {
   let sawCandidate = false;
   const parser = createSseParser((data) => {
     const event = JSON.parse(data);
+    // An error after the stream has started comes as an event, not a status.
+    if (event.error) {
+      throw new Error(`Gemini generate failed: ${event.error.code} ${JSON.stringify(event.error)}`);
+    }
     // usageMetadata is a running total, so the last one covers the whole call.
     if (event.usageMetadata) usageMetadata = event.usageMetadata;
     const candidate = event.candidates?.[0];
@@ -102,7 +106,9 @@ async function generateStream(body, { onUsage, onText }) {
   parser.end();
 
   if (!sawCandidate) throw new Error("Gemini returned no candidates (likely blocked)");
-  if (finishReason && !COMPLETE_FINISHES.has(finishReason)) {
+  // A stream that closes without a finish reason was cut off, not finished.
+  if (!finishReason) throw new Error("Gemini stream ended before the answer finished");
+  if (!COMPLETE_FINISHES.has(finishReason)) {
     throw new Error(`Gemini stopped the answer early: ${finishReason}`);
   }
   reportUsage(onUsage, usageMetadata);
