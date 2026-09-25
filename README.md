@@ -8,9 +8,11 @@ exact module, lesson, and timestamp where the topic was taught.
 ```
 SRT/VTT files → parse → chunk (with timestamps) → embed (local, all-MiniLM-L6-v2) → Qdrant
                                                                                         ↓
-user question → input guardrail (history-aware) → query condensation (multi-turn)
-              → embed + HyDE → retrieve (up to 10 candidates) → LLM rerank → up to 5
-              → answer generation (cited, history-aware)
+user question → input guardrail (history-aware) ───────────────────────┐ runs alongside
+              → query condensation (multi-turn)                        │ retrieval; the
+              → embed + HyDE → retrieve (up to 10 candidates)          │ answer waits
+              → LLM rerank → up to 5                                   │ for its verdict
+              → answer generation (cited, history-aware, streamed) ◄───┘
 ```
 
 Pipeline stages, mapped to the original reference diagram:
@@ -434,18 +436,15 @@ Ranked roughly by effort-to-value if this continues past the assignment:
    what to ask yet.
 4. **Query decomposition for compound questions** ("explain OAuth and push
    notifications"): split into sub-questions, retrieve for each, merge.
-5. **Streaming answers.** Stream the LLM response token-by-token to the UI
-   instead of waiting for the full answer. Meaningful perceived-speed
-   improvement, no architecture change needed.
-6. **Feedback loop.** Thumbs up/down on answers, stored alongside the
+5. **Feedback loop.** Thumbs up/down on answers, stored alongside the
    analytics log. Lets you distinguish "low retrieval score but actually a
    fine answer" from "high score but wrong answer."
-7. **Server-side chat history + accounts.** Move history off `localStorage`
+6. **Server-side chat history + accounts.** Move history off `localStorage`
    so it syncs across devices; needed if this ever has real multiple users.
-8. **Faithfulness/hallucination check.** A second LLM pass verifying the
+7. **Faithfulness/hallucination check.** A second LLM pass verifying the
    final answer's claims are actually supported by the cited excerpts, before
    returning it. Real value, but needs careful testing to avoid false
    rejections of good answers.
-9. **Video timestamp deep-linking.** If lesson videos are hosted somewhere
+8. **Video timestamp deep-linking.** If lesson videos are hosted somewhere
    with seek-to-timestamp URLs (e.g. an internal LMS), turn the citation
    timestamps into clickable links that jump straight to that second.
