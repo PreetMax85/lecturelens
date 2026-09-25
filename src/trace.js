@@ -12,6 +12,7 @@ function createTrace() {
   const startedAt = process.hrtime.bigint();
   const spans = [];
   const tokens = new Map();
+  const marks = new Map();
 
   async function span(name, fn) {
     const begin = process.hrtime.bigint();
@@ -35,9 +36,18 @@ function createTrace() {
     tokens.set(name, running);
   }
 
+  // A moment rather than a duration, such as the first streamed word reaching
+  // the student. Only the first mark of a name counts, so it can be called
+  // from a callback that fires on every chunk.
+  function mark(name) {
+    if (!marks.has(name)) marks.set(name, Number(process.hrtime.bigint() - startedAt) / 1e6);
+  }
+
   return {
     span,
     usage,
+    mark,
+    marks: () => Object.fromEntries(marks),
     onUsage: (name) => (reported) => usage(name, reported),
     spans: () => spans.map((s) => ({ ...s })),
     stageTotals: () =>
@@ -54,6 +64,8 @@ const NOOP_TRACE = {
   span: (_name, fn) => fn(),
   usage: () => {},
   onUsage: () => () => {},
+  mark: () => {},
+  marks: () => ({}),
   spans: () => [],
   stageTotals: () => ({}),
   tokenTotals: () => ({}),
