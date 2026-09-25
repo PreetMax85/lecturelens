@@ -1,12 +1,13 @@
 // Minimal server-sent events reader: hands over the `data` of each event as a
-// string. Gemini streams its answer in this format, and so does /chat/stream.
-// Network chunks do not line up with events, so partial input is held until
-// the blank line that ends the event arrives.
+// string, for reading the /chat/stream response. Network chunks do not line
+// up with events, so partial input is held until the blank line that ends the
+// event arrives.
 //
-// frontend/src/sse.js is the same parser as an ES module for the browser,
-// which cannot import this CommonJS file. Keep the two in step.
+// src/sse.js is the backend's copy of this parser. The backend is CommonJS,
+// which the frontend cannot import, so the two are kept in step by hand, with
+// the same tests.
 
-function createSseParser(onData) {
+export function createSseParser(onData) {
   let buffer = "";
 
   function dispatch(block) {
@@ -34,5 +35,3 @@ function createSseParser(onData) {
     },
   };
 }
-
-module.exports = { createSseParser };
