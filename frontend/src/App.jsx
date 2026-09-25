@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import CourseHeader from "./CourseHeader.jsx";
 import { createSseParser } from "./sse.js";
+import { chatHistory } from "./history.js";
 
 const API_BASE = import.meta.env.VITE_API_URL || "";
 const STORAGE_KEY = "lecturelens_chat_history";
@@ -62,6 +63,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [serverStatus, setServerStatus] = useState("checking"); // checking | waking | ready | down
   const bottomRef = useRef(null);
+  const listRef = useRef(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -92,26 +94,36 @@ export default function App() {
     };
   }, []);
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  const streaming = messages.some((m) => m.pending);
 
   useEffect(() => {
+    if (!streaming) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    // While an answer streams in, follow it only if the reader is already at
+    // the bottom, so scrolling up to reread is not undone by the next words.
+    const list = listRef.current;
+    if (list && list.scrollHeight - list.scrollTop - list.clientHeight < 150) {
+      bottomRef.current?.scrollIntoView({ behavior: "auto" });
+    }
+  }, [messages, streaming]);
+
+  useEffect(() => {
+    // Saved once the reply is complete rather than on every streamed piece.
+    if (streaming) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
     } catch {
       // storage full or unavailable - non-fatal, chat just won't persist
     }
-  }, [messages]);
+  }, [messages, streaming]);
 
   async function sendMessage() {
     const text = input.trim();
     if (!text || loading) return;
 
-    const history = messages
-      .filter((m) => (m.role === "user" || m.role === "assistant") && m.content !== GREETING.content)
-      .slice(-8)
-      .map((m) => ({ role: m.role, content: m.content }));
+    const history = chatHistory(messages, GREETING.content);
 
     // The reply is added straight away, marked pending, and filled in as the
     // stream arrives. `stage` drives the status line shown before any text.
@@ -148,7 +160,7 @@ export default function App() {
           finished = true;
           // Gemini can cut an answer off partway, so text already shown is
           // taken back rather than left looking complete.
-          updateReply(() => ({ content: event.error || FAILED, sources: [], pending: false }));
+          updateReply(() => ({ content: event.error || FAILED, sources: [], pending: false, failed: true }));
         }
       });
       if (!finished) throw new Error("stream ended without a result");
@@ -159,6 +171,7 @@ export default function App() {
           content: err instanceof TypeError ? "Couldn't reach the server. Is it running?" : FAILED,
           sources: [],
           pending: false,
+          failed: true,
         }));
       }
     } finally {
@@ -203,7 +216,7 @@ export default function App() {
             Can't reach the server right now. Try refreshing in a minute.
           </div>
         )}
-        <div className="chat-messages">
+        <div className="chat-messages" ref={listRef}>
           {messages.map((m, i) => (
             <div key={i} className={`message ${m.role}`}>
               <div className="bubble">
