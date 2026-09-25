@@ -11,6 +11,7 @@
     "eval": "node eval/run.js",
     "perf": "node eval/perf.js",
     "eval:guardrail": "node eval/guardrail.js",
+    "eval:rerank-bakeoff": "node eval/rerank-bakeoff.js",
     "test": "node --test \"src/**/*.test.js\" \"eval/**/*.test.js\""
   },
   "dependencies": {
