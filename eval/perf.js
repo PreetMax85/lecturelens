@@ -217,10 +217,10 @@ function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWar
   lines.push(`| Median wait for the whole answer | ${fmtMs(wall.medianMs)} |`);
   lines.push(`| p95 wait for the whole answer (slowest of ${plural(wall.n, "run")} is ${fmtMs(Math.max(...usable.map((r) => r.wallMs)))}) | ${fmtMs(wall.p95Ms)} |`);
   if (singleTurn.length) {
-    lines.push(`| Median wait, single-turn questions (${plural(singleTurn.length, "run")}) | ${fmtMs(median(singleTurn.map((r) => r.wallMs)))} |`);
+    lines.push(`| Median wait for the whole answer, single-turn questions (${plural(singleTurn.length, "run")}) | ${fmtMs(median(singleTurn.map((r) => r.wallMs)))} |`);
   }
   if (multiTurn.length) {
-    lines.push(`| Median wait, follow-up questions (${plural(multiTurn.length, "run")}) | ${fmtMs(median(multiTurn.map((r) => r.wallMs)))} |`);
+    lines.push(`| Median wait for the whole answer, follow-up questions (${plural(multiTurn.length, "run")}) | ${fmtMs(median(multiTurn.map((r) => r.wallMs)))} |`);
   }
   lines.push(`| Median summed stage time | ${fmtMs(wall.medianSummedStageMs)} |`);
   lines.push(`| Cost per question | ${fmtUsd(wall.costUsd)} |`);
