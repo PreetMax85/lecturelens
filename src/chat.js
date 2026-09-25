@@ -3,9 +3,9 @@
 // The guardrail and retrieval start at the same time. Waiting for the
 // guardrail first used to put its whole round trip (about a second) in front
 // of everything else. The answer call still waits for the guardrail's verdict,
-// so a rejected message never produces an answer. What a rejection wastes is
-// the retrieval calls already in flight (HyDE, plus condensation on a
-// follow-up); retrieval is told to stop before its rerank call.
+// so a rejected message never produces an answer. A rejection wastes only the
+// retrieval call already in flight when it lands: condensation on a follow-up,
+// or HyDE. Retrieval checks for it before starting its next LLM call.
 //
 // `emit` receives events as the turn progresses, for the streaming endpoint:
 //   { type: "sources", sources }  the excerpts the answer will be built on

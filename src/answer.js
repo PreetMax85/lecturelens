@@ -160,7 +160,8 @@ const FINAL_K = 5;
 // eval/run.js can ablate them; production always runs with all stages on.
 // `llm` is injectable so the eval can cache and rate-limit Gemini calls.
 // `cancelled` lets src/chat.js abandon a retrieval whose message the guardrail
-// has since rejected, before it spends a rerank call on it.
+// has since rejected. It is checked after condensation and before rerank, the
+// points after which the next step is another LLM call.
 async function retrieve(
   userMessage,
   history = [],
@@ -177,6 +178,7 @@ async function retrieve(
   const standaloneQuery = condense
     ? await condenseQuery(userMessage, history, llm, trace)
     : userMessage;
+  if (cancelled()) return { standaloneQuery, candidates: [], results: [] };
 
   const [queryVector, hydePassage] = await Promise.all([
     trace.span("embed-query", () => embedText(standaloneQuery)),
