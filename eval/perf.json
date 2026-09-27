@@ -1,6 +1,6 @@
 {
   "model": "gemini-3.1-flash-lite",
-  "startedAt": "2026-09-16T10:51:50.431Z",
+  "startedAt": "2026-09-27T05:30:31.950Z",
   "repeats": 3,
   "sampleIds": [
     "c01",
@@ -14,8 +14,8 @@
     "m01",
     "m05"
   ],
-  "modelLoadMs": 190.691385,
-  "connectionWarmupMs": 733.37632,
+  "modelLoadMs": 161.68473,
+  "connectionWarmupMs": 1410.881814,
   "prices": {
     "input": 0.25,
     "output": 1.5
@@ -23,109 +23,116 @@
   "priceCheckedOn": "2026-09-16",
   "stages": [
     {
-      "stage": "hyde",
-      "n": 28,
-      "medianMs": 1222.6068015,
-      "p95Ms": 1880.450078,
-      "meanInputTokens": 115.14285714285714,
-      "meanOutputTokens": 95,
-      "costUsd": 0.0001712857142857143
-    },
-    {
       "stage": "answer",
-      "n": 28,
-      "medianMs": 1222.0135865,
-      "p95Ms": 3018.658973,
-      "meanInputTokens": 913.1428571428571,
-      "meanOutputTokens": 137.89285714285714,
-      "costUsd": 0.00043512499999999996
-    },
-    {
-      "stage": "rerank",
-      "n": 28,
-      "medianMs": 1053.36922,
-      "p95Ms": 1654.846062,
-      "meanInputTokens": 1032,
-      "meanOutputTokens": 7.142857142857143,
-      "costUsd": 0.0002687142857142857
+      "n": 29,
+      "medianMs": 2835.894827,
+      "p95Ms": 8834.691433,
+      "meanInputTokens": 881.6896551724138,
+      "meanOutputTokens": 134.0344827586207,
+      "costUsd": 0.0004214741379310345
     },
     {
       "stage": "condense",
       "n": 6,
-      "medianMs": 1007.309628,
-      "p95Ms": 1925.800721,
-      "meanInputTokens": 33.42857142857143,
-      "meanOutputTokens": 3.857142857142857,
-      "costUsd": 0.000014142857142857143
+      "medianMs": 2455.910188,
+      "p95Ms": 3640.020859,
+      "meanInputTokens": 32.275862068965516,
+      "meanOutputTokens": 3.7241379310344827,
+      "costUsd": 0.000013655172413793102
+    },
+    {
+      "stage": "hyde",
+      "n": 29,
+      "medianMs": 2109.631605,
+      "p95Ms": 6485.689498,
+      "meanInputTokens": 115.03448275862068,
+      "meanOutputTokens": 95.13793103448276,
+      "costUsd": 0.00017146551724137932
     },
     {
       "stage": "search",
-      "n": 28,
-      "medianMs": 976.5850355,
-      "p95Ms": 1483.056034,
+      "n": 29,
+      "medianMs": 1289.4610969999999,
+      "p95Ms": 1814.968193,
       "meanInputTokens": 0,
       "meanOutputTokens": 0,
       "costUsd": 0
     },
     {
       "stage": "guardrail",
-      "n": 28,
-      "medianMs": 935.683189,
-      "p95Ms": 1931.455194,
-      "meanInputTokens": 386.35714285714283,
+      "n": 29,
+      "medianMs": 1222.491204,
+      "p95Ms": 6156.957596,
+      "meanInputTokens": 385.9310344827586,
       "meanOutputTokens": 1,
-      "costUsd": 0.0000980892857142857
+      "costUsd": 0.00009798275862068965
+    },
+    {
+      "stage": "rerank",
+      "n": 29,
+      "medianMs": 1197.621282,
+      "p95Ms": 6608.647636,
+      "meanInputTokens": 1031.448275862069,
+      "meanOutputTokens": 7.413793103448276,
+      "costUsd": 0.00026898275862068967
     },
     {
       "stage": "embed-hyde",
-      "n": 28,
-      "medianMs": 27.533109500000002,
-      "p95Ms": 33.812774,
+      "n": 29,
+      "medianMs": 19.436276,
+      "p95Ms": 32.112512,
       "meanInputTokens": 0,
       "meanOutputTokens": 0,
       "costUsd": 0
     },
     {
       "stage": "embed-query",
-      "n": 28,
-      "medianMs": 10.788603,
-      "p95Ms": 17.671617,
+      "n": 29,
+      "medianMs": 9.896696,
+      "p95Ms": 14.052254,
       "meanInputTokens": 0,
       "meanOutputTokens": 0,
       "costUsd": 0
     },
     {
       "stage": "verify-citations",
-      "n": 28,
-      "medianMs": 0.0848685,
-      "p95Ms": 0.645946,
+      "n": 29,
+      "medianMs": 0.069394,
+      "p95Ms": 0.5897,
       "meanInputTokens": 0,
       "meanOutputTokens": 0,
       "costUsd": 0
     }
   ],
   "wall": {
-    "n": 28,
-    "medianMs": 5746.1688825,
-    "p95Ms": 9973.924931,
-    "medianSummedStageMs": 6002.5404905,
-    "costUsd": 0.000987357142857143
+    "n": 29,
+    "medianMs": 7849.53004,
+    "p95Ms": 19438.484565,
+    "medianSummedStageMs": 11107.843778,
+    "firstTokenN": 29,
+    "firstTokenMedianMs": 7149.363674,
+    "firstTokenP95Ms": 18012.557566,
+    "costUsd": 0.0009735603448275862
   },
   "runs": [
     {
       "id": "c01",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 6101.957362,
+      "wallMs": 6587.755462,
+      "marks": {
+        "sources": 3262.876294,
+        "first-token": 5313.976765
+      },
       "stageTotals": {
-        "guardrail": 1313.808216,
-        "embed-query": 9.783878,
-        "hyde": 1137.587693,
-        "embed-hyde": 16.625265,
-        "search": 943.065942,
-        "rerank": 1130.955801,
-        "answer": 1797.466482,
-        "verify-citations": 0.971079
+        "embed-query": 8.547964,
+        "guardrail": 1134.738297,
+        "hyde": 1727.198291,
+        "embed-hyde": 15.737123,
+        "search": 1005.016804,
+        "rerank": 763.081628,
+        "answer": 3323.721203,
+        "verify-citations": 0.811613
       },
       "tokenTotals": {
         "guardrail": {
@@ -134,18 +141,18 @@
         },
         "hyde": {
           "inputTokens": 109,
-          "outputTokens": 86
+          "outputTokens": 107
         },
         "rerank": {
-          "inputTokens": 900,
-          "outputTokens": 9
+          "inputTokens": 984,
+          "outputTokens": 12
         },
         "answer": {
-          "inputTokens": 1056,
-          "outputTokens": 169
+          "inputTokens": 1085,
+          "outputTokens": 162
         }
       },
-      "answerChars": 632,
+      "answerChars": 604,
       "citations": 3,
       "calls": 4,
       "problem": null,
@@ -155,28 +162,32 @@
       "id": "c05",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 4462.787676,
+      "wallMs": 5502.37137,
+      "marks": {
+        "sources": 3735.056832,
+        "first-token": 4756.608831
+      },
       "stageTotals": {
-        "guardrail": 767.895995,
-        "embed-query": 17.671617,
-        "hyde": 1193.531457,
-        "embed-hyde": 31.926142,
-        "search": 1030.76588,
-        "rerank": 735.467614,
-        "answer": 950.354753,
-        "verify-citations": 0.645946
+        "embed-query": 12.198534,
+        "hyde": 1654.914326,
+        "embed-hyde": 14.299932,
+        "search": 1094.302732,
+        "guardrail": 2015.776373,
+        "rerank": 1228.361822,
+        "answer": 1766.658108,
+        "verify-citations": 0.5897
       },
       "tokenTotals": {
-        "guardrail": {
-          "inputTokens": 374,
-          "outputTokens": 1
-        },
         "hyde": {
           "inputTokens": 112,
           "outputTokens": 86
         },
+        "guardrail": {
+          "inputTokens": 374,
+          "outputTokens": 1
+        },
         "rerank": {
-          "inputTokens": 1044,
+          "inputTokens": 1046,
           "outputTokens": 3
         },
         "answer": {
@@ -194,36 +205,40 @@
       "id": "c09",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 11891.657811,
+      "wallMs": 13295.304207,
+      "marks": {
+        "sources": 10034.445642,
+        "first-token": 11129.003736
+      },
       "stageTotals": {
-        "guardrail": 731.026231,
-        "embed-query": 6.800407,
-        "hyde": 1146.427832,
-        "embed-hyde": 21.45919,
-        "search": 1022.030659,
-        "rerank": 7635.817125,
-        "answer": 1578.866614,
-        "verify-citations": 0.197647
+        "embed-query": 15.679327,
+        "hyde": 1577.507278,
+        "embed-hyde": 31.446846,
+        "search": 1295.505534,
+        "guardrail": 2411.203291,
+        "rerank": 7398.363447,
+        "answer": 3260.613952,
+        "verify-citations": 0.174611
       },
       "tokenTotals": {
+        "hyde": {
+          "inputTokens": 111,
+          "outputTokens": 106
+        },
         "guardrail": {
           "inputTokens": 373,
           "outputTokens": 1
         },
-        "hyde": {
-          "inputTokens": 111,
-          "outputTokens": 96
-        },
         "rerank": {
-          "inputTokens": 1091,
-          "outputTokens": 9
+          "inputTokens": 1108,
+          "outputTokens": 12
         },
         "answer": {
           "inputTokens": 1122,
-          "outputTokens": 282
+          "outputTokens": 276
         }
       },
-      "answerChars": 1114,
+      "answerChars": 1091,
       "citations": 4,
       "calls": 5,
       "problem": "HTTP 429",
@@ -233,16 +248,20 @@
       "id": "c13",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 4901.112467,
+      "wallMs": 7497.92196,
+      "marks": {
+        "sources": 4153.148989,
+        "first-token": 5001.975752
+      },
       "stageTotals": {
-        "guardrail": 686.098563,
-        "embed-query": 11.495178,
-        "hyde": 1069.776578,
-        "embed-hyde": 28.289965,
-        "search": 956.753367,
-        "rerank": 757.740946,
-        "answer": 1645.571942,
-        "verify-citations": 0.121594
+        "embed-query": 11.813372,
+        "guardrail": 1219.582127,
+        "hyde": 1582.611249,
+        "embed-hyde": 27.123151,
+        "search": 1523.488797,
+        "rerank": 1276.29224,
+        "answer": 3344.537521,
+        "verify-citations": 0.163846
       },
       "tokenTotals": {
         "guardrail": {
@@ -251,19 +270,19 @@
         },
         "hyde": {
           "inputTokens": 111,
-          "outputTokens": 98
+          "outputTokens": 89
         },
         "rerank": {
-          "inputTokens": 1078,
+          "inputTokens": 1065,
           "outputTokens": 12
         },
         "answer": {
-          "inputTokens": 1135,
-          "outputTokens": 234
+          "inputTokens": 1129,
+          "outputTokens": 294
         }
       },
-      "answerChars": 972,
-      "citations": 3,
+      "answerChars": 1151,
+      "citations": 4,
       "calls": 4,
       "problem": null,
       "repeat": 1
@@ -272,16 +291,20 @@
       "id": "p02",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 4525.008484,
+      "wallMs": 19438.484565,
+      "marks": {
+        "sources": 13251.963066,
+        "first-token": 17781.511426
+      },
       "stageTotals": {
-        "guardrail": 709.114382,
-        "embed-query": 8.036591,
-        "hyde": 1025.317526,
-        "embed-hyde": 18.610203,
-        "search": 1082.628059,
-        "rerank": 765.945635,
-        "answer": 1200.761783,
-        "verify-citations": 0.075951
+        "embed-query": 13.813665,
+        "guardrail": 2464.473875,
+        "hyde": 2837.10858,
+        "embed-hyde": 27.635273,
+        "search": 1581.1542330000002,
+        "rerank": 9055.035935,
+        "answer": 6186.342569,
+        "verify-citations": 0.09777
       },
       "tokenTotals": {
         "guardrail": {
@@ -290,19 +313,19 @@
         },
         "hyde": {
           "inputTokens": 117,
-          "outputTokens": 89
+          "outputTokens": 102
         },
         "rerank": {
-          "inputTokens": 1044,
-          "outputTokens": 6
+          "inputTokens": 1035,
+          "outputTokens": 9
         },
         "answer": {
-          "inputTokens": 805,
-          "outputTokens": 129
+          "inputTokens": 988,
+          "outputTokens": 202
         }
       },
-      "answerChars": 524,
-      "citations": 2,
+      "answerChars": 818,
+      "citations": 3,
       "calls": 4,
       "problem": null,
       "repeat": 1
@@ -311,37 +334,41 @@
       "id": "p07",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 6236.553751,
+      "wallMs": 9242.144353,
+      "marks": {
+        "sources": 7292.640878,
+        "first-token": 8150.064964
+      },
       "stageTotals": {
-        "guardrail": 729.871265,
-        "embed-query": 15.444003,
-        "hyde": 1209.369369,
-        "embed-hyde": 31.642028,
-        "search": 969.66597,
-        "rerank": 1164.373902,
-        "answer": 2365.421355,
-        "verify-citations": 0.066555
+        "embed-query": 9.753112,
+        "hyde": 1519.598513,
+        "embed-hyde": 17.061857,
+        "guardrail": 1605.938904,
+        "search": 987.906623,
+        "rerank": 5018.138399,
+        "answer": 1949.3721,
+        "verify-citations": 0.07427
       },
       "tokenTotals": {
+        "hyde": {
+          "inputTokens": 129,
+          "outputTokens": 109
+        },
         "guardrail": {
           "inputTokens": 391,
           "outputTokens": 1
         },
-        "hyde": {
-          "inputTokens": 129,
-          "outputTokens": 106
-        },
         "rerank": {
-          "inputTokens": 1044,
-          "outputTokens": 3
+          "inputTokens": 1006,
+          "outputTokens": 7
         },
         "answer": {
-          "inputTokens": 639,
-          "outputTokens": 69
+          "inputTokens": 943,
+          "outputTokens": 124
         }
       },
-      "answerChars": 293,
-      "citations": 1,
+      "answerChars": 506,
+      "citations": 2,
       "calls": 4,
       "problem": null,
       "repeat": 1
@@ -350,16 +377,20 @@
       "id": "p13",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 5721.033624,
+      "wallMs": 4760.628309,
+      "marks": {
+        "sources": 3500.564171,
+        "first-token": 4274.709657
+      },
       "stageTotals": {
-        "guardrail": 844.916279,
-        "embed-query": 16.424348,
-        "hyde": 1186.815691,
-        "embed-hyde": 20.972027,
-        "search": 978.1855039999999,
-        "rerank": 620.846608,
-        "answer": 2313.004221,
-        "verify-citations": 0.053389
+        "embed-query": 14.052254,
+        "guardrail": 881.826653,
+        "hyde": 1419.051634,
+        "embed-hyde": 19.436276,
+        "search": 1536.22273,
+        "rerank": 779.060188,
+        "answer": 1259.974169,
+        "verify-citations": 0.047002
       },
       "tokenTotals": {
         "guardrail": {
@@ -368,10 +399,10 @@
         },
         "hyde": {
           "inputTokens": 124,
-          "outputTokens": 95
+          "outputTokens": 94
         },
         "rerank": {
-          "inputTokens": 1013,
+          "inputTokens": 1011,
           "outputTokens": 3
         },
         "answer": {
@@ -389,16 +420,20 @@
       "id": "p19",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 5684.320845,
+      "wallMs": 13837.451452,
+      "marks": {
+        "sources": 8474.010886,
+        "first-token": 12058.243242
+      },
       "stageTotals": {
-        "guardrail": 756.492102,
-        "embed-query": 14.881883,
-        "hyde": 1268.052861,
-        "embed-hyde": 33.091031,
-        "search": 955.129438,
-        "rerank": 1062.639249,
-        "answer": 1870.459348,
-        "verify-citations": 0.146174
+        "embed-query": 11.531898,
+        "guardrail": 978.82599,
+        "hyde": 6485.689498,
+        "embed-hyde": 17.584486,
+        "search": 1721.691335,
+        "rerank": 990.155119,
+        "answer": 5363.270973,
+        "verify-citations": 0.1076
       },
       "tokenTotals": {
         "guardrail": {
@@ -411,15 +446,15 @@
         },
         "rerank": {
           "inputTokens": 1071,
-          "outputTokens": 12
+          "outputTokens": 13
         },
         "answer": {
-          "inputTokens": 1325,
-          "outputTokens": 288
+          "inputTokens": 1161,
+          "outputTokens": 208
         }
       },
-      "answerChars": 1071,
-      "citations": 5,
+      "answerChars": 834,
+      "citations": 3,
       "calls": 4,
       "problem": null,
       "repeat": 1
@@ -428,41 +463,45 @@
       "id": "m01",
       "multiTurn": true,
       "allowed": true,
-      "wallMs": 7134.292016,
+      "wallMs": 11710.962532,
+      "marks": {
+        "sources": 10040.286596,
+        "first-token": 11243.878138
+      },
       "stageTotals": {
-        "guardrail": 870.31424,
-        "condense": 982.022782,
-        "embed-query": 15.438235,
-        "hyde": 2329.631314,
-        "embed-hyde": 35.191217,
-        "search": 1405.0860659999998,
-        "rerank": 1084.91846,
-        "answer": 1140.841047,
-        "verify-citations": 0.065254
+        "condense": 2312.275736,
+        "embed-query": 9.616841,
+        "hyde": 2876.037589,
+        "embed-hyde": 33.901268,
+        "guardrail": 5457.448557,
+        "search": 1801.447677,
+        "rerank": 3825.9716,
+        "answer": 1670.513984,
+        "verify-citations": 0.062205
       },
       "tokenTotals": {
-        "guardrail": {
-          "inputTokens": 410,
-          "outputTokens": 1
-        },
         "condense": {
           "inputTokens": 151,
           "outputTokens": 20
         },
         "hyde": {
           "inputTokens": 112,
-          "outputTokens": 100
+          "outputTokens": 109
+        },
+        "guardrail": {
+          "inputTokens": 410,
+          "outputTokens": 1
         },
         "rerank": {
-          "inputTokens": 1045,
+          "inputTokens": 1029,
           "outputTokens": 3
         },
         "answer": {
           "inputTokens": 641,
-          "outputTokens": 51
+          "outputTokens": 58
         }
       },
-      "answerChars": 185,
+      "answerChars": 232,
       "citations": 1,
       "calls": 5,
       "problem": null,
@@ -472,17 +511,21 @@
       "id": "m05",
       "multiTurn": true,
       "allowed": true,
-      "wallMs": 8200.747937,
+      "wallMs": 13656.600544,
+      "marks": {
+        "sources": 9059.312992,
+        "first-token": 12874.55312
+      },
       "stageTotals": {
-        "guardrail": 881.390477,
-        "condense": 1925.800721,
-        "embed-query": 5.05177,
-        "hyde": 1428.289728,
-        "embed-hyde": 31.078848,
-        "search": 1483.056034,
-        "rerank": 1567.650278,
-        "answer": 1616.230378,
-        "verify-citations": 0.085158
+        "guardrail": 883.234037,
+        "condense": 2881.442503,
+        "embed-query": 9.082258,
+        "hyde": 2486.908102,
+        "embed-hyde": 25.635857,
+        "search": 1537.3554330000002,
+        "rerank": 2903.958429,
+        "answer": 4597.150422,
+        "verify-citations": 0.064881
       },
       "tokenTotals": {
         "guardrail": {
@@ -495,19 +538,19 @@
         },
         "hyde": {
           "inputTokens": 108,
-          "outputTokens": 82
+          "outputTokens": 78
         },
         "rerank": {
-          "inputTokens": 1043,
+          "inputTokens": 1034,
           "outputTokens": 6
         },
         "answer": {
-          "inputTokens": 852,
-          "outputTokens": 106
+          "inputTokens": 876,
+          "outputTokens": 76
         }
       },
-      "answerChars": 409,
-      "citations": 2,
+      "answerChars": 300,
+      "citations": 1,
       "calls": 5,
       "problem": null,
       "repeat": 1
@@ -516,16 +559,20 @@
       "id": "c01",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 7753.152949,
+      "wallMs": 19468.894115,
+      "marks": {
+        "sources": 13066.114546,
+        "first-token": 18012.557566
+      },
       "stageTotals": {
-        "guardrail": 1594.645766,
-        "embed-query": 15.000442,
-        "hyde": 1880.450078,
-        "embed-hyde": 31.588039,
-        "search": 995.584366,
-        "rerank": 1537.731086,
-        "answer": 1958.142372,
-        "verify-citations": 0.087698
+        "embed-query": 10.258335,
+        "guardrail": 2824.376931,
+        "hyde": 5687.459835,
+        "embed-hyde": 19.023096,
+        "search": 1507.696657,
+        "rerank": 6608.647636,
+        "answer": 6402.652857,
+        "verify-citations": 0.069394
       },
       "tokenTotals": {
         "guardrail": {
@@ -534,18 +581,18 @@
         },
         "hyde": {
           "inputTokens": 109,
-          "outputTokens": 94
+          "outputTokens": 97
         },
         "rerank": {
           "inputTokens": 900,
-          "outputTokens": 11
+          "outputTokens": 12
         },
         "answer": {
-          "inputTokens": 1238,
-          "outputTokens": 171
+          "inputTokens": 1085,
+          "outputTokens": 167
         }
       },
-      "answerChars": 645,
+      "answerChars": 617,
       "citations": 3,
       "calls": 4,
       "problem": null,
@@ -555,29 +602,33 @@
       "id": "c05",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 13995.475588,
+      "wallMs": 7849.53004,
+      "marks": {
+        "sources": 5999.853778,
+        "first-token": 7018.640712
+      },
       "stageTotals": {
-        "guardrail": 2734.506083,
-        "embed-query": 10.525563,
-        "hyde": 8305.171962,
-        "embed-hyde": 20.911775,
-        "search": 1381.929039,
-        "rerank": 861.649984,
-        "answer": 1384.424142,
-        "verify-citations": 0.041645
+        "embed-query": 11.483287,
+        "hyde": 2351.550578,
+        "embed-hyde": 12.963594,
+        "search": 1467.102988,
+        "rerank": 1132.494841,
+        "guardrail": 5999.836946,
+        "answer": 1849.563274,
+        "verify-citations": 0.051926
       },
       "tokenTotals": {
+        "hyde": {
+          "inputTokens": 112,
+          "outputTokens": 82
+        },
+        "rerank": {
+          "inputTokens": 1017,
+          "outputTokens": 3
+        },
         "guardrail": {
           "inputTokens": 374,
           "outputTokens": 1
-        },
-        "hyde": {
-          "inputTokens": 112,
-          "outputTokens": 77
-        },
-        "rerank": {
-          "inputTokens": 1011,
-          "outputTokens": 3
         },
         "answer": {
           "inputTokens": 605,
@@ -586,45 +637,49 @@
       },
       "answerChars": 322,
       "citations": 1,
-      "calls": 5,
-      "problem": "HTTP 503",
+      "calls": 4,
+      "problem": null,
       "repeat": 2
     },
     {
       "id": "c09",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 5417.916909,
+      "wallMs": 17270.722144,
+      "marks": {
+        "sources": 13478.27248,
+        "first-token": 14997.806265
+      },
       "stageTotals": {
-        "guardrail": 1047.401719,
-        "embed-query": 14.59934,
-        "hyde": 1235.844234,
-        "embed-hyde": 18.507496,
-        "search": 950.4286000000001,
-        "rerank": 1222.178849,
-        "answer": 1159.254013,
-        "verify-citations": 0.165627
+        "embed-query": 9.754832,
+        "hyde": 2215.403283,
+        "embed-hyde": 14.833285,
+        "search": 990.118108,
+        "rerank": 1427.699786,
+        "guardrail": 13478.255035,
+        "answer": 3792.326892,
+        "verify-citations": 0.081588
       },
       "tokenTotals": {
+        "hyde": {
+          "inputTokens": 111,
+          "outputTokens": 97
+        },
+        "rerank": {
+          "inputTokens": 1091,
+          "outputTokens": 9
+        },
         "guardrail": {
           "inputTokens": 373,
           "outputTokens": 1
         },
-        "hyde": {
-          "inputTokens": 111,
-          "outputTokens": 96
-        },
-        "rerank": {
-          "inputTokens": 1104,
-          "outputTokens": 7
-        },
         "answer": {
-          "inputTokens": 944,
-          "outputTokens": 183
+          "inputTokens": 1122,
+          "outputTokens": 271
         }
       },
-      "answerChars": 721,
-      "citations": 3,
+      "answerChars": 1031,
+      "citations": 4,
       "calls": 4,
       "problem": null,
       "repeat": 2
@@ -633,16 +688,20 @@
       "id": "c13",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 5703.765768,
+      "wallMs": 13842.599282,
+      "marks": {
+        "sources": 5007.712902,
+        "first-token": 11051.974609
+      },
       "stageTotals": {
-        "guardrail": 934.143961,
-        "embed-query": 10.804745,
-        "hyde": 1035.86363,
-        "embed-hyde": 23.770688,
-        "search": 925.552507,
-        "rerank": 1183.611312,
-        "answer": 1814.219292,
-        "verify-citations": 0.109719
+        "embed-query": 7.324103,
+        "guardrail": 874.533174,
+        "hyde": 3368.005266,
+        "embed-hyde": 15.82136,
+        "search": 973.062935,
+        "rerank": 901.53168,
+        "answer": 8834.691433,
+        "verify-citations": 0.10378
       },
       "tokenTotals": {
         "guardrail": {
@@ -651,18 +710,18 @@
         },
         "hyde": {
           "inputTokens": 111,
-          "outputTokens": 93
+          "outputTokens": 72
         },
         "rerank": {
-          "inputTokens": 1057,
-          "outputTokens": 15
+          "inputTokens": 1063,
+          "outputTokens": 18
         },
         "answer": {
-          "inputTokens": 1273,
-          "outputTokens": 304
+          "inputTokens": 1266,
+          "outputTokens": 277
         }
       },
-      "answerChars": 1231,
+      "answerChars": 1104,
       "citations": 4,
       "calls": 4,
       "problem": null,
@@ -672,16 +731,20 @@
       "id": "p02",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 4693.972252,
+      "wallMs": 12330.606831,
+      "marks": {
+        "sources": 10005.640538,
+        "first-token": 11124.126466
+      },
       "stageTotals": {
-        "guardrail": 989.144032,
-        "embed-query": 14.020654,
-        "hyde": 1083.115698,
-        "embed-hyde": 29.496275,
-        "search": 1163.985926,
-        "rerank": 734.614534,
-        "answer": 967.494592,
-        "verify-citations": 0.077332
+        "embed-query": 10.091907,
+        "guardrail": 2436.180457,
+        "hyde": 4322.593187,
+        "embed-hyde": 27.359238,
+        "search": 1505.58249,
+        "rerank": 4908.81776,
+        "answer": 2324.863396,
+        "verify-citations": 0.065075
       },
       "tokenTotals": {
         "guardrail": {
@@ -693,16 +756,16 @@
           "outputTokens": 77
         },
         "rerank": {
-          "inputTokens": 1035,
+          "inputTokens": 1058,
           "outputTokens": 6
         },
         "answer": {
           "inputTokens": 805,
-          "outputTokens": 48
+          "outputTokens": 133
         }
       },
-      "answerChars": 181,
-      "citations": 1,
+      "answerChars": 558,
+      "citations": 2,
       "calls": 4,
       "problem": null,
       "repeat": 2
@@ -711,16 +774,20 @@
       "id": "p07",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 10086.061936,
+      "wallMs": 16311.530143,
+      "marks": {
+        "sources": 4667.31712,
+        "first-token": 15757.339571
+      },
       "stageTotals": {
-        "guardrail": 1931.455194,
-        "embed-query": 13.388818,
-        "hyde": 1430.480629,
-        "embed-hyde": 29.256039,
-        "search": 977.849829,
-        "rerank": 1341.759176,
-        "answer": 4622.217357,
-        "verify-citations": 0.066255
+        "embed-query": 15.304094,
+        "guardrail": 1742.752306,
+        "hyde": 2109.631605,
+        "embed-hyde": 15.423485,
+        "search": 1289.4610969999999,
+        "rerank": 1505.84673,
+        "answer": 11644.128601,
+        "verify-citations": 0.050163
       },
       "tokenTotals": {
         "guardrail": {
@@ -732,15 +799,15 @@
           "outputTokens": 111
         },
         "rerank": {
-          "inputTokens": 958,
-          "outputTokens": 3
+          "inputTokens": 1036,
+          "outputTokens": 6
         },
         "answer": {
-          "inputTokens": 639,
-          "outputTokens": 79
+          "inputTokens": 798,
+          "outputTokens": 57
         }
       },
-      "answerChars": 332,
+      "answerChars": 218,
       "citations": 1,
       "calls": 4,
       "problem": null,
@@ -750,16 +817,20 @@
       "id": "p13",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 5423.06404,
+      "wallMs": 6375.423247,
+      "marks": {
+        "sources": 4918.367655,
+        "first-token": 5872.203
+      },
       "stageTotals": {
-        "guardrail": 937.222417,
-        "embed-query": 7.686175,
-        "hyde": 1140.909665,
-        "embed-hyde": 18.789093,
-        "search": 951.838056,
-        "rerank": 1553.714323,
-        "answer": 1060.352268,
-        "verify-citations": 0.056765
+        "embed-query": 9.867043,
+        "guardrail": 1571.935868,
+        "hyde": 2096.452355,
+        "embed-hyde": 22.461614,
+        "search": 993.995757,
+        "rerank": 2051.10304,
+        "answer": 1456.975646,
+        "verify-citations": 0.049027
       },
       "tokenTotals": {
         "guardrail": {
@@ -768,10 +839,10 @@
         },
         "hyde": {
           "inputTokens": 124,
-          "outputTokens": 104
+          "outputTokens": 94
         },
         "rerank": {
-          "inputTokens": 1029,
+          "inputTokens": 1020,
           "outputTokens": 3
         },
         "answer": {
@@ -789,16 +860,20 @@
       "id": "p19",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 9973.924931,
+      "wallMs": 6920.860921,
+      "marks": {
+        "sources": 3511.594232,
+        "first-token": 5264.104929
+      },
       "stageTotals": {
-        "guardrail": 5429.383599,
-        "embed-query": 7.882756,
-        "hyde": 1329.947469,
-        "embed-hyde": 27.638594,
-        "search": 1831.475762,
-        "rerank": 1044.099191,
-        "answer": 1240.446739,
-        "verify-citations": 0.087785
+        "embed-query": 11.637028,
+        "guardrail": 949.635462,
+        "hyde": 1471.251493,
+        "embed-hyde": 26.905338,
+        "search": 1250.196285,
+        "rerank": 1004.240992,
+        "answer": 3409.138381,
+        "verify-citations": 0.086107
       },
       "tokenTotals": {
         "guardrail": {
@@ -807,19 +882,19 @@
         },
         "hyde": {
           "inputTokens": 116,
-          "outputTokens": 96
+          "outputTokens": 97
         },
         "rerank": {
-          "inputTokens": 1066,
-          "outputTokens": 9
+          "inputTokens": 1077,
+          "outputTokens": 12
         },
         "answer": {
-          "inputTokens": 980,
-          "outputTokens": 245
+          "inputTokens": 1161,
+          "outputTokens": 191
         }
       },
-      "answerChars": 951,
-      "citations": 4,
+      "answerChars": 738,
+      "citations": 3,
       "calls": 4,
       "problem": null,
       "repeat": 2
@@ -828,33 +903,37 @@
       "id": "m01",
       "multiTurn": true,
       "allowed": true,
-      "wallMs": 6112.298698,
+      "wallMs": 5604.80687,
+      "marks": {
+        "sources": 3974.685212,
+        "first-token": 5067.921294
+      },
       "stageTotals": {
-        "guardrail": 876.158477,
-        "condense": 1032.596474,
-        "embed-query": 10.026141,
-        "hyde": 1465.123769,
-        "embed-hyde": 24.418815,
-        "search": 928.879189,
-        "rerank": 833.899574,
-        "answer": 1169.219682,
-        "verify-citations": 0.04794
+        "condense": 1170.102144,
+        "embed-query": 9.509284,
+        "guardrail": 1226.590691,
+        "hyde": 1157.228481,
+        "embed-hyde": 30.840648,
+        "search": 996.824214,
+        "rerank": 872.721314,
+        "answer": 1630.04529,
+        "verify-citations": 0.041615
       },
       "tokenTotals": {
-        "guardrail": {
-          "inputTokens": 410,
-          "outputTokens": 1
-        },
         "condense": {
           "inputTokens": 151,
           "outputTokens": 20
+        },
+        "guardrail": {
+          "inputTokens": 410,
+          "outputTokens": 1
         },
         "hyde": {
           "inputTokens": 112,
           "outputTokens": 97
         },
         "rerank": {
-          "inputTokens": 1023,
+          "inputTokens": 1028,
           "outputTokens": 3
         },
         "answer": {
@@ -872,17 +951,21 @@
       "id": "m05",
       "multiTurn": true,
       "allowed": true,
-      "wallMs": 5771.304141,
+      "wallMs": 7557.713271,
+      "marks": {
+        "sources": 6036.470543,
+        "first-token": 7149.363674
+      },
       "stageTotals": {
-        "guardrail": 994.522338,
-        "condense": 685.076541,
-        "embed-query": 10.268102,
-        "hyde": 1446.096288,
-        "embed-hyde": 25.589331,
-        "search": 977.352932,
-        "rerank": 785.390136,
-        "answer": 1099.483564,
-        "verify-citations": 0.083682
+        "guardrail": 863.135866,
+        "condense": 2599.54464,
+        "embed-query": 8.632983,
+        "hyde": 1384.411379,
+        "embed-hyde": 26.179444,
+        "search": 1224.311807,
+        "rerank": 1040.546945,
+        "answer": 1521.140133,
+        "verify-citations": 0.060429
       },
       "tokenTotals": {
         "guardrail": {
@@ -895,19 +978,19 @@
         },
         "hyde": {
           "inputTokens": 108,
-          "outputTokens": 87
+          "outputTokens": 95
         },
         "rerank": {
-          "inputTokens": 1030,
-          "outputTokens": 13
+          "inputTokens": 1023,
+          "outputTokens": 6
         },
         "answer": {
-          "inputTokens": 1212,
-          "outputTokens": 112
+          "inputTokens": 876,
+          "outputTokens": 57
         }
       },
-      "answerChars": 409,
-      "citations": 2,
+      "answerChars": 217,
+      "citations": 1,
       "calls": 5,
       "problem": null,
       "repeat": 2
@@ -916,16 +999,20 @@
       "id": "c01",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 4186.793566,
+      "wallMs": 7476.594853,
+      "marks": {
+        "sources": 3691.791118,
+        "first-token": 6103.257955
+      },
       "stageTotals": {
-        "guardrail": 571.411629,
-        "embed-query": 4.306193,
-        "hyde": 1037.653553,
-        "embed-hyde": 27.427625,
-        "search": 905.0252579999999,
-        "rerank": 675.992979,
-        "answer": 1185.397992,
-        "verify-citations": 0.070843
+        "embed-query": 6.175743,
+        "guardrail": 1132.479722,
+        "hyde": 1546.316529,
+        "embed-hyde": 14.729098,
+        "search": 1300.839963,
+        "rerank": 1095.438233,
+        "answer": 3784.646189,
+        "verify-citations": 0.090977
       },
       "tokenTotals": {
         "guardrail": {
@@ -934,7 +1021,7 @@
         },
         "hyde": {
           "inputTokens": 109,
-          "outputTokens": 116
+          "outputTokens": 107
         },
         "rerank": {
           "inputTokens": 900,
@@ -942,10 +1029,10 @@
         },
         "answer": {
           "inputTokens": 1085,
-          "outputTokens": 167
+          "outputTokens": 168
         }
       },
-      "answerChars": 617,
+      "answerChars": 613,
       "citations": 3,
       "calls": 4,
       "problem": null,
@@ -955,16 +1042,20 @@
       "id": "c05",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 4352.00112,
+      "wallMs": 5265.470081,
+      "marks": {
+        "sources": 3400.025125,
+        "first-token": 4407.144712
+      },
       "stageTotals": {
-        "guardrail": 688.464353,
-        "embed-query": 11.46852,
-        "hyde": 1203.212679,
-        "embed-hyde": 26.176166,
-        "search": 1080.6386109999999,
-        "rerank": 788.941414,
-        "answer": 853.903967,
-        "verify-citations": 0.053585
+        "embed-query": 7.67489,
+        "guardrail": 1044.879707,
+        "hyde": 1560.391479,
+        "embed-hyde": 13.439814,
+        "search": 1239.687001,
+        "rerank": 839.464295,
+        "answer": 1865.364757,
+        "verify-citations": 0.049406
       },
       "tokenTotals": {
         "guardrail": {
@@ -973,10 +1064,10 @@
         },
         "hyde": {
           "inputTokens": 112,
-          "outputTokens": 80
+          "outputTokens": 91
         },
         "rerank": {
-          "inputTokens": 1030,
+          "inputTokens": 1029,
           "outputTokens": 3
         },
         "answer": {
@@ -994,16 +1085,20 @@
       "id": "c09",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 4796.167389,
+      "wallMs": 6590.424436,
+      "marks": {
+        "sources": 3754.379956,
+        "first-token": 4600.555526
+      },
       "stageTotals": {
-        "guardrail": 788.564597,
-        "embed-query": 9.62806,
-        "hyde": 1285.161608,
-        "embed-hyde": 29.84896,
-        "search": 973.678412,
-        "rerank": 808.13765,
-        "answer": 1155.13121,
-        "verify-citations": 0.084579
+        "embed-query": 9.748195,
+        "guardrail": 903.003385,
+        "hyde": 1529.653481,
+        "embed-hyde": 16.435455,
+        "search": 1540.4918559999999,
+        "rerank": 937.018758,
+        "answer": 2835.894827,
+        "verify-citations": 0.084493
       },
       "tokenTotals": {
         "guardrail": {
@@ -1012,19 +1107,19 @@
         },
         "hyde": {
           "inputTokens": 111,
-          "outputTokens": 94
+          "outputTokens": 97
         },
         "rerank": {
-          "inputTokens": 1109,
-          "outputTokens": 7
+          "inputTokens": 1091,
+          "outputTokens": 9
         },
         "answer": {
-          "inputTokens": 961,
-          "outputTokens": 158
+          "inputTokens": 1122,
+          "outputTokens": 243
         }
       },
-      "answerChars": 645,
-      "citations": 2,
+      "answerChars": 966,
+      "citations": 4,
       "calls": 4,
       "problem": null,
       "repeat": 3
@@ -1033,16 +1128,20 @@
       "id": "c13",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 7331.089523,
+      "wallMs": 6242.054935,
+      "marks": {
+        "sources": 3440.665008,
+        "first-token": 4286.86403
+      },
       "stageTotals": {
-        "guardrail": 686.230903,
-        "embed-query": 9.987284,
-        "hyde": 1191.033267,
-        "embed-hyde": 27.13059,
-        "search": 963.377613,
-        "rerank": 3184.372675,
-        "answer": 1501.088201,
-        "verify-citations": 0.103457
+        "embed-query": 9.896696,
+        "guardrail": 785.588002,
+        "hyde": 1648.131757,
+        "embed-hyde": 12.463434,
+        "search": 1207.839259,
+        "rerank": 816.87305,
+        "answer": 2801.25858,
+        "verify-citations": 0.08532
       },
       "tokenTotals": {
         "guardrail": {
@@ -1051,19 +1150,19 @@
         },
         "hyde": {
           "inputTokens": 111,
-          "outputTokens": 96
+          "outputTokens": 80
         },
         "rerank": {
-          "inputTokens": 1079,
-          "outputTokens": 12
+          "inputTokens": 1057,
+          "outputTokens": 13
         },
         "answer": {
-          "inputTokens": 1130,
-          "outputTokens": 293
+          "inputTokens": 1117,
+          "outputTokens": 210
         }
       },
-      "answerChars": 1243,
-      "citations": 4,
+      "answerChars": 846,
+      "citations": 3,
       "calls": 4,
       "problem": null,
       "repeat": 3
@@ -1072,16 +1171,20 @@
       "id": "p02",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 4901.502459,
+      "wallMs": 5785.358153,
+      "marks": {
+        "sources": 4150.545026,
+        "first-token": 5169.22809
+      },
       "stageTotals": {
-        "guardrail": 982.39826,
-        "embed-query": 9.856136,
-        "hyde": 1302.016827,
-        "embed-hyde": 16.986899,
-        "search": 975.358524,
-        "rerank": 831.874567,
-        "answer": 1042.229808,
-        "verify-citations": 0.122646
+        "embed-query": 9.946112,
+        "guardrail": 1048.969449,
+        "hyde": 2170.550714,
+        "embed-hyde": 29.263131,
+        "search": 1235.955384,
+        "rerank": 960.463226,
+        "answer": 1634.674129,
+        "verify-citations": 0.106095
       },
       "tokenTotals": {
         "guardrail": {
@@ -1090,19 +1193,19 @@
         },
         "hyde": {
           "inputTokens": 117,
-          "outputTokens": 94
+          "outputTokens": 92
         },
         "rerank": {
-          "inputTokens": 1058,
-          "outputTokens": 10
+          "inputTokens": 1061,
+          "outputTokens": 3
         },
         "answer": {
-          "inputTokens": 987,
-          "outputTokens": 117
+          "inputTokens": 639,
+          "outputTokens": 48
         }
       },
-      "answerChars": 462,
-      "citations": 2,
+      "answerChars": 181,
+      "citations": 1,
       "calls": 4,
       "problem": null,
       "repeat": 3
@@ -1111,16 +1214,20 @@
       "id": "p07",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 6011.416532,
+      "wallMs": 18657.298632,
+      "marks": {
+        "sources": 11814.705812,
+        "first-token": 17482.2606
+      },
       "stageTotals": {
-        "guardrail": 1402.213447,
-        "embed-query": 11.241407,
-        "hyde": 1132.863997,
-        "embed-hyde": 16.129384,
-        "search": 975.817139,
-        "rerank": 1351.552927,
-        "answer": 1369.950171,
-        "verify-citations": 0.043296
+        "embed-query": 14.016492,
+        "guardrail": 3675.207168,
+        "hyde": 9163.549632,
+        "embed-hyde": 32.112512,
+        "search": 2021.8503369999999,
+        "rerank": 1623.520055,
+        "answer": 6842.4847,
+        "verify-citations": 0.065743
       },
       "tokenTotals": {
         "guardrail": {
@@ -1129,19 +1236,19 @@
         },
         "hyde": {
           "inputTokens": 129,
-          "outputTokens": 96
+          "outputTokens": 99
         },
         "rerank": {
-          "inputTokens": 1062,
-          "outputTokens": 1
+          "inputTokens": 1056,
+          "outputTokens": 7
         },
         "answer": {
-          "inputTokens": 1278,
-          "outputTokens": 53
+          "inputTokens": 824,
+          "outputTokens": 118
         }
       },
-      "answerChars": 191,
-      "citations": 1,
+      "answerChars": 478,
+      "citations": 2,
       "calls": 4,
       "problem": null,
       "repeat": 3
@@ -1150,16 +1257,20 @@
       "id": "p13",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 5620.253059,
+      "wallMs": 5380.521342,
+      "marks": {
+        "sources": 3720.787373,
+        "first-token": 5066.436228
+      },
       "stageTotals": {
-        "guardrail": 1235.923875,
-        "embed-query": 18.593095,
-        "hyde": 1272.004556,
-        "embed-hyde": 33.412795,
-        "search": 983.735897,
-        "rerank": 1134.044909,
-        "answer": 1203.580434,
-        "verify-citations": 0.093472
+        "embed-query": 11.519704,
+        "guardrail": 1406.575212,
+        "hyde": 1839.404797,
+        "embed-hyde": 27.235017,
+        "search": 993.421032,
+        "rerank": 1111.364075,
+        "answer": 1659.653783,
+        "verify-citations": 0.049292
       },
       "tokenTotals": {
         "guardrail": {
@@ -1168,19 +1279,19 @@
         },
         "hyde": {
           "inputTokens": 124,
-          "outputTokens": 104
+          "outputTokens": 92
         },
         "rerank": {
-          "inputTokens": 1013,
-          "outputTokens": 7
+          "inputTokens": 995,
+          "outputTokens": 3
         },
         "answer": {
-          "inputTokens": 793,
-          "outputTokens": 103
+          "inputTokens": 633,
+          "outputTokens": 46
         }
       },
-      "answerChars": 387,
-      "citations": 2,
+      "answerChars": 161,
+      "citations": 1,
       "calls": 4,
       "problem": null,
       "repeat": 3
@@ -1189,36 +1300,40 @@
       "id": "p19",
       "multiTurn": false,
       "allowed": true,
-      "wallMs": 7255.133296,
+      "wallMs": 16663.317603,
+      "marks": {
+        "sources": 9732.97121,
+        "first-token": 14241.294114
+      },
       "stageTotals": {
-        "guardrail": 1380.816436,
-        "embed-query": 10.772461,
-        "hyde": 1347.443486,
-        "embed-hyde": 28.769346,
-        "search": 990.038638,
-        "rerank": 740.177367,
-        "answer": 3018.658973,
-        "verify-citations": 0.145262
+        "embed-query": 10.943069,
+        "hyde": 3605.095382,
+        "embed-hyde": 14.767384,
+        "search": 978.6957,
+        "guardrail": 6156.957596,
+        "rerank": 5379.991396,
+        "answer": 6930.227329,
+        "verify-citations": 0.079136
       },
       "tokenTotals": {
+        "hyde": {
+          "inputTokens": 116,
+          "outputTokens": 98
+        },
         "guardrail": {
           "inputTokens": 378,
           "outputTokens": 1
         },
-        "hyde": {
-          "inputTokens": 116,
-          "outputTokens": 97
-        },
         "rerank": {
-          "inputTokens": 1082,
-          "outputTokens": 12
+          "inputTokens": 1066,
+          "outputTokens": 9
         },
         "answer": {
-          "inputTokens": 1161,
+          "inputTokens": 980,
           "outputTokens": 293
         }
       },
-      "answerChars": 1105,
+      "answerChars": 1096,
       "citations": 5,
       "calls": 4,
       "problem": null,
@@ -1228,17 +1343,21 @@
       "id": "m01",
       "multiTurn": true,
       "allowed": true,
-      "wallMs": 6378.966217,
+      "wallMs": 9606.077374,
+      "marks": {
+        "sources": 8165.640157,
+        "first-token": 9037.304525
+      },
       "stageTotals": {
-        "guardrail": 1008.752598,
-        "condense": 1553.910825,
-        "embed-query": 5.502859,
-        "hyde": 1079.477115,
-        "embed-hyde": 26.03235,
-        "search": 902.293206,
-        "rerank": 960.49887,
-        "answer": 1064.819064,
-        "verify-citations": 0.043718
+        "guardrail": 892.236005,
+        "condense": 1496.595966,
+        "embed-query": 9.484655,
+        "hyde": 4694.944158,
+        "embed-hyde": 28.201018,
+        "search": 1499.0305210000001,
+        "rerank": 1197.621282,
+        "answer": 1440.329178,
+        "verify-citations": 0.065432
       },
       "tokenTotals": {
         "guardrail": {
@@ -1251,18 +1370,18 @@
         },
         "hyde": {
           "inputTokens": 112,
-          "outputTokens": 88
+          "outputTokens": 106
         },
         "rerank": {
-          "inputTokens": 1031,
-          "outputTokens": 3
+          "inputTokens": 1040,
+          "outputTokens": 4
         },
         "answer": {
           "inputTokens": 641,
-          "outputTokens": 51
+          "outputTokens": 58
         }
       },
-      "answerChars": 185,
+      "answerChars": 232,
       "citations": 1,
       "calls": 5,
       "problem": null,
@@ -1272,17 +1391,21 @@
       "id": "m05",
       "multiTurn": true,
       "allowed": true,
-      "wallMs": 9051.827849,
+      "wallMs": 19267.535255,
+      "marks": {
+        "sources": 12296.720112,
+        "first-token": 18826.075361
+      },
       "stageTotals": {
-        "guardrail": 1093.23043,
-        "condense": 981.258398,
-        "embed-query": 10.24223,
-        "hyde": 1829.524295,
-        "embed-hyde": 33.812774,
-        "search": 1030.177406,
-        "rerank": 1654.846062,
-        "answer": 2671.687364,
-        "verify-citations": 0.104825
+        "guardrail": 1222.491204,
+        "condense": 3640.020859,
+        "embed-query": 9.760764,
+        "hyde": 3306.289205,
+        "embed-hyde": 28.681857,
+        "search": 1814.968193,
+        "rerank": 4296.180928,
+        "answer": 6970.705641,
+        "verify-citations": 0.067659
       },
       "tokenTotals": {
         "guardrail": {
@@ -1295,19 +1418,19 @@
         },
         "hyde": {
           "inputTokens": 108,
-          "outputTokens": 101
+          "outputTokens": 107
         },
         "rerank": {
-          "inputTokens": 1048,
+          "inputTokens": 1023,
           "outputTokens": 6
         },
         "answer": {
-          "inputTokens": 877,
-          "outputTokens": 140
+          "inputTokens": 876,
+          "outputTokens": 53
         }
       },
-      "answerChars": 493,
-      "citations": 3,
+      "answerChars": 203,
+      "citations": 1,
       "calls": 5,
       "problem": null,
       "repeat": 3
