@@ -109,3 +109,26 @@ test("the no-op trace runs the function and records nothing", async () => {
   assert.deepStrictEqual(NOOP_TRACE.spans(), []);
   assert.deepStrictEqual(NOOP_TRACE.tokenTotals(), {});
 });
+
+test("mark records how far into the trace a moment happened", async () => {
+  const trace = createTrace();
+  await sleep(20);
+  trace.mark("first-token");
+  const { "first-token": at } = trace.marks();
+  assert.ok(at >= 15, `expected at least 15ms, got ${at}`);
+  assert.ok(at <= trace.wallMs());
+});
+
+test("mark keeps the first time a name is marked, so a per-chunk callback can mark freely", async () => {
+  const trace = createTrace();
+  trace.mark("first-token");
+  const first = trace.marks()["first-token"];
+  await sleep(20);
+  trace.mark("first-token");
+  assert.strictEqual(trace.marks()["first-token"], first);
+});
+
+test("the no-op trace ignores marks", () => {
+  NOOP_TRACE.mark("first-token");
+  assert.deepStrictEqual(NOOP_TRACE.marks(), {});
+});

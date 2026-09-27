@@ -4,8 +4,8 @@ What to build next and why, in plain language. The goal is to turn LectureLens
 from a working project into something a real student could use every day.
 
 Each item says what it is, why it matters, how you know it worked, and roughly
-how long it takes. Items are ordered by value for the effort. Nothing here is
-started yet.
+how long it takes. Items are ordered by value for the effort. Items with a
+**Status** line have shipped; the rest are not started.
 
 ## Where the project stands today
 
@@ -36,6 +36,9 @@ an estimated cost per question.
 
 **Effort.** Half a day to a day.
 
+**Status.** Done. `npm run perf` times every stage and counts its tokens; the
+results are in `eval/perf.md` and the README speed section.
+
 ### 2. Stream the answer as it is written
 
 **What.** Send the answer to the browser word by word instead of waiting for
@@ -49,6 +52,14 @@ chat product does this, and its absence is the first thing people notice.
 still render correctly once the answer finishes.
 
 **Effort.** A day.
+
+**Status.** Done. Answers stream over `/chat/stream`, the sources show before
+the text, and the guardrail now runs alongside retrieval instead of before it.
+The first words arrive after a median 7.15 s, measured on 2026-09-27 on a day
+Gemini was slow, which is about 2.7 s sooner than the same runs would have
+finished before. That is not within a second: a question goes through three
+or four LLM calls before the answer call can start, so "about a second" was
+never reachable with this pipeline.
 
 ### 3. Make citations clickable
 
@@ -162,6 +173,10 @@ a stale figure in an interview.
 **Done when.** A pull request that changes retrieval shows the eval failing.
 
 **Effort.** Half a day.
+
+**Status.** Done. `.github/workflows/ci.yml` runs the tests and the
+cache-only eval on every pull request and fails if the committed results
+change.
 
 ## Phase 4: nice to have, once the rest exists
 

@@ -73,11 +73,17 @@ function summarizeStages(runs) {
 function summarizeWall(runs) {
   const walls = runs.map((r) => r.wallMs);
   const summed = runs.map((r) => Object.values(r.stageTotals).reduce((a, b) => a + b, 0));
+  // When the student starts reading. A run that streamed nothing has no mark
+  // and is left out, since counting it as zero would flatter the result.
+  const firstToken = runs.map((r) => r.marks?.["first-token"]).filter((ms) => ms != null);
   return {
     n: runs.length,
     medianMs: median(walls),
     p95Ms: percentile(walls, 95),
     medianSummedStageMs: median(summed),
+    firstTokenN: firstToken.length,
+    firstTokenMedianMs: median(firstToken),
+    firstTokenP95Ms: percentile(firstToken, 95),
     costUsd: summarizeStages(runs).reduce((a, s) => a + s.costUsd, 0),
   };
 }

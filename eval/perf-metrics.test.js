@@ -112,3 +112,22 @@ test("summarizeWall reports the summed stage time so overlap is visible", () => 
   // Run 2 sums to 90ms of stage time against a 200ms wall clock.
   assert.strictEqual(wall.medianSummedStageMs, 90);
 });
+
+test("summarizeWall reports when the first words of the answer arrived", () => {
+  const streamed = runs.map((r, i) => ({ ...r, marks: { "first-token": [40, 60, 80][i] } }));
+  const wall = summarizeWall(streamed);
+  assert.strictEqual(wall.firstTokenN, 3);
+  assert.strictEqual(wall.firstTokenMedianMs, 60);
+  assert.strictEqual(wall.firstTokenP95Ms, 80);
+});
+
+test("summarizeWall leaves out a run that streamed no words rather than counting it as instant", () => {
+  const mixed = [
+    { ...runs[0], marks: { "first-token": 40 } },
+    { ...runs[1], marks: {} },
+    { ...runs[2] },
+  ];
+  const wall = summarizeWall(mixed);
+  assert.strictEqual(wall.firstTokenN, 1);
+  assert.strictEqual(wall.firstTokenMedianMs, 40);
+});

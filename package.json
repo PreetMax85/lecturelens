@@ -12,7 +12,7 @@
     "perf": "node eval/perf.js",
     "eval:guardrail": "node eval/guardrail.js",
     "eval:rerank-bakeoff": "node eval/rerank-bakeoff.js",
-    "test": "node --test \"src/**/*.test.js\" \"eval/**/*.test.js\""
+    "test": "node --test \"src/**/*.test.js\" \"eval/**/*.test.js\" \"frontend/src/**/*.test.js\""
   },
   "dependencies": {
     "@xenova/transformers": "^2.17.2",

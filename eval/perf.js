@@ -3,8 +3,9 @@
 // Usage: node eval/perf.js [--repeats N] [--questions N] [--dry-run]
 //
 // Asks a fixed sample of labeled questions through the same path the server
-// takes, checkGuardrail() then answerQuestion(), and records how long each
-// stage took and how many tokens it spent. Writes eval/perf.json and
+// takes, handleChat() with the answer streamed, and records how long each
+// stage took, how many tokens it spent, when the first words of the answer
+// arrived and when the whole of it had. Writes eval/perf.json and
 // eval/perf.md.
 //
 // Why this cannot reuse the retrieval eval's cache: a cached response returns
@@ -30,8 +31,7 @@ require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
 
-const { checkGuardrail } = require("../src/guardrail");
-const { answerQuestion } = require("../src/answer");
+const { handleChat } = require("../src/chat");
 const { embedText } = require("../src/local-embed");
 const { generate, MODEL } = require("../src/gemini");
 const { createTrace } = require("../src/trace");
@@ -132,12 +132,10 @@ async function measureRun(question, perf) {
   perf.startRun();
 
   const history = question.history || [];
-  const allowed = await checkGuardrail(question.question, history, { llm: perf.llm, trace });
+  const result = await handleChat(question.question, history, { llm: perf.llm, trace });
   // The guardrail should allow every labeled question. If it ever rejects one
   // the run is not comparable to the others, so it is recorded and skipped.
-  const result = allowed
-    ? await answerQuestion(question.question, history, { llm: perf.llm, trace })
-    : null;
+  const allowed = !result.blocked;
 
   const { problem, calls } = perf.runStats();
   return {
@@ -145,10 +143,11 @@ async function measureRun(question, perf) {
     multiTurn: history.length > 0,
     allowed,
     wallMs: trace.wallMs(),
+    marks: trace.marks(),
     stageTotals: trace.stageTotals(),
     tokenTotals: trace.tokenTotals(),
-    answerChars: result ? result.answer.length : 0,
-    citations: result ? result.citationCheck.total : 0,
+    answerChars: allowed ? result.answer.length : 0,
+    citations: allowed ? result.citationCheck.total : 0,
     calls,
     problem,
   };
@@ -156,13 +155,14 @@ async function measureRun(question, perf) {
 
 function fmtMs(ms) {
   if (ms == null) return "n/a";
-  return ms >= 1000 ? `${(ms / 1000).toFixed(2)} s` : `${Math.round(ms)} ms`;
+  // 999.5 ms and up would round to "1000 ms", so it switches to seconds there.
+  return ms >= 999.5 ? `${(ms / 1000).toFixed(2)} s` : `${Math.round(ms)} ms`;
 }
 
 const fmtUsd = (usd) => `$${usd.toFixed(6)}`;
 
 const STAGE_LABELS = {
-  guardrail: "Guardrail (LLM)",
+  guardrail: "Guardrail (LLM, alongside retrieval)",
   condense: "Condensation (LLM)",
   "embed-query": "Embed the question (local)",
   hyde: "HyDE passage (LLM)",
@@ -211,14 +211,16 @@ function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWar
   lines.push("");
   lines.push("| Measure | Value |");
   lines.push("|---|---|");
-  lines.push(`| Median wait for an answer | ${fmtMs(wall.medianMs)} |`);
   const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
-  lines.push(`| p95 wait (slowest of ${plural(wall.n, "run")} is ${fmtMs(Math.max(...usable.map((r) => r.wallMs)))}) | ${fmtMs(wall.p95Ms)} |`);
+  lines.push(`| Median wait for the first words of the answer (${plural(wall.firstTokenN, "run")}) | ${fmtMs(wall.firstTokenMedianMs)} |`);
+  lines.push(`| p95 wait for the first words | ${fmtMs(wall.firstTokenP95Ms)} |`);
+  lines.push(`| Median wait for the whole answer | ${fmtMs(wall.medianMs)} |`);
+  lines.push(`| p95 wait for the whole answer (slowest of ${plural(wall.n, "run")} is ${fmtMs(Math.max(...usable.map((r) => r.wallMs)))}) | ${fmtMs(wall.p95Ms)} |`);
   if (singleTurn.length) {
-    lines.push(`| Median wait, single-turn questions (${plural(singleTurn.length, "run")}) | ${fmtMs(median(singleTurn.map((r) => r.wallMs)))} |`);
+    lines.push(`| Median wait for the whole answer, single-turn questions (${plural(singleTurn.length, "run")}) | ${fmtMs(median(singleTurn.map((r) => r.wallMs)))} |`);
   }
   if (multiTurn.length) {
-    lines.push(`| Median wait, follow-up questions (${plural(multiTurn.length, "run")}) | ${fmtMs(median(multiTurn.map((r) => r.wallMs)))} |`);
+    lines.push(`| Median wait for the whole answer, follow-up questions (${plural(multiTurn.length, "run")}) | ${fmtMs(median(multiTurn.map((r) => r.wallMs)))} |`);
   }
   lines.push(`| Median summed stage time | ${fmtMs(wall.medianSummedStageMs)} |`);
   lines.push(`| Cost per question | ${fmtUsd(wall.costUsd)} |`);
@@ -229,7 +231,10 @@ function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWar
 
   lines.push(
     "The summed stage time is larger than the wall clock because stages overlap: the " +
-      "question embed and the HyDE call run concurrently, and so do the two vector searches."
+      "guardrail runs alongside condensation, HyDE and search, the question embed and the " +
+      "HyDE call run concurrently, and so do the two vector searches. The answer is " +
+      "streamed: the first words arrive once its call starts writing, and the whole-answer " +
+      "wait ends when the last of it has arrived and its citations are checked."
   );
   lines.push("");
   lines.push(
@@ -271,15 +276,16 @@ function renderMarkdown({ runs, usable, stages, wall, modelLoadMs, connectionWar
   }
 
   lines.push("");
-  lines.push("**Per question** (median wall clock over the repeats)");
+  lines.push("**Per question** (medians over the repeats)");
   lines.push("");
-  lines.push("| Question | Turns | Median | Calls | Answer chars | Citations |");
-  lines.push("|---|---|---|---|---|---|");
+  lines.push("| Question | Turns | First words | Whole answer | Calls | Answer chars | Citations |");
+  lines.push("|---|---|---|---|---|---|---|");
   for (const id of sampleIds) {
     const forId = usable.filter((r) => r.id === id);
     if (!forId.length) continue;
     lines.push(
       `| ${id} | ${forId[0].multiTurn ? "follow-up" : "single"} | ` +
+        `${fmtMs(median(forId.map((r) => r.marks?.["first-token"]).filter((ms) => ms != null)))} | ` +
         `${fmtMs(median(forId.map((r) => r.wallMs)))} | ${forId[0].calls} | ` +
         `${Math.round(median(forId.map((r) => r.answerChars)))} | ${median(forId.map((r) => r.citations))} |`
     );
@@ -364,6 +370,7 @@ async function main() {
           multiTurn: (question.history || []).length > 0,
           allowed: true,
           wallMs: 0,
+          marks: {},
           stageTotals: {},
           tokenTotals: {},
           answerChars: 0,

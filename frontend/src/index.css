@@ -183,7 +183,8 @@ body {
   white-space: pre-wrap;
 }
 
-.bubble.typing {
+/* The status line shown until the answer's first words arrive. */
+.bubble .typing {
   opacity: 0.6;
   font-style: italic;
 }

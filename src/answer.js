@@ -159,14 +159,26 @@ const FINAL_K = 5;
 // Retrieval half of the pipeline. Each stage can be switched off so
 // eval/run.js can ablate them; production always runs with all stages on.
 // `llm` is injectable so the eval can cache and rate-limit Gemini calls.
+// `cancelled` lets src/chat.js abandon a retrieval whose message the guardrail
+// has since rejected. It is checked after condensation and before rerank, the
+// points after which the next step is another LLM call.
 async function retrieve(
   userMessage,
   history = [],
-  { condense = true, hyde = true, rerank = true, llm = generate, hydeSample = 0, trace = NOOP_TRACE } = {}
+  {
+    condense = true,
+    hyde = true,
+    rerank = true,
+    llm = generate,
+    hydeSample = 0,
+    trace = NOOP_TRACE,
+    cancelled = () => false,
+  } = {}
 ) {
   const standaloneQuery = condense
     ? await condenseQuery(userMessage, history, llm, trace)
     : userMessage;
+  if (cancelled()) return { standaloneQuery, candidates: [], results: [] };
 
   const [queryVector, hydePassage] = await Promise.all([
     trace.span("embed-query", () => embedText(standaloneQuery)),
@@ -185,6 +197,7 @@ async function retrieve(
 
   const resultSets = await Promise.all(searchPromises);
   const candidates = mergeResults(resultSets, CANDIDATE_POOL);
+  if (cancelled()) return { standaloneQuery, candidates, results: [] };
 
   const ordered = rerank
     ? await rerankResults(standaloneQuery, candidates, llm, trace)
@@ -192,9 +205,24 @@ async function retrieve(
   return { standaloneQuery, candidates, results: ordered.slice(0, FINAL_K) };
 }
 
-async function answerQuestion(userMessage, history = [], { llm = generate, trace = NOOP_TRACE } = {}) {
-  const { results } = await retrieve(userMessage, history, { llm, trace });
+// The sources as the student sees them, one per excerpt the answer was built on.
+function toSources(results) {
+  return results.map((r) => {
+    const startTs = r.payload.timestamp;
+    const endTs = r.payload.end != null ? formatTimestamp(r.payload.end) : null;
+    return {
+      module: r.payload.module,
+      lesson: r.payload.lesson,
+      timestamp: endTs && endTs !== startTs ? `${startTs} – ${endTs}` : startTs,
+      score: r.score,
+    };
+  });
+}
 
+// Generation half of the pipeline: writes the answer from already retrieved
+// excerpts and checks its citations against them. `onText`, if given, gets the
+// answer as it streams; the returned answer is the same either way.
+async function answerFromResults(userMessage, history, results, { llm = generate, trace = NOOP_TRACE, onText } = {}) {
   if (!results.length) {
     return {
       answer: "I couldn't find anything relevant to that in the course content.",
@@ -208,7 +236,7 @@ async function answerQuestion(userMessage, history = [], { llm = generate, trace
   const prompt = `${ANSWER_SYSTEM}\n\n${historyBlock}Source excerpts:\n${context}\n\nStudent question: ${userMessage}`;
 
   const answer = await trace.span("answer", () =>
-    llm(prompt, { temperature: 0.2, onUsage: trace.onUsage("answer") })
+    llm(prompt, { temperature: 0.2, onUsage: trace.onUsage("answer"), onText })
   );
 
   const check = await trace.span("verify-citations", () =>
@@ -222,17 +250,13 @@ async function answerQuestion(userMessage, history = [], { llm = generate, trace
   return {
     answer,
     citationCheck: { total: check.total, verified: check.verified, unverified },
-    sources: results.map((r) => {
-      const startTs = r.payload.timestamp;
-      const endTs = r.payload.end != null ? formatTimestamp(r.payload.end) : null;
-      return {
-        module: r.payload.module,
-        lesson: r.payload.lesson,
-        timestamp: endTs && endTs !== startTs ? `${startTs} – ${endTs}` : startTs,
-        score: r.score,
-      };
-    }),
+    sources: toSources(results),
   };
 }
 
-module.exports = { answerQuestion, retrieve, hydeRequest };
+async function answerQuestion(userMessage, history = [], { llm = generate, trace = NOOP_TRACE } = {}) {
+  const { results } = await retrieve(userMessage, history, { llm, trace });
+  return answerFromResults(userMessage, history, results, { llm, trace });
+}
+
+module.exports = { answerQuestion, answerFromResults, retrieve, toSources, hydeRequest };
