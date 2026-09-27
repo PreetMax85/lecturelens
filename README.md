@@ -254,59 +254,77 @@ retrieval instead of being blocked.
 ### Speed and cost
 
 `npm run perf` asks 10 labeled questions (8 single-turn, 2 follow-ups) 3 times
-each through the same path the server takes, the guardrail and then
-`answerQuestion()`, and times every stage. Token counts are the exact ones
-Gemini reports with each response, not estimates. Full output, including every
-run, is in `eval/perf.md` and `eval/perf.json`.
+each through the same path the server takes, `handleChat()` with the answer
+streamed, and times every stage, when the first words of the answer arrive and
+when all of it has. Token counts are the exact ones Gemini reports with each
+response, not estimates. Full output, including every run, is in
+`eval/perf.md` and `eval/perf.json`. The same measurement taken on `main`
+immediately before, when the guardrail still ran first and the answer arrived
+in one piece, is in `eval/perf-before.md`.
 
 | Stage | Median | p95 | Cost per question |
 |---|---|---|---|
-| HyDE passage (LLM) | 1.22 s | 1.88 s | $0.000171 |
-| Answer generation (LLM) | 1.22 s | 3.02 s | $0.000435 |
-| Rerank (LLM) | 1.05 s | 1.65 s | $0.000269 |
-| Condensation (LLM, follow-ups only) | 1.01 s | 1.93 s | $0.000014 |
-| Vector search (Qdrant, both searches added) | 977 ms | 1.48 s | free |
-| Guardrail (LLM) | 936 ms | 1.93 s | $0.000098 |
-| Both embeddings and citation checks (local) | about 40 ms | about 50 ms | free |
+| Answer generation (LLM) | 2.84 s | 8.83 s | $0.000421 |
+| Condensation (LLM, follow-ups only) | 2.46 s | 3.64 s | $0.000014 |
+| HyDE passage (LLM) | 2.11 s | 6.49 s | $0.000171 |
+| Vector search (Qdrant, both searches added) | 1.29 s | 1.81 s | free |
+| Guardrail (LLM, alongside retrieval) | 1.22 s | 6.16 s | $0.000098 |
+| Rerank (LLM) | 1.20 s | 6.61 s | $0.000269 |
+| Both embeddings and citation checks (local) | about 30 ms | about 50 ms | free |
 
 | End to end | |
 |---|---|
-| Median wait for an answer | 5.75 s (5.65 s single-turn, 6.76 s follow-ups) |
-| p95 wait | 9.97 s |
+| Median wait for the first words | 7.15 s |
+| Median wait for the whole answer | 7.85 s (7.50 s single-turn, 10.66 s follow-ups) |
+| p95 wait, first words and whole answer | 18.01 s and 19.44 s |
 | Cost per question at paid rates | about $0.001, or roughly 1,000 questions per dollar |
 
 What the numbers say:
 
-- **The wait is LLM round trips.** Four or five Gemini calls of about a second
-  each make up almost all of it. Everything that runs locally, both embeddings
-  and citation verification, adds about 40 ms in total, so a faster embedding
-  model would change nothing a student notices.
-- **The guardrail costs about a second on every question** to produce one
-  token, roughly a sixth of the median wait and a tenth of the cost. It is the
-  most obvious stage to replace with something cheaper.
+- **Running the guardrail alongside retrieval and streaming the answer bring
+  the first words about 2.7 s sooner.** In all 29 runs the guardrail finished
+  before retrieval did, so its median 1.22 s no longer adds to the wait, and
+  the first words arrive a median 1.09 s before the whole answer. Taken per
+  run, the first words come a median 2.7 s (25%) before that same run would
+  have finished on the old path. This is an estimate from each run's own stage
+  times, and it is the headline because the comparison below is not clean.
+- **The before and after medians barely differ, because Gemini slowed down
+  between the two runs.** On `main` the whole answer took a median 7.48 s; on
+  this code the first words took 7.15 s. But the same Gemini calls were slower
+  in the second run: answer generation took 2.84 s against 1.52 s, and the
+  summed stage time 11.11 s against 8.24 s. The second run started the moment the
+  first ended, so that difference is Gemini, not the code.
+- **Gemini was slow on the day.** A one-word reply took a median 2.4 s just
+  before these runs. On 2026-09-16, when the previous version of this table
+  was measured, HyDE and answer generation took 1.22 s each and the whole
+  answer arrived after a median 5.75 s. Every LLM stage above is inflated.
+- **The wait is still LLM round trips.** Four or five Gemini calls make up
+  almost all of it, and two or three of them (condensation on follow-ups,
+  HyDE, rerank) run one after another before the answer can start. Everything
+  that runs locally, both embeddings and citation verification, adds about
+  30 ms in total, so a faster embedding model would change nothing a student
+  notices.
 - **Answer generation is the most expensive stage but not the largest prompt.**
-  Rerank sends more input tokens (about 1,030 against 910), but output tokens
+  Rerank sends more input tokens (about 1,030 against 880), but output tokens
   cost six times as much and the answer is the only long output, so it is
-  about 44% of the cost to rerank's 27%.
-- **Streaming would help more than any single speedup.** The answer is the last
-  stage and its call starts about 4.5 s in, so streamed text would begin to
-  appear shortly after that instead of the whole answer arriving at 5.75 s.
+  about 43% of the cost to rerank's 28%.
 
 Caveats:
 
 - **These times cannot be reproduced from the cache.** A cached response comes
   back in microseconds, so every call behind this table was a real one, made
-  on 2026-09-16 from a laptop in India against Gemini and a Qdrant
+  on 2026-09-27 from a laptop in India against Gemini and a Qdrant
   Cloud free cluster. Re-running `npm run perf` spends about 127 requests of
   the 500-per-day free quota and will give somewhat different times. CI
   therefore checks the retrieval numbers but not these.
 - **30 runs is a small sample.** p95 is the second slowest run, not a smooth
   estimate.
-- **Two of the 30 runs were dropped**, one after a 429 and one after a 503 from
-  Gemini. Any run in which a call failed is dropped rather than kept, because
-  a retry pauses in the middle of the pipeline and a failure that is not
-  retried is quietly absorbed by the pipeline's fallbacks, either of which
-  would publish a sample of a pipeline that did not really run.
+- **One of the 30 runs was dropped** after a 429 from Gemini (and one of the
+  30 before runs after a network error). Any run in which a call failed is
+  dropped rather than kept, because a retry pauses in the middle of the
+  pipeline and a failure that is not retried is quietly absorbed by the
+  pipeline's fallbacks, either of which would publish a sample of a pipeline
+  that did not really run.
 - **The times are warm.** The embedding model is loaded and the connections
   to Gemini and Qdrant are opened before each measured run. A free-tier Render
   server waking from sleep pays for the model load and those connections again
@@ -363,7 +381,8 @@ Caveats: the LLM order is one cached temperature-0 response per question and
 the production pool is one HyDE draw, so neither side's sampling variance is
 measured. Cross-encoder latencies come from a laptop CPU, not the deployed
 host, and move by a few tens of milliseconds between runs. The LLM latency is
-the rerank stage from `npm run perf`, not re-measured. Cross-encoder scores use
+the rerank stage from the 2026-09-16 `npm run perf` run, not re-measured; the
+2026-09-27 runs put it at 994 ms and 1.20 s. Cross-encoder scores use
 fp32 weights, because the quantized exports scored the same pair differently
 depending on the rest of the batch. They were bit-identical across two local
 runs but are not proven identical across machines, so the bake-off is not part
