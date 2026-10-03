@@ -31,14 +31,12 @@ async function generate(prompt, { temperature = 0.2, systemInstruction, onUsage,
   }
   if (onText) return generateStream(body, { onUsage, onText });
 
-  const res = await fetch(
-    `${BASE}/models/${MODEL}:generateContent?key=${GEMINI_KEY}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }
-  );
+  // Key in the header (not ?key= URL) so it stays out of access/proxy logs.
+  const res = await fetch(`${BASE}/models/${MODEL}:generateContent`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_KEY },
+    body: JSON.stringify(body),
+  });
   if (!res.ok) {
     throw new Error(`Gemini generate failed: ${res.status} ${await res.text()}`);
   }
@@ -65,14 +63,11 @@ function reportUsage(onUsage, usageMetadata) {
 const COMPLETE_FINISHES = new Set(["STOP", "MAX_TOKENS"]);
 
 async function generateStream(body, { onUsage, onText }) {
-  const res = await fetch(
-    `${BASE}/models/${MODEL}:streamGenerateContent?alt=sse&key=${GEMINI_KEY}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }
-  );
+  const res = await fetch(`${BASE}/models/${MODEL}:streamGenerateContent?alt=sse`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_KEY },
+    body: JSON.stringify(body),
+  });
   if (!res.ok) {
     throw new Error(`Gemini generate failed: ${res.status} ${await res.text()}`);
   }

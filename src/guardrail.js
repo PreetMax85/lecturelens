@@ -1,4 +1,5 @@
 const { generate } = require("./gemini");
+const { formatHistory } = require("./history-format");
 const { NOOP_TRACE } = require("./trace");
 
 const GUARDRAIL_SYSTEM = `You are a binary classifier for a course-support chatbot.
@@ -27,13 +28,6 @@ Given the conversation, respond with EXACTLY one word:
   them.
 
 Respond with only ALLOW or REJECT, nothing else.`;
-
-function formatHistory(history, limit) {
-  return history
-    .slice(-limit)
-    .map((h) => `${h.role === "user" ? "Student" : "Assistant"}: ${h.content}`)
-    .join("\n");
-}
 
 // `llm` is injectable so eval/guardrail.js can cache Gemini calls.
 async function checkGuardrail(userMessage, history = [], { llm = generate, trace = NOOP_TRACE } = {}) {

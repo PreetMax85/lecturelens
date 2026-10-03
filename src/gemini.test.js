@@ -47,7 +47,8 @@ test("with onText, streams each piece of text in order and returns the whole ans
   const answer = await generate("q", { onText: (text) => pieces.push(text) });
   assert.deepEqual(pieces, ["React Native ", "uses Expo."]);
   assert.equal(answer, "React Native uses Expo.");
-  assert.match(calls[0].url, /:streamGenerateContent\?alt=sse&/);
+  assert.match(calls[0].url, /:streamGenerateContent\?alt=sse$/);
+  assert.ok(calls[0].init.headers["x-goog-api-key"], "API key sent via header");
 });
 
 test("with onText, reports the token counts of the last chunk once", async (t) => {
