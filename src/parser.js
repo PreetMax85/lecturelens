@@ -4,9 +4,21 @@
 
 function timeToSeconds(t) {
   // t like "00:00:05,640" or "00:00:05.640"
+  if (typeof t !== "string") throw new Error(`invalid timestamp: ${String(t)}`);
   const norm = t.replace(",", ".").trim();
-  const [h, m, s] = norm.split(":");
-  return parseInt(h, 10) * 3600 + parseInt(m, 10) * 60 + parseFloat(s);
+  const parts = norm.split(":");
+  if (parts.length !== 3) throw new Error(`invalid timestamp: ${t}`);
+  const [h, m, s] = parts;
+  const hours = Number(h);
+  const minutes = Number(m);
+  const seconds = Number(s);
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes) || !Number.isFinite(seconds)) {
+    throw new Error(`invalid timestamp: ${t}`);
+  }
+  if (minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60 || hours < 0) {
+    throw new Error(`timestamp out of range: ${t}`);
+  }
+  return hours * 3600 + minutes * 60 + seconds;
 }
 
 function parseSubtitle(content) {
@@ -32,8 +44,15 @@ function parseSubtitle(content) {
     if (timeLineIdx === -1) continue; // not a cue block (e.g. stray metadata)
 
     const match = lines[timeLineIdx].match(timeLineRe);
-    const start = timeToSeconds(match[1]);
-    const end = timeToSeconds(match[2]);
+    let start;
+    let end;
+    try {
+      start = timeToSeconds(match[1]);
+      end = timeToSeconds(match[2]);
+    } catch {
+      continue; // malformed timestamp line - skip rather than emit NaN
+    }
+    if (!(end > start)) continue;
     const cueText = lines
       .slice(timeLineIdx + 1)
       .join(" ")

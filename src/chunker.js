@@ -6,8 +6,11 @@ const DEFAULT_MAX_CHUNK_SECONDS = 45; // group cues until this many seconds cove
 const DEFAULT_MAX_CHUNK_CHARS = 800; // or until this much text collected, whichever first
 
 function chunkCues(cues, opts = {}) {
-  const maxSeconds = opts.maxChunkSeconds || DEFAULT_MAX_CHUNK_SECONDS;
-  const maxChars = opts.maxChunkChars || DEFAULT_MAX_CHUNK_CHARS;
+  const maxSeconds = opts.maxChunkSeconds ?? DEFAULT_MAX_CHUNK_SECONDS;
+  const maxChars = opts.maxChunkChars ?? DEFAULT_MAX_CHUNK_CHARS;
+  if (!(maxSeconds > 0) || !(maxChars > 0)) {
+    throw new Error("maxChunkSeconds and maxChunkChars must be positive");
+  }
 
   const chunks = [];
   let current = null;

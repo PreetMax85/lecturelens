@@ -2,6 +2,7 @@ const { embedText } = require("./local-embed");
 const { generate } = require("./gemini");
 const { search } = require("./qdrant");
 const { formatTimestamp } = require("./chunker");
+const { formatHistory } = require("./history-format");
 const { verifyCitations } = require("./citations");
 const { NOOP_TRACE } = require("./trace");
 
@@ -57,13 +58,6 @@ without needing the history - resolve pronouns and vague references like
 If the new message is already a standalone question unrelated to the history,
 return it completely unchanged. Respond with ONLY the rewritten (or unchanged)
 question, nothing else - no preamble, no quotes.`;
-
-function formatHistory(history, limit) {
-  return history
-    .slice(-limit)
-    .map((h) => `${h.role === "user" ? "Student" : "Assistant"}: ${h.content}`)
-    .join("\n");
-}
 
 async function condenseQuery(userMessage, history, llm = generate, trace = NOOP_TRACE) {
   if (!history || history.length === 0) return userMessage;
@@ -124,13 +118,15 @@ relevant to answering the question. Exclude numbers for excerpts that are not
 actually relevant. Respond with ONLY the JSON array, e.g. [3,1,5] - no other
 text, no explanation, no markdown fences.`;
 
+const RERANK_TEXT_CHARS = 300; // excerpt slice shown to the reranker per candidate
+
 async function rerankResults(question, results, llm = generate, trace = NOOP_TRACE) {
   if (results.length <= 1) return results;
 
   const listing = results
     .map(
       (r, i) =>
-        `${i + 1}. [${r.payload.module} | ${r.payload.lesson} | ${r.payload.timestamp}] ${r.payload.text.slice(0, 300)}`
+        `${i + 1}. [${r.payload.module} | ${r.payload.lesson} | ${r.payload.timestamp}] ${r.payload.text.slice(0, RERANK_TEXT_CHARS)}`
     )
     .join("\n\n");
 

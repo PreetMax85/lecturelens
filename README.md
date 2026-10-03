@@ -29,20 +29,28 @@ Pipeline stages, mapped to the original reference diagram:
 
 ## Setup
 
+Requires Node 20+.
+
 1. **Gemini API key** (free): https://aistudio.google.com/apikey (used only
    for guardrail/condense/HyDE/rerank/answer LLM calls, not embeddings).
 2. **Qdrant Cloud free cluster**: https://cloud.qdrant.io
 3. Backend:
    ```
-   npm install
+   npm ci
    cp .env.example .env
    # fill in GEMINI_API_KEY, QDRANT_URL, QDRANT_API_KEY
    ```
 4. Frontend:
    ```
    cd frontend
-   npm install
+   npm ci
+   cp .env.example .env
+   # leave VITE_API_URL unset for local dev (Vite proxies /chat to :3001),
+   # set it to the Render URL only when deployed
    ```
+
+5. Verify: `npm test` (unit tests) and `npm run eval -- --cache-only`
+   (reproduces the published retrieval numbers with zero API quota).
 
 ## Ingest your course
 
@@ -51,9 +59,9 @@ npm run ingest -- "/path/to/class-subtitle"
 ```
 
 Walks `module N/lesson-folder/*.srt|.vtt`, chunks (~45s per chunk), embeds
-locally (no API, no rate limits), upserts to Qdrant. Re-run after any change
-to `cleanLessonTitle`/`cleanModuleName` in `src/ingest.js`, and delete the
-Qdrant collection first so old and new casing don't mix.
+locally (no API, no rate limits), upserts to Qdrant. Point IDs are
+deterministic (`module|lessonFolder|start`), so re-running the same corpus
+upserts over itself instead of duplicating points.
 
 ## Run it
 
@@ -251,7 +259,7 @@ refused. The borderline cases exist to catch that, but there are only five.
 And the guardrail fails open: if the Gemini call errors, the message goes on to
 retrieval instead of being blocked.
 
-### Speed and cost
+### Speed and cost (measured 2026-09-27; prices as of 2026-09-16)
 
 `npm run perf` asks 10 labeled questions (8 single-turn, 2 follow-ups) 3 times
 each through the same path the server takes, `handleChat()` with the answer
@@ -428,42 +436,25 @@ Set `VITE_API_URL` to your Render backend URL in the [Vercel](https://vercel.com
 ## Known limitations (deliberate scope decisions, not oversights)
 
 - **Single course only.** Query routing across multiple courses/data sources
-  is architecturally not needed here, since there's one vector store. See Future
-  Scope below for what multi-course support would require.
+  is architecturally not needed here, since there's one vector store. See
+  `ROADMAP.md` for what multi-course support would require.
 - **Guardrail is a single classifier call**, not the full PII/competitor
   detection pipeline from the reference diagram. That's appropriate for a
-  single-course student support bot.
+  single-course student support bot. It fails open: if the Gemini call errors,
+  the message goes on to retrieval instead of being blocked.
 - **Chat history is per-browser** (`localStorage`), not synced across
   devices or persisted server-side.
+- **Rate limits are best-effort.** Per-IP (30/10min) plus a soft in-memory
+  daily cap protect the free-tier quota; both reset on server restart/sleep.
 
-## Future scope: turning this from a project into a product
+## Future scope
 
-Ranked roughly by effort-to-value if this continues past the assignment:
+Piloted deep on one course on purpose — trustworthy citations first. Next,
+in priority order (full reasoning in `ROADMAP.md`):
 
-1. **Multi-course support with real query routing.** Add a course selector,
-   tag every chunk with a `course_id`, and route retrieval to the right
-   course's data. This is where the "Query Routing" diagram node actually
-   becomes applicable, unlike now.
-2. **Analytics / instructor dashboard.** Log every question, its condensed
-   query, retrieval scores, and whether the guardrail blocked it, to a small
-   database (SQLite is enough to start). Surface: most-asked topics, questions
-   with weak retrieval scores (signals a content gap or confusing lesson),
-   and blocked/off-topic queries. Needs real usage data to be convincing, so
-   don't ship an empty dashboard.
-3. **Course outline sidebar.** Let students browse modules/lessons directly
-   instead of only asking questions. Useful for students who don't know
-   what to ask yet.
-4. **Query decomposition for compound questions** ("explain OAuth and push
-   notifications"): split into sub-questions, retrieve for each, merge.
-5. **Feedback loop.** Thumbs up/down on answers, stored alongside the
-   analytics log. Lets you distinguish "low retrieval score but actually a
-   fine answer" from "high score but wrong answer."
-6. **Server-side chat history + accounts.** Move history off `localStorage`
-   so it syncs across devices; needed if this ever has real multiple users.
-7. **Faithfulness/hallucination check.** A second LLM pass verifying the
-   final answer's claims are actually supported by the cited excerpts, before
-   returning it. Real value, but needs careful testing to avoid false
-   rejections of good answers.
-8. **Video timestamp deep-linking.** If lesson videos are hosted somewhere
-   with seek-to-timestamp URLs (e.g. an internal LMS), turn the citation
-   timestamps into clickable links that jump straight to that second.
+1. **Multi-course support with real query routing** (course selector + `course_id` on every chunk).
+2. **Analytics / instructor dashboard** (most-asked topics, weak retrieval = content gaps).
+3. **Course outline sidebar** (browse lessons, not just ask).
+
+Further ideas (query decomposition, feedback loop, accounts, faithfulness
+check, timestamp deep-linking) live in `ROADMAP.md`.

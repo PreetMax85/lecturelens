@@ -13,6 +13,16 @@ const { ensureCollection, upsertPoints } = require("./qdrant");
 
 const EMBED_BATCH_SIZE = 50;
 
+// Deterministic point ID so re-ingesting the same chunk upserts over itself
+// instead of duplicating the collection. Qdrant accepts UUID strings.
+function pointIdFor(chunk) {
+  const hex = crypto
+    .createHash("sha256")
+    .update(`${chunk.module}|${chunk.lessonFolder}|${chunk.start}`)
+    .digest("hex");
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+}
+
 const ACRONYM_FIXES = {
   oauth: "OAuth",
   api: "API",
@@ -134,7 +144,7 @@ async function ingestCourse(rootDir) {
     const vectors = await embedBatch(batch.map((c) => c.text));
 
     const points = batch.map((c, idx) => ({
-      id: crypto.randomUUID(),
+      id: pointIdFor(c),
       vector: vectors[idx],
       payload: c,
     }));
@@ -146,13 +156,17 @@ async function ingestCourse(rootDir) {
   console.log("\nIngestion complete.");
 }
 
-const rootArg = process.argv[2];
-if (!rootArg) {
-  console.error("Usage: node src/ingest.js <path-to-course-root>");
-  process.exit(1);
+if (require.main === module) {
+  const rootArg = process.argv[2];
+  if (!rootArg) {
+    console.error("Usage: node src/ingest.js <path-to-course-root>");
+    process.exit(1);
+  }
+
+  ingestCourse(path.resolve(rootArg)).catch((err) => {
+    console.error("Ingestion failed:", err);
+    process.exit(1);
+  });
 }
 
-ingestCourse(path.resolve(rootArg)).catch((err) => {
-  console.error("Ingestion failed:", err);
-  process.exit(1);
-});
+module.exports = { ingestCourse, cleanLessonTitle, cleanModuleName, pointIdFor };
