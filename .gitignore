@@ -19,4 +19,7 @@ npm-debug.log*
 # Course transcript data - copyrighted third-party content, don't publish
 class-subtitle/
 class-subtitle.zip
-__MACOSX/   
+__MACOSX/
+
+# Local agent instructions - personal workflow, not part of the project
+AGENTS.md   
