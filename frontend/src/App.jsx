@@ -43,9 +43,31 @@ async function streamChat(body, onEvent) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
+  // A rate-limited or rejected request arrives as plain JSON, not an SSE
+  // stream, so read the server's message before touching the event parser.
+  if (!res.ok) {
+    let serverMessage = null;
+    try {
+      serverMessage = (await res.json())?.error;
+    } catch {
+      // non-JSON error body - fall through to the status-based error below
+    }
+    const err = new Error(`HTTP ${res.status}`);
+    err.serverMessage = serverMessage;
+    err.status = res.status;
+    throw err;
+  }
+  if (!res.body) throw new Error("empty response body");
 
-  const parser = createSseParser((data) => onEvent(JSON.parse(data)));
+  const parser = createSseParser((data) => {
+    let event;
+    try {
+      event = JSON.parse(data);
+    } catch {
+      return; // one malformed event must not kill the stream
+    }
+    onEvent(event);
+  });
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   for (;;) {
@@ -166,9 +188,13 @@ export default function App() {
       if (!finished) throw new Error("stream ended without a result");
     } catch (err) {
       // fetch rejects with a TypeError when the request never got through.
+      // A 429/400 carries the server's message on err.serverMessage.
       if (!finished) {
         updateReply(() => ({
-          content: err instanceof TypeError ? "Couldn't reach the server. Is it running?" : FAILED,
+          content:
+            err instanceof TypeError
+              ? "Couldn't reach the server. Is it running?"
+              : err.serverMessage || FAILED,
           sources: [],
           pending: false,
           failed: true,
